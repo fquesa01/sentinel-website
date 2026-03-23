@@ -20,8 +20,8 @@ export default function HomePage() {
           <span>Sentinel Counsel</span>
         </a>
         <div className="ice-nav-links">
+          <a href="#courtroom">Litigation</a>
           <a href="#capabilities">Capabilities</a>
-          <a href="#privilege">Privilege</a>
           <a href="#team">Team</a>
           <a href="#security">Security</a>
           <a href="#contact" className="ice-nav-cta">Request Demo</a>
@@ -32,18 +32,18 @@ export default function HomePage() {
         <div className="hero-grid-bg"></div>
         <div className="hero-content">
           <div className="hero-badge">
-            Privileged AI Infrastructure
+            AI-Powered Litigation Platform
           </div>
-          <h1>AI that <em>Protects</em><br/>Attorney-Client Privilege</h1>
+          <h1>Your Unfair <em>Advantage</em><br/>in the Courtroom</h1>
           <p className="hero-sub">
-            Sentinel Counsel empowers law firms with secure, privilege-preserving AI — purpose-built for investigations, depositions, and client communications.
+            Sentinel Counsel is the AI second chair that pulls case files by voice, flags deponent lies in real time, builds your case checklist automatically, and drafts discovery responses in minutes — all without ever compromising privilege.
           </p>
           <div className="hero-actions">
             <a href="#contact" className="btn-primary">
               Request a Demo
             </a>
-            <a href="#capabilities" className="btn-ghost">
-              Explore Platform
+            <a href="#courtroom" className="btn-ghost">
+              See It in Action
             </a>
           </div>
         </div>
@@ -51,19 +51,19 @@ export default function HomePage() {
 
       <div className="trust-bar">
         <div className="trust-inner">
-          <div className="trust-item">End-to-End Encrypted</div>
-          <div className="trust-item">SOC 2 Type II</div>
-          <div className="trust-item">Zero Data Retention</div>
-          <div className="trust-item">Privilege Compliant</div>
+          <div className="trust-item">Voice-First — No Training Required</div>
+          <div className="trust-item">Real-Time Deposition Support</div>
+          <div className="trust-item">Discovery in Minutes, Not Weeks</div>
+          <div className="trust-item">Privilege Protected</div>
         </div>
       </div>
 
       <section id="courtroom">
         <div className="courtroom-grid">
           <div className="courtroom-text">
-            <span className="mono-label">For the Courtroom Litigator</span>
-            <h2>Your Second Chair<br/>is Now <em>AI</em></h2>
-            <p>No interface to learn. No buttons to click. Speak to Sentinel Counsel the way you'd speak to your best associate — and watch it work.</p>
+            <span className="mono-label">Built for Trial Attorneys</span>
+            <h2>Like Having Your Best<br/>Associate — <em>Always On</em></h2>
+            <p>No interface to learn. No buttons to click. Speak to Sentinel Counsel the way you'd talk to your sharpest associate — and get instant results that would take a junior days.</p>
             <div className="voice-prompt">
               <span>"Pull the deposition transcript from the Martinez case and flag every inconsistency with his prior sworn statement."</span>
             </div>
