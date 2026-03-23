@@ -16,6 +16,22 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
 
+## Artifacts
+
+### `artifacts/sentinel-counsel` (`@workspace/sentinel-counsel`)
+
+Sentinel Counsel homepage — AI security platform for law firms. React + Vite web app using the "Ice Protocol" design aesthetic (steel-gray/cyan cybersecurity theme).
+
+- **Design**: Ice Protocol — dark (#0b0d10) background, cyan (#00d4ff) accents, green status indicators, Roboto Mono monospace nav
+- **Fonts**: Outfit (headings), Inter (body), Roboto Mono (mono/labels) — loaded via Google Fonts in index.html
+- **CSS**: Custom CSS in `src/styles/homepage.css` (no Tailwind for page content)
+- **Sections**: Nav, Hero, Trust Bar, Courtroom Demo Terminal, Capabilities (5 cards), Privilege Vault (animated), Heppner Case Callout, Team/Leadership, Security Stats, CTA, Footer
+- **Animations**: Pulsing status dots, blinking cursor, rotating vault ticks, vault center glow pulse
+
+### `artifacts/mockup-sandbox` (`@workspace/mockup-sandbox`)
+
+Design mockup sandbox for prototyping component variations on the canvas. Contains multiple homepage design variants (WarmAuthority, StarkPrecision, StarkTight, StarkPolished, MidnightInk, ParchmentNoir, IceProtocol).
+
 ## Structure
 
 ```text

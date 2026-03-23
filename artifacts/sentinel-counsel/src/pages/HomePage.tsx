@@ -1,16 +1,6 @@
 import { useEffect, useState } from "react";
 import "@/styles/homepage.css";
 
-function ShieldIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M17 2L4 8v9c0 8.3 5.5 16 13 18 7.5-2 13-9.7 13-18V8L17 2z" stroke="#c8a44e" strokeWidth="1.5" fill="none"/>
-      <path d="M17 8L10 11.5v5.5c0 4.6 3 8.8 7 9.9 4-1.1 7-5.3 7-9.9v-5.5L17 8z" stroke="#c8a44e" strokeWidth="1" fill="rgba(200,164,78,0.06)"/>
-      <circle cx="17" cy="17" r="2.5" fill="#c8a44e"/>
-    </svg>
-  );
-}
-
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
 
@@ -21,29 +11,28 @@ export default function HomePage() {
   }, []);
 
   return (
-    <>
-      <nav id="nav" className={scrolled ? "scrolled" : ""}>
-        <a href="#" className="nav-logo">
-          <ShieldIcon className="shield-icon" />
+    <div className="ice-container">
+      <nav className={`ice-nav ${scrolled ? "scrolled" : ""}`}>
+        <a href="#" className="ice-logo">
+          <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 2L4 8v9c0 8.3 5.5 16 13 18 7.5-2 13-9.7 13-18V8L17 2z" strokeWidth="1.5" />
+          </svg>
           <span>Sentinel Counsel</span>
         </a>
-        <ul className="nav-links">
-          <li><a href="#capabilities">Capabilities</a></li>
-          <li><a href="#privilege">Privilege</a></li>
-          <li><a href="#team">Team</a></li>
-          <li><a href="#security">Security</a></li>
-          <li><a href="#contact" className="nav-cta">Request Demo</a></li>
-        </ul>
+        <div className="ice-nav-links">
+          <a href="#capabilities">Capabilities</a>
+          <a href="#privilege">Privilege</a>
+          <a href="#team">Team</a>
+          <a href="#security">Security</a>
+          <a href="#contact" className="ice-nav-cta">Request Demo</a>
+        </div>
       </nav>
 
-      <section className="hero">
-        <div className="hero-bg"></div>
-        <div className="hero-grid"></div>
-        <div className="scan-line"></div>
+      <section className="ice-hero">
+        <div className="hero-grid-bg"></div>
         <div className="hero-content">
           <div className="hero-badge">
-            <span className="dot"></span>
-            Privileged AI Infrastructure for Law
+            Privileged AI Infrastructure
           </div>
           <h1>AI that <em>Protects</em><br/>Attorney-Client Privilege</h1>
           <p className="hero-sub">
@@ -52,7 +41,6 @@ export default function HomePage() {
           <div className="hero-actions">
             <a href="#contact" className="btn-primary">
               Request a Demo
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
             <a href="#capabilities" className="btn-ghost">
               Explore Platform
@@ -63,51 +51,29 @@ export default function HomePage() {
 
       <div className="trust-bar">
         <div className="trust-inner">
-          <div className="trust-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            End-to-End Encrypted
-          </div>
-          <div className="trust-divider"></div>
-          <div className="trust-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            SOC 2 Type II
-          </div>
-          <div className="trust-divider"></div>
-          <div className="trust-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            Zero Data Retention
-          </div>
-          <div className="trust-divider"></div>
-          <div className="trust-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
-            Privilege Compliant
-          </div>
+          <div className="trust-item">End-to-End Encrypted</div>
+          <div className="trust-item">SOC 2 Type II</div>
+          <div className="trust-item">Zero Data Retention</div>
+          <div className="trust-item">Privilege Compliant</div>
         </div>
       </div>
 
-      <section className="courtroom" id="courtroom">
-        <div className="courtroom-inner">
+      <section id="courtroom">
+        <div className="courtroom-grid">
           <div className="courtroom-text">
-            <div className="section-label">For the Courtroom Litigator</div>
-            <div className="section-title">Your Second Chair<br/>is Now <em style={{ fontStyle: "italic", color: "var(--gold)" }}>AI</em></div>
-            <p className="section-desc" style={{ marginBottom: "2rem" }}>No interface to learn. No buttons to click. Speak to Sentinel Counsel the way you'd speak to your best associate — and watch it work.</p>
+            <span className="mono-label">For the Courtroom Litigator</span>
+            <h2>Your Second Chair<br/>is Now <em>AI</em></h2>
+            <p>No interface to learn. No buttons to click. Speak to Sentinel Counsel the way you'd speak to your best associate — and watch it work.</p>
             <div className="voice-prompt">
-              <div className="voice-ring">
-                <div className="voice-ring-inner"></div>
-              </div>
               <span>"Pull the deposition transcript from the Martinez case and flag every inconsistency with his prior sworn statement."</span>
             </div>
           </div>
+
           <div className="courtroom-demo">
             <div className="demo-terminal">
               <div className="demo-header">
-                <div className="demo-dots">
-                  <span></span><span></span><span></span>
-                </div>
-                <div className="demo-title">SENTINEL COUNSEL — LIVE SESSION</div>
-                <div className="demo-status">
-                  <span className="status-dot"></span> PRIVILEGED
-                </div>
+                <div>SENTINEL COUNSEL — LIVE SESSION</div>
+                <div className="demo-status">SESSION ENCRYPTED</div>
               </div>
               <div className="demo-body">
                 <div className="demo-step">
@@ -124,6 +90,7 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
+
                 <div className="demo-step">
                   <div className="step-icon warn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -138,6 +105,7 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
+
                 <div className="demo-step">
                   <div className="step-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
@@ -153,6 +121,7 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
+
                 <div className="demo-step">
                   <div className="step-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M8 8h6M8 11h4"/></svg>
@@ -166,6 +135,7 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
+
                 <div className="demo-step">
                   <div className="step-icon voice-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
@@ -174,10 +144,7 @@ export default function HomePage() {
                     <div className="step-label">Zero Interface. Just Speak.</div>
                     <div className="step-desc">No software to learn. Speak naturally and Sentinel Counsel pulls documents, drafts motions, tags discovery, creates privilege logs — anything your case demands.</div>
                     <div className="step-result">
-                      <span className="result-tag voice-tag">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
-                        Voice-first AI
-                      </span>
+                      <span className="result-tag voice-tag">Voice-first AI</span>
                       <span className="result-tag">No training required</span>
                     </div>
                   </div>
@@ -188,12 +155,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="capabilities" id="capabilities">
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <div className="section-label">Platform</div>
-          <div className="section-title">Five Pillars of<br/>Privileged Intelligence</div>
-          <p className="section-desc">Every capability engineered to keep your practice protected while unlocking the full power of AI.</p>
+      <section id="capabilities">
+        <div className="cap-header">
+          <span className="mono-label">Platform</span>
+          <h2>Five Pillars of<br/>Privileged Intelligence</h2>
+          <p>Every capability engineered to keep your practice protected while unlocking the full power of AI.</p>
         </div>
+
         <div className="cap-grid">
           <div className="cap-card">
             <div className="cap-icon">
@@ -202,6 +170,7 @@ export default function HomePage() {
             <h3>Privileged AI Access</h3>
             <p>Let your clients leverage AI without waiving privilege. Every interaction is wrapped in attorney work-product protections and audit-trailed for defensibility.</p>
           </div>
+
           <div className="cap-card">
             <div className="cap-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M8 2h8"/></svg>
@@ -209,6 +178,7 @@ export default function HomePage() {
             <h3>Ambient Intelligence</h3>
             <p>Real-time AI for meetings, depositions, and client interviews. Capture, summarize, and analyze spoken testimony with privilege-preserving architecture.</p>
           </div>
+
           <div className="cap-card">
             <div className="cap-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
@@ -216,6 +186,7 @@ export default function HomePage() {
             <h3>Investigation Orchestration</h3>
             <p>Manage large-scale investigations across thousands of documents, witnesses, and data sources. AI-powered pattern recognition with human oversight at every step.</p>
           </div>
+
           <div className="cap-card">
             <div className="cap-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M8 8h6M8 11h4"/></svg>
@@ -223,6 +194,7 @@ export default function HomePage() {
             <h3>Full E-Discovery</h3>
             <p>End-to-end electronic discovery with AI-assisted document review, predictive coding, privilege logging, and production management — all within a secure, defensible environment.</p>
           </div>
+
           <div className="cap-card">
             <div className="cap-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
@@ -233,20 +205,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="privilege" id="privilege">
-        <div className="privilege-inner" style={{ maxWidth: "1200px", margin: "0 auto" }}>
+      <section id="privilege">
+        <div className="privilege-inner">
           <div className="priv-visual">
-            <div className="vault-ring"></div>
-            <div className="vault-ring"></div>
-            <div className="vault-ring"></div>
+            <div className="vault-ticks"></div>
+            <div className="vault-ring-1"></div>
+            <div className="vault-ring-2"></div>
+            <div className="vault-ring-3"></div>
             <div className="vault-center">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </div>
           </div>
+
           <div className="priv-text">
-            <div className="section-label">Privilege Protection</div>
-            <div className="section-title">The Vault Around<br/>Your Practice</div>
-            <p className="section-desc">Traditional AI tools expose sensitive communications to third parties, potentially waiving attorney-client privilege. Sentinel Counsel was designed from the ground up to prevent this.</p>
+            <span className="mono-label">Privilege Protection</span>
+            <h2>The Vault Around<br/>Your Practice</h2>
+            <p>Traditional AI tools expose sensitive communications to third parties, potentially waiving attorney-client privilege. Sentinel Counsel was designed from the ground up to prevent this.</p>
+
             <div className="priv-features">
               <div className="priv-feat">
                 <div className="priv-feat-dot"></div>
@@ -283,38 +258,41 @@ export default function HomePage() {
 
       <section className="case-callout" id="heppner">
         <div className="case-inner">
-          <div className="section-label">The Precedent</div>
-          <div className="section-title">The Court Has Spoken:<br/>AI Use Can Waive Privilege</div>
-          <p className="section-desc" style={{ margin: "0 auto" }}>A landmark federal ruling has confirmed what many feared — using consumer AI tools with privileged information destroys attorney-client privilege.</p>
+          <span className="mono-label">The Precedent</span>
+          <h2>The Court Has Spoken:<br/>AI Use Can Waive Privilege</h2>
+          <p>A landmark federal ruling has confirmed what many feared — using consumer AI tools with privileged information destroys attorney-client privilege.</p>
+
           <div className="case-ruling">
-            <div className="gavel-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M14.5 2.5l5 5M2 22l1.5-1.5M6.5 17.5l-4 4M17 7l-8.5 8.5M15 9l-1-1M18.5 5.5l-1-1"/><path d="M21 3l-8.5 8.5M3 21l8.5-8.5"/><rect x="8" y="14" width="4" height="4" rx="0.5" transform="rotate(-45 10 16)"/></svg>
-            </div>
             <div className="case-cite">United States v. Heppner</div>
             <div className="case-court">S.D.N.Y. &bull; No. 25-cr-00503 &bull; Feb. 2026 &bull; Judge Jed S. Rakoff</div>
+
             <div className="case-quote">
-              Sharing privileged communications with a third-party AI platform constitutes a waiver of the privilege over the original attorney-client communications themselves.
+              "Sharing privileged communications with a third-party AI platform constitutes a waiver of the privilege over the original attorney-client communications themselves."
             </div>
+
             <p className="case-explanation">
               Judge Rakoff ruled that 31 documents a defendant generated using a consumer AI platform were neither privileged nor protected as work product. The court found that inputting privileged information into a public AI tool — whose privacy policy permits data collection, model training, and disclosure to government authorities — eliminates any reasonable expectation of confidentiality. The privilege was destroyed the moment the data was shared.
             </p>
+
             <div className="case-answer">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
               Sentinel Counsel is the answer to Heppner
             </div>
           </div>
         </div>
       </section>
 
-      <section className="team" id="team">
+      <section id="team">
         <div className="team-new-inner">
           <div className="team-left">
-            <div className="section-label">Leadership</div>
-            <div className="section-title">Built by Experts Who've<br/>Stood in the Arena</div>
-            <p className="section-desc" style={{ marginBottom: "2.5rem" }}>Our team is made up of former state and federal prosecutors, public company general and associate general counsels, and an author of several enterprise-level security treatises.</p>
+            <span className="mono-label">Leadership</span>
+            <h2>Built by Experts Who've<br/>Stood in the Arena</h2>
+            <p>Our team is made up of former state and federal prosecutors, public company general and associate general counsels, and an author of several enterprise-level security treatises.</p>
           </div>
+
           <div className="team-right">
             <div className="expertise-label">Deep Experience In</div>
+
             <div className="expertise-list">
               <div className="expertise-item">
                 <div className="expertise-marker"></div>
@@ -338,17 +316,18 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
+
             <div className="expertise-creds">
               <span className="expertise-cred">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                 Former Federal &amp; State Prosecutors
               </span>
               <span className="expertise-cred">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                 Public Company GCs &amp; AGCs
               </span>
               <span className="expertise-cred">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                 Enterprise Security Author
               </span>
             </div>
@@ -356,11 +335,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="security" id="security">
+      <section id="security">
         <div className="security-inner">
-          <div className="section-label">Security Posture</div>
-          <div className="section-title">Enterprise-Grade by Default</div>
-          <p className="section-desc" style={{ margin: "0 auto" }}>Built by the people who wrote the security playbook at the world's largest technology companies.</p>
+          <span className="mono-label">Security Posture</span>
+          <h2>Enterprise-Grade by Default</h2>
+          <p>Built by the people who wrote the security playbook at the world's largest technology companies.</p>
+
           <div className="sec-grid">
             <div className="sec-item">
               <div className="sec-number">256</div>
@@ -382,31 +362,27 @@ export default function HomePage() {
       </section>
 
       <section className="cta-section" id="contact">
-        <div className="section-title">Ready to Protect<br/>Your Practice?</div>
+        <h2>Ready to Protect<br/>Your Practice?</h2>
         <p className="section-desc">Join the law firms already using Sentinel Counsel to harness AI without compromising privilege.</p>
         <a href="#" className="btn-primary">
           Request a Confidential Demo
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </section>
 
-      <footer>
-        <div className="footer-inner">
-          <div className="footer-left">
-            <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17 2L4 8v9c0 8.3 5.5 16 13 18 7.5-2 13-9.7 13-18V8L17 2z" stroke="#c8a44e" strokeWidth="1.5" fill="none"/>
-              <circle cx="17" cy="17" r="2.5" fill="#c8a44e"/>
-            </svg>
-            <span>Sentinel Counsel</span>
-          </div>
-          <div className="footer-copy">&copy; 2026 Sentinel Counsel. All rights reserved.</div>
-          <ul className="footer-links">
-            <li><a href="#">Privacy</a></li>
-            <li><a href="#">Terms</a></li>
-            <li><a href="#">Security</a></li>
-          </ul>
+      <footer className="ice-footer">
+        <div className="footer-left">
+          <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 2L4 8v9c0 8.3 5.5 16 13 18 7.5-2 13-9.7 13-18V8L17 2z" strokeWidth="1.5" />
+          </svg>
+          <span>Sentinel Counsel</span>
+        </div>
+        <div className="footer-status">SYSTEM STATUS: OPERATIONAL</div>
+        <div className="footer-links">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Security</a>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
