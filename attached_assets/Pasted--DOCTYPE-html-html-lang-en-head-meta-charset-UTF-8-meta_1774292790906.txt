@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentinel Counsel — AI Security for Law Firms</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --midnight: #0a0e1a;
+  --deep-navy: #0f1628;
+  --slate: #1a2038;
+  --steel: #2a3254;
+  --gold: #c8a44e;
+  --gold-light: #dfc171;
+  --gold-dim: rgba(200, 164, 78, 0.15);
+  --ice: #e8ecf4;
+  --frost: #b8c4d8;
+  --mist: #8a96b0;
+  --white: #f5f7fb;
+  --danger: #c84e4e;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--midnight);
+  color: var(--frost);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--midnight); }
+::-webkit-scrollbar-thumb { background: var(--steel); border-radius: 3px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 1.25rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10, 14, 26, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(200, 164, 78, 0.08);
+  transition: all 0.4s ease;
+}
+
+nav.scrolled {
+  padding: 0.85rem 3rem;
+  background: rgba(10, 14, 26, 0.95);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.nav-logo .shield-icon {
+  width: 34px;
+  height: 34px;
+}
+
+.nav-logo span {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: 0.02em;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--mist);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-cta {
+  padding: 0.6rem 1.5rem;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold) !important;
+  font-family: var(--sans);
+  font-size: 0.78rem !important;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.nav-cta:hover {
+  background: var(--gold);
+  color: var(--midnight) !important;
+}
+
+.nav-cta::after { display: none !important; }
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7rem 3rem 5rem;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 40%, rgba(200, 164, 78, 0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 20% 80%, rgba(15, 22, 40, 0.8) 0%, transparent 60%),
+    linear-gradient(180deg, var(--midnight) 0%, var(--deep-navy) 100%);
+}
+
+/* Animated grid lines */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(200, 164, 78, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200, 164, 78, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, black 20%, transparent 70%);
+  animation: gridPulse 8s ease-in-out infinite;
+}
+
+@keyframes gridPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* Scanning line */
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 164, 78, 0.15), transparent);
+  animation: scan 6s linear infinite;
+}
+
+@keyframes scan {
+  0% { top: -1px; }
+  100% { top: 100%; }
+}
+
+.hero-content {
+  position: relative;
+  max-width: 900px;
+  text-align: center;
+  z-index: 2;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid rgba(200, 164, 78, 0.25);
+  background: rgba(200, 164, 78, 0.05);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.8s ease both;
+}
+
+.hero-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 1.75rem;
+  animation: fadeUp 0.8s ease 0.15s both;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-sub {
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: var(--frost);
+  line-height: 1.7;
+  max-width: 640px;
+  margin: 0 auto 3rem;
+  animation: fadeUp 0.8s ease 0.3s both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1.25rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeUp 0.8s ease 0.45s both;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 2.25rem;
+  background: var(--gold);
+  color: var(--midnight);
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.btn-primary:hover::before { transform: translateX(100%); }
+.btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(200, 164, 78, 0.25); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 2.25rem;
+  background: transparent;
+  color: var(--frost);
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--steel);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-ghost:hover { border-color: var(--frost); color: var(--white); }
+
+/* ── TRUST BAR ── */
+.trust-bar {
+  padding: 3rem;
+  border-top: 1px solid rgba(200, 164, 78, 0.06);
+  border-bottom: 1px solid rgba(200, 164, 78, 0.06);
+  background: rgba(15, 22, 40, 0.5);
+}
+
+.trust-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--mist);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.trust-item svg {
+  width: 16px;
+  height: 16px;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+.trust-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--steel);
+}
+
+/* ── COURTROOM AI ── */
+.courtroom {
+  background: var(--midnight);
+  position: relative;
+  padding: 7rem 3rem;
+  overflow: hidden;
+}
+
+.courtroom::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+  opacity: 0.3;
+}
+
+.courtroom-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.courtroom-text {
+  position: sticky;
+  top: 8rem;
+}
+
+.voice-prompt {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(200, 164, 78, 0.12);
+  background: rgba(200, 164, 78, 0.03);
+  margin-top: 0.5rem;
+}
+
+.voice-ring {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  animation: voicePulse 2s ease-in-out infinite;
+}
+
+.voice-ring-inner {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: voicePulse 2s ease-in-out infinite 0.3s;
+}
+
+@keyframes voicePulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.95); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.voice-prompt span {
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--frost);
+  line-height: 1.55;
+}
+
+/* Demo terminal */
+.demo-terminal {
+  border: 1px solid rgba(200, 164, 78, 0.12);
+  background: rgba(10, 14, 26, 0.9);
+  overflow: hidden;
+}
+
+.demo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid rgba(200, 164, 78, 0.08);
+  background: rgba(15, 22, 40, 0.8);
+}
+
+.demo-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.demo-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--steel);
+}
+
+.demo-dots span:first-child { background: rgba(200, 80, 80, 0.6); }
+.demo-dots span:nth-child(2) { background: rgba(200, 164, 78, 0.5); }
+.demo-dots span:last-child { background: rgba(80, 180, 100, 0.5); }
+
+.demo-title {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--mist);
+  letter-spacing: 0.12em;
+}
+
+.demo-status {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: #50b464;
+  letter-spacing: 0.08em;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #50b464;
+  animation: blink 2s ease-in-out infinite;
+}
+
+.demo-body {
+  padding: 0.5rem;
+}
+
+.demo-step {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem 1rem;
+  border: 1px solid transparent;
+  transition: all 0.4s;
+  cursor: default;
+  position: relative;
+}
+
+.demo-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 1.95rem;
+  bottom: -2px;
+  width: 1px;
+  height: 12px;
+  background: rgba(200, 164, 78, 0.15);
+}
+
+.demo-step:hover {
+  border-color: rgba(200, 164, 78, 0.1);
+  background: rgba(200, 164, 78, 0.02);
+}
+
+.step-icon {
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(200, 164, 78, 0.2);
+  background: rgba(200, 164, 78, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--gold);
+}
+
+.step-icon svg { width: 18px; height: 18px; }
+
+.step-icon.warn {
+  border-color: rgba(200, 80, 80, 0.3);
+  background: rgba(200, 80, 80, 0.06);
+  color: var(--danger);
+}
+
+.step-icon.voice-icon {
+  border-color: rgba(80, 180, 100, 0.3);
+  background: rgba(80, 180, 100, 0.06);
+  color: #50b464;
+}
+
+.step-label {
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.35rem;
+}
+
+.step-desc {
+  font-size: 0.8rem;
+  color: var(--mist);
+  line-height: 1.55;
+  margin-bottom: 0.75rem;
+}
+
+.step-result {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.result-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  color: var(--gold-light);
+  background: rgba(200, 164, 78, 0.06);
+  border: 1px solid rgba(200, 164, 78, 0.12);
+}
+
+.result-tag.alert {
+  color: var(--danger);
+  background: rgba(200, 80, 80, 0.06);
+  border-color: rgba(200, 80, 80, 0.2);
+}
+
+.result-tag.success {
+  color: #50b464;
+  background: rgba(80, 180, 100, 0.06);
+  border-color: rgba(80, 180, 100, 0.2);
+}
+
+.result-tag.voice-tag {
+  color: #50b464;
+  background: rgba(80, 180, 100, 0.06);
+  border-color: rgba(80, 180, 100, 0.2);
+}
+
+@media (max-width: 900px) {
+  .courtroom-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .courtroom-text { position: static; }
+}
+
+/* ── SECTIONS SHARED ── */
+section {
+  padding: 7rem 3rem;
+}
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+}
+
+.section-desc {
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: var(--frost);
+  line-height: 1.7;
+  max-width: 560px;
+}
+
+/* ── CAPABILITIES ── */
+.capabilities {
+  background: var(--deep-navy);
+  position: relative;
+}
+
+.cap-grid {
+  max-width: 1200px;
+  margin: 3.5rem auto 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1px;
+  background: rgba(200, 164, 78, 0.08);
+  border: 1px solid rgba(200, 164, 78, 0.08);
+}
+
+.cap-card {
+  background: var(--deep-navy);
+  padding: 2.5rem;
+  position: relative;
+  transition: all 0.4s;
+}
+
+.cap-card:hover {
+  background: rgba(200, 164, 78, 0.03);
+}
+
+.cap-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gold);
+  transition: width 0.5s;
+}
+
+.cap-card:hover::before { width: 100%; }
+
+.cap-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(200, 164, 78, 0.2);
+  background: rgba(200, 164, 78, 0.05);
+  margin-bottom: 1.5rem;
+  color: var(--gold);
+}
+
+.cap-icon svg { width: 20px; height: 20px; }
+
+.cap-card h3 {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 0.85rem;
+}
+
+.cap-card p {
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: var(--mist);
+  line-height: 1.65;
+}
+
+/* ── PRIVILEGE SECTION ── */
+.privilege {
+  position: relative;
+  overflow: hidden;
+}
+
+.privilege-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.priv-visual {
+  position: relative;
+  aspect-ratio: 1;
+  max-width: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vault-ring {
+  position: absolute;
+  border: 1px solid rgba(200, 164, 78, 0.12);
+  border-radius: 50%;
+  animation: rotate 30s linear infinite;
+}
+
+.vault-ring:nth-child(1) { width: 100%; height: 100%; }
+.vault-ring:nth-child(2) { width: 75%; height: 75%; animation-direction: reverse; animation-duration: 22s; border-color: rgba(200, 164, 78, 0.08); }
+.vault-ring:nth-child(3) { width: 50%; height: 50%; animation-duration: 18s; border-color: rgba(200, 164, 78, 0.15); }
+
+.vault-ring::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.vault-center {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--gold);
+  background: rgba(200, 164, 78, 0.05);
+  position: relative;
+  z-index: 2;
+}
+
+.vault-center svg { width: 32px; height: 32px; color: var(--gold); }
+
+.priv-text .section-desc {
+  margin-bottom: 2.5rem;
+}
+
+.priv-features {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.priv-feat {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.priv-feat-dot {
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+.priv-feat-text h4 {
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.3rem;
+}
+
+.priv-feat-text p {
+  font-size: 0.82rem;
+  color: var(--mist);
+  line-height: 1.55;
+}
+
+/* ── TEAM ── */
+.team {
+  background: var(--deep-navy);
+  position: relative;
+}
+
+.team-new-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.expertise-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(200, 164, 78, 0.12);
+}
+
+.expertise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  margin-bottom: 2rem;
+}
+
+.expertise-item {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.expertise-marker {
+  width: 10px;
+  height: 10px;
+  margin-top: 5px;
+  background: var(--gold);
+  flex-shrink: 0;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.expertise-content h4 {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.4rem;
+}
+
+.expertise-content p {
+  font-size: 0.84rem;
+  color: var(--mist);
+  line-height: 1.6;
+}
+
+.expertise-creds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(200, 164, 78, 0.08);
+}
+
+.expertise-cred {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid rgba(200, 164, 78, 0.15);
+  background: rgba(200, 164, 78, 0.04);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--gold-light);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .team-new-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+
+/* ── CASE CALLOUT ── */
+.case-callout {
+  position: relative;
+  overflow: hidden;
+}
+
+.case-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.case-ruling {
+  border: 1px solid rgba(200, 80, 80, 0.25);
+  background: rgba(200, 80, 80, 0.04);
+  padding: 3rem 3.5rem;
+  position: relative;
+  margin-top: 3rem;
+}
+
+.case-ruling::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--danger), transparent);
+}
+
+.case-ruling .gavel-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 1.5rem;
+  border: 1px solid rgba(200, 80, 80, 0.3);
+  background: rgba(200, 80, 80, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--danger);
+}
+
+.case-ruling .gavel-icon svg { width: 22px; height: 22px; }
+
+.case-cite {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.case-court {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--danger);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.case-quote {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--frost);
+  line-height: 1.55;
+  max-width: 700px;
+  margin: 0 auto 1.5rem;
+  position: relative;
+  padding: 0 2rem;
+}
+
+.case-quote::before,
+.case-quote::after {
+  font-family: var(--serif);
+  font-size: 3rem;
+  color: rgba(200, 80, 80, 0.3);
+  position: absolute;
+  line-height: 1;
+}
+
+.case-quote::before { content: '\201C'; top: -0.5rem; left: -0.5rem; }
+.case-quote::after { content: '\201D'; bottom: -1rem; right: -0.5rem; }
+
+.case-explanation {
+  font-size: 0.9rem;
+  color: var(--mist);
+  line-height: 1.65;
+  max-width: 620px;
+  margin: 0 auto 2rem;
+}
+
+.case-answer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.75rem;
+  border: 1px solid rgba(200, 164, 78, 0.3);
+  background: rgba(200, 164, 78, 0.06);
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+}
+
+.case-answer svg { width: 16px; height: 16px; }
+
+/* ── SECURITY ── */
+.security {
+  position: relative;
+}
+
+.security-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.sec-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  margin-top: 4rem;
+}
+
+.sec-item {
+  padding: 2rem;
+}
+
+.sec-number {
+  font-family: var(--serif);
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 0.75rem;
+}
+
+.sec-item h4 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.sec-item p {
+  font-size: 0.82rem;
+  color: var(--mist);
+  line-height: 1.55;
+}
+
+/* ── CTA ── */
+.cta-section {
+  padding: 8rem 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 600px;
+  height: 600px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(200, 164, 78, 0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.cta-section .section-title {
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  margin-bottom: 1.5rem;
+}
+
+.cta-section .section-desc {
+  max-width: 520px;
+  margin: 0 auto 2.5rem;
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 3rem;
+  border-top: 1px solid rgba(200, 164, 78, 0.06);
+  background: rgba(10, 14, 26, 0.8);
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.footer-left svg { width: 24px; height: 24px; color: var(--gold); }
+
+.footer-left span {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.footer-copy {
+  font-size: 0.75rem;
+  color: var(--mist);
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+.footer-links a {
+  font-size: 0.75rem;
+  color: var(--mist);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover { color: var(--gold); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  section { padding: 5rem 1.5rem; }
+  .privilege-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .priv-visual { max-width: 300px; margin: 0 auto; }
+  .sec-grid { grid-template-columns: 1fr; }
+  .trust-inner { gap: 1.5rem; }
+  .trust-divider { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <svg class="shield-icon" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17 2L4 8v9c0 8.3 5.5 16 13 18 7.5-2 13-9.7 13-18V8L17 2z" stroke="#c8a44e" stroke-width="1.5" fill="none"/>
+      <path d="M17 8L10 11.5v5.5c0 4.6 3 8.8 7 9.9 4-1.1 7-5.3 7-9.9v-5.5L17 8z" stroke="#c8a44e" stroke-width="1" fill="rgba(200,164,78,0.06)"/>
+      <circle cx="17" cy="17" r="2.5" fill="#c8a44e"/>
+    </svg>
+    <span>Sentinel Counsel</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#capabilities">Capabilities</a></li>
+    <li><a href="#privilege">Privilege</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#security">Security</a></li>
+    <li><a href="#contact" class="nav-cta">Request Demo</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="scan-line"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Privileged AI Infrastructure for Law
+    </div>
+    <h1>AI that <em>Protects</em><br>Attorney-Client Privilege</h1>
+    <p class="hero-sub">
+      Sentinel Counsel empowers law firms with secure, privilege-preserving AI — purpose-built for investigations, depositions, and client communications.
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">
+        Request a Demo
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#capabilities" class="btn-ghost">
+        Explore Platform
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      End-to-End Encrypted
+    </div>
+    <div class="trust-divider"></div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      SOC 2 Type II
+    </div>
+    <div class="trust-divider"></div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Zero Data Retention
+    </div>
+    <div class="trust-divider"></div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+      Privilege Compliant
+    </div>
+  </div>
+</div>
+
+<!-- COURTROOM AI VALUE -->
+<section class="courtroom" id="courtroom">
+  <div class="courtroom-inner">
+    <div class="courtroom-text">
+      <div class="section-label">For the Courtroom Litigator</div>
+      <div class="section-title">Your Second Chair<br>is Now <em style="font-style:italic; color:var(--gold);">AI</em></div>
+      <p class="section-desc" style="margin-bottom:2rem;">No interface to learn. No buttons to click. Speak to Sentinel Counsel the way you'd speak to your best associate — and watch it work.</p>
+      <div class="voice-prompt">
+        <div class="voice-ring">
+          <div class="voice-ring-inner"></div>
+        </div>
+        <span>"Pull the deposition transcript from the Martinez case and flag every inconsistency with his prior sworn statement."</span>
+      </div>
+    </div>
+    <div class="courtroom-demo">
+      <div class="demo-terminal">
+        <div class="demo-header">
+          <div class="demo-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="demo-title">SENTINEL COUNSEL — LIVE SESSION</div>
+          <div class="demo-status">
+            <span class="status-dot"></span> PRIVILEGED
+          </div>
+        </div>
+        <div class="demo-body" id="demoBody">
+          <div class="demo-step" data-step="0">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="step-content">
+              <div class="step-label">Case Files On Demand</div>
+              <div class="step-desc">Your case files surface the moment you need them. Briefs, exhibits, prior testimony — retrieved by voice in seconds, not hours of searching.</div>
+              <div class="step-result">
+                <span class="result-tag">3 depositions</span>
+                <span class="result-tag">12 exhibits</span>
+                <span class="result-tag">2 expert reports</span>
+              </div>
+            </div>
+          </div>
+          <div class="demo-step" data-step="1">
+            <div class="step-icon warn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="step-content">
+              <div class="step-label">Deponent Lie Detection</div>
+              <div class="step-desc">Real-time cross-reference against prior statements, filings, and public records. Inconsistencies are flagged instantly during live depositions.</div>
+              <div class="step-result">
+                <span class="result-tag alert">3 contradictions found</span>
+                <span class="result-tag">vs. prior sworn statement</span>
+                <span class="result-tag">vs. deponent's emails and text messages</span>
+              </div>
+            </div>
+          </div>
+          <div class="demo-step" data-step="2">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="step-content">
+              <div class="step-label">Auto-Built Case Checklist</div>
+              <div class="step-desc">Elements of every cause of action are mapped and tracked automatically. Your case checklist updates in real time as evidence comes in.</div>
+              <div class="step-result">
+                <span class="result-tag success">4 of 6 elements satisfied</span>
+                <span class="result-tag">2 need additional evidence</span>
+                <span class="result-tag">2 elements from depositions</span>
+                <span class="result-tag">2 elements from emails</span>
+              </div>
+            </div>
+          </div>
+          <div class="demo-step" data-step="3">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M8 8h6M8 11h4"/></svg>
+            </div>
+            <div class="step-content">
+              <div class="step-label">Instant Discovery Response</div>
+              <div class="step-desc">Respond to interrogatories and document requests in minutes instead of weeks. AI drafts responses, flags privilege issues, and generates privilege logs.</div>
+              <div class="step-result">
+                <span class="result-tag">47 RFPs drafted</span>
+                <span class="result-tag">privilege log generated</span>
+              </div>
+            </div>
+          </div>
+          <div class="demo-step" data-step="4">
+            <div class="step-icon voice-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            </div>
+            <div class="step-content">
+              <div class="step-label">Zero Interface. Just Speak.</div>
+              <div class="step-desc">No software to learn. Speak naturally and Sentinel Counsel pulls documents, drafts motions, tags discovery, creates privilege logs — anything your case demands.</div>
+              <div class="step-result">
+                <span class="result-tag voice-tag">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+                  Voice-first AI
+                </span>
+                <span class="result-tag">No training required</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section class="capabilities" id="capabilities">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div class="section-label">Platform</div>
+    <div class="section-title">Five Pillars of<br>Privileged Intelligence</div>
+    <p class="section-desc">Every capability engineered to keep your practice protected while unlocking the full power of AI.</p>
+  </div>
+  <div class="cap-grid">
+    <div class="cap-card">
+      <div class="cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+      </div>
+      <h3>Privileged AI Access</h3>
+      <p>Let your clients leverage AI without waiving privilege. Every interaction is wrapped in attorney work-product protections and audit-trailed for defensibility.</p>
+    </div>
+    <div class="cap-card">
+      <div class="cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M8 2h8"/></svg>
+      </div>
+      <h3>Ambient Intelligence</h3>
+      <p>Real-time AI for meetings, depositions, and client interviews. Capture, summarize, and analyze spoken testimony with privilege-preserving architecture.</p>
+    </div>
+    <div class="cap-card">
+      <div class="cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      </div>
+      <h3>Investigation Orchestration</h3>
+      <p>Manage large-scale investigations across thousands of documents, witnesses, and data sources. AI-powered pattern recognition with human oversight at every step.</p>
+    </div>
+    <div class="cap-card">
+      <div class="cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M8 8h6M8 11h4"/></svg>
+      </div>
+      <h3>Full E-Discovery</h3>
+      <p>End-to-end electronic discovery with AI-assisted document review, predictive coding, privilege logging, and production management — all within a secure, defensible environment.</p>
+    </div>
+    <div class="cap-card">
+      <div class="cap-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
+      </div>
+      <h3>Secure Client Portal</h3>
+      <p>Give clients a protected gateway to interact with AI under the umbrella of privilege. Full audit trails, access controls, and defensible data handling.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVILEGE -->
+<section class="privilege" id="privilege">
+  <div class="privilege-inner" style="max-width:1200px; margin:0 auto;">
+    <div class="priv-visual">
+      <div class="vault-ring"></div>
+      <div class="vault-ring"></div>
+      <div class="vault-ring"></div>
+      <div class="vault-center">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+    </div>
+    <div class="priv-text">
+      <div class="section-label">Privilege Protection</div>
+      <div class="section-title">The Vault Around<br>Your Practice</div>
+      <p class="section-desc">Traditional AI tools expose sensitive communications to third parties, potentially waiving attorney-client privilege. Sentinel Counsel was designed from the ground up to prevent this.</p>
+      <div class="priv-features">
+        <div class="priv-feat">
+          <div class="priv-feat-dot"></div>
+          <div class="priv-feat-text">
+            <h4>Zero Third-Party Exposure</h4>
+            <p>Data never leaves the privilege boundary. No model training on your inputs. Ever.</p>
+          </div>
+        </div>
+        <div class="priv-feat">
+          <div class="priv-feat-dot"></div>
+          <div class="priv-feat-text">
+            <h4>Defensible Audit Trail</h4>
+            <p>Every AI interaction is logged, timestamped, and mapped to privilege assertions for court defensibility.</p>
+          </div>
+        </div>
+        <div class="priv-feat">
+          <div class="priv-feat-dot"></div>
+          <div class="priv-feat-text">
+            <h4>Work Product Doctrine Compliant</h4>
+            <p>Architected to satisfy both attorney-client privilege and work product protection standards.</p>
+          </div>
+        </div>
+        <div class="priv-feat">
+          <div class="priv-feat-dot"></div>
+          <div class="priv-feat-text">
+            <h4>Client-Facing AI Under Privilege</h4>
+            <p>Empower clients to use AI tools within a privileged communication framework directed by counsel.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE CALLOUT -->
+<section class="case-callout" id="heppner">
+  <div class="case-inner">
+    <div class="section-label">The Precedent</div>
+    <div class="section-title">The Court Has Spoken:<br>AI Use Can Waive Privilege</div>
+    <p class="section-desc" style="margin:0 auto;">A landmark federal ruling has confirmed what many feared — using consumer AI tools with privileged information destroys attorney-client privilege.</p>
+    <div class="case-ruling">
+      <div class="gavel-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.5 2.5l5 5M2 22l1.5-1.5M6.5 17.5l-4 4M17 7l-8.5 8.5M15 9l-1-1M18.5 5.5l-1-1"/><path d="M21 3l-8.5 8.5M3 21l8.5-8.5"/><rect x="8" y="14" width="4" height="4" rx="0.5" transform="rotate(-45 10 16)"/></svg>
+      </div>
+      <div class="case-cite">United States v. Heppner</div>
+      <div class="case-court">S.D.N.Y. &bull; No. 25-cr-00503 &bull; Feb. 2026 &bull; Judge Jed S. Rakoff</div>
+      <div class="case-quote">
+        Sharing privileged communications with a third-party AI platform constitutes a waiver of the privilege over the original attorney-client communications themselves.
+      </div>
+      <p class="case-explanation">
+        Judge Rakoff ruled that 31 documents a defendant generated using a consumer AI platform were neither privileged nor protected as work product. The court found that inputting privileged information into a public AI tool — whose privacy policy permits data collection, model training, and disclosure to government authorities — eliminates any reasonable expectation of confidentiality. The privilege was destroyed the moment the data was shared.
+      </p>
+      <div class="case-answer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Sentinel Counsel is the answer to Heppner
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="team" id="team">
+  <div class="team-new-inner">
+    <div class="team-left">
+      <div class="section-label">Leadership</div>
+      <div class="section-title">Built by Experts Who've<br>Stood in the Arena</div>
+      <p class="section-desc" style="margin-bottom:2.5rem;">Our team is made up of former state and federal prosecutors, public company general and associate general counsels, and an author of several enterprise-level security treatises.</p>
+    </div>
+    <div class="team-right">
+      <div class="expertise-label">Deep Experience In</div>
+      <div class="expertise-list">
+        <div class="expertise-item">
+          <div class="expertise-marker"></div>
+          <div class="expertise-content">
+            <h4>Enterprise Security &amp; Compliance</h4>
+            <p>Former Microsoft Security &amp; Compliance leadership. Author of multiple enterprise security treatises. A decade building zero-trust architectures and data protection frameworks for Fortune 500 organizations.</p>
+          </div>
+        </div>
+        <div class="expertise-item">
+          <div class="expertise-marker"></div>
+          <div class="expertise-content">
+            <h4>Litigation at All Levels</h4>
+            <p>Former federal and state prosecutors and big law alumni with extensive experience across complex investigations, regulatory enforcement, white-collar defense, and trial advocacy at every level of the court system.</p>
+          </div>
+        </div>
+        <div class="expertise-item">
+          <div class="expertise-marker"></div>
+          <div class="expertise-content">
+            <h4>Public Company Litigation</h4>
+            <p>General counsels and associate general counsels from publicly traded companies. Deep fluency in SEC enforcement, securities litigation, shareholder disputes, and board-level governance.</p>
+          </div>
+        </div>
+      </div>
+      <div class="expertise-creds">
+        <span class="expertise-cred">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Former Federal &amp; State Prosecutors
+        </span>
+        <span class="expertise-cred">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Public Company GCs &amp; AGCs
+        </span>
+        <span class="expertise-cred">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Enterprise Security Author
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section class="security" id="security">
+  <div class="security-inner">
+    <div class="section-label">Security Posture</div>
+    <div class="section-title">Enterprise-Grade by Default</div>
+    <p class="section-desc" style="margin:0 auto;">Built by the people who wrote the security playbook at the world's largest technology companies.</p>
+    <div class="sec-grid">
+      <div class="sec-item">
+        <div class="sec-number">256</div>
+        <h4>Bit AES Encryption</h4>
+        <p>Military-grade encryption for data at rest and in transit. Your case files have never been safer.</p>
+      </div>
+      <div class="sec-item">
+        <div class="sec-number">0</div>
+        <h4>Data Retention</h4>
+        <p>Inputs are never stored or used for model training. When the session ends, the data ceases to exist.</p>
+      </div>
+      <div class="sec-item">
+        <div class="sec-number">∞</div>
+        <h4>Audit Granularity</h4>
+        <p>Every interaction, query, and output is logged with tamper-proof integrity for complete defensibility.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="section-label">Get Started</div>
+  <div class="section-title">Ready to Protect Your<br>Practice with AI?</div>
+  <p class="section-desc" style="margin:0 auto 2.5rem;">Schedule a confidential demonstration and see how Sentinel Counsel can transform your firm's capabilities without compromising privilege.</p>
+  <div>
+    <a href="/cdn-cgi/l/email-protection#d6b2b3bbb996a5b3b8a2bfb8b3bab5b9a3b8a5b3baf8b5b9bb" class="btn-primary" style="font-size:0.85rem; padding:1.1rem 2.75rem;">
+      Schedule Confidential Demo
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L4 6v5c0 6.6 3.4 12.7 8 14.3 4.6-1.6 8-7.7 8-14.3V6L12 2z"/><circle cx="12" cy="11" r="2" fill="currentColor"/></svg>
+      <span>Sentinel Counsel</span>
+    </div>
+    <p class="footer-copy">&copy; 2026 Sentinel Counsel. All rights reserved. Privileged &amp; Confidential.</p>
+    <ul class="footer-links">
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Security</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+// Nav scroll behavior
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+</script>
+
+</body>
+</html>

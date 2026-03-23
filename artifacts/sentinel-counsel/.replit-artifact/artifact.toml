@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Sentinel Counsel"
+version = "1.0.0"
+id = "artifacts/sentinel-counsel"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22097
+
+[services.development]
+run = "pnpm --filter @workspace/sentinel-counsel run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/sentinel-counsel", "run", "build" ]
+publicDir = "artifacts/sentinel-counsel/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22097"
+BASE_PATH = "/"
