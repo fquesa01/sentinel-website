@@ -13,6 +13,7 @@ export default function HomePage() {
 
   return (
     <div className="ice-container">
+      <ParticleField />
       <nav className={`ice-nav ${scrolled ? "scrolled" : ""}`}>
         <a href="#" className="ice-logo">
           <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -30,8 +31,6 @@ export default function HomePage() {
       </nav>
 
       <section className="ice-hero">
-        <ParticleField />
-        <div className="hero-gradient-fade"></div>
         <div className="hero-content">
           <div className="hero-badge">
             AI-Powered Litigation Platform

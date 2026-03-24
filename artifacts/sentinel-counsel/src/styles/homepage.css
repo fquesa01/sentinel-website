@@ -167,22 +167,6 @@
   position: relative;
 }
 
-.hero-gradient-fade {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    transparent 60%,
-    rgba(11, 13, 16, 0.6) 80%,
-    rgba(11, 13, 16, 1) 100%
-  );
-  z-index: 1;
-  pointer-events: none;
-}
 
 .hero-content {
   position: relative;
@@ -271,7 +255,7 @@
 .trust-bar {
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  background: var(--bg-secondary);
+  background: rgba(18, 20, 24, 0.85);
   position: relative;
   z-index: 2;
 }
@@ -705,7 +689,7 @@
 }
 
 .case-callout {
-  background: var(--bg-secondary);
+  background: rgba(18, 20, 24, 0.85);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   position: relative;
@@ -924,6 +908,8 @@
   border-top: 1px solid var(--border);
   padding: 3rem 4rem;
   display: flex;
+  position: relative;
+  z-index: 2;
   justify-content: space-between;
   align-items: center;
   background: var(--bg-secondary);
