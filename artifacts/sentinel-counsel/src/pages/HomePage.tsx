@@ -37,7 +37,7 @@ export default function HomePage() {
           </div>
           <h1>Your Unfair <em>Advantage</em><br/>in the Courtroom</h1>
           <p className="hero-sub">
-            Sentinel Counsel is the AI second chair that pulls case files by voice, flags deponent lies in real time, builds your case checklist automatically, and drafts discovery responses in minutes — all without ever compromising privilege.
+            Pull case files by voice. Flag lies in real time. Draft discovery in minutes. All without compromising privilege.
           </p>
           <div className="hero-actions">
             <a href="#contact" className="btn-primary">
