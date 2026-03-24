@@ -550,7 +550,9 @@
 }
 
 .cap-card p {
-  font-size: 0.95rem;
+  font-size: 1.1rem;
+  color: #c8cdd4;
+  line-height: 1.7;
 }
 
 .privilege-inner {
