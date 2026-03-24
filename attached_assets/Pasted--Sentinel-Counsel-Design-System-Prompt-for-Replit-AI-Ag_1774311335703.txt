@@ -1,0 +1,379 @@
+# Sentinel Counsel — Design System Prompt for Replit AI Agent
+
+## ROLE
+You are building the Sentinel Counsel LLP web application — an AI-powered legal and compliance intelligence platform for litigation law firms, real estate transactional attorneys, private equity due diligence teams, and institutional investors. Every design decision must project **institutional-grade trust, sophistication, and speed**. Think Bloomberg Terminal meets Wachtell Lipton meets Palantir — not consumer SaaS.
+
+---
+
+## COLOR PALETTE
+
+### Core Backgrounds
+- `--bg-primary: #0B0B12` — Main app background (warm-tinted near-black, never pure #000)
+- `--bg-secondary: #12121C` — Cards, panels, modals
+- `--bg-tertiary: #1A1A28` — Elevated surfaces, hover states, sidebar
+- `--bg-nav: #08080E` — Top nav and fixed headers
+
+### Navy Accents (Trust Layer)
+- `--navy-deep: #1A2744` — Section dividers, secondary panels
+- `--navy-mid: #243356` — Active sidebar items, selected states
+- `--navy-light: #2E4068` — Hover states on navy elements
+
+### Gold Accents (Institutional Signal — USE SPARINGLY)
+- `--gold-primary: #C9A84C` — Primary CTA buttons, active states, key data highlights
+- `--gold-light: #D4B85A` — Hover state for gold elements
+- `--gold-muted: #8B7A3C` — Subtle borders, inactive gold elements
+- `--gold-glow: rgba(201, 168, 76, 0.15)` — Subtle glow behind gold CTAs
+
+### Text
+- `--text-primary: #E8E6E1` — Body text (warm off-white, reduces eye strain)
+- `--text-heading: #FFFFFF` — Headlines and titles only
+- `--text-secondary: #9B98A0` — Captions, labels, metadata
+- `--text-muted: #6B6876` — Placeholders, disabled text
+- `--text-on-gold: #0B0B12` — Text on gold buttons (dark on gold)
+
+### Status & Data Colors
+- `--status-positive: #4ECDC4` — Success, active, connected (muted teal)
+- `--status-warning: #E0A458` — Warnings, pending, attention (warm amber)
+- `--status-danger: #D45555` — Errors, critical alerts (muted red, not fire-engine)
+- `--status-info: #5B8DEF` — Informational, links within content (slate blue)
+
+### Borders & Dividers
+- `--border-subtle: rgba(255, 255, 255, 0.06)` — Card edges, table rows
+- `--border-medium: rgba(255, 255, 255, 0.12)` — Input fields, active dividers
+- `--border-gold: rgba(201, 168, 76, 0.3)` — Featured card borders, premium elements
+
+---
+
+## TYPOGRAPHY
+
+### Font Stack
+```css
+/* Headlines, brand, hero text — serif for gravitas */
+--font-display: 'DM Serif Display', 'Playfair Display', Georgia, serif;
+
+/* Body, UI, navigation, buttons — clean sans-serif */
+--font-body: 'Inter', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+/* Code, data tables, numbers — monospace */
+--font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+```
+
+### Type Scale
+```css
+--text-hero: 3.5rem;      /* 56px — Landing page hero only */
+--text-h1: 2.5rem;        /* 40px — Page titles */
+--text-h2: 1.75rem;       /* 28px — Section headers */
+--text-h3: 1.25rem;       /* 20px — Card titles, subsections */
+--text-body: 1rem;         /* 16px — Body copy */
+--text-sm: 0.875rem;       /* 14px — Labels, metadata, table cells */
+--text-xs: 0.75rem;        /* 12px — Captions, timestamps */
+```
+
+### Typography Rules
+- Headlines (h1, h2, hero): Use `--font-display` (serif). Font-weight 400. Letter-spacing: -0.02em.
+- Body and UI: Use `--font-body` (sans-serif). Font-weight 400 for body, 500 for labels, 600 for buttons.
+- Data/numbers: Use `--font-mono` in tables, dashboards, and financial figures.
+- Line height: 1.6 for body text, 1.2 for headlines, 1.4 for UI elements.
+- NEVER use font-weight 800/900 (black/ultra-bold). Max is 700 for rare emphasis.
+
+---
+
+## COMPONENT PATTERNS
+
+### Buttons
+```css
+/* Primary CTA — Gold, used for main actions only */
+.btn-primary {
+  background: var(--gold-primary);
+  color: var(--text-on-gold);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  border-radius: 4px; /* Minimal radius — not bubbly */
+  border: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 20px var(--gold-glow);
+}
+.btn-primary:hover {
+  background: var(--gold-light);
+  box-shadow: 0 0 30px rgba(201, 168, 76, 0.25);
+}
+
+/* Secondary — Ghost/outline style */
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-medium);
+  padding: 12px 28px;
+  border-radius: 4px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.btn-secondary:hover {
+  border-color: var(--gold-muted);
+  color: var(--gold-primary);
+}
+
+/* Tertiary — Text-only link button */
+.btn-tertiary {
+  background: none;
+  border: none;
+  color: var(--gold-primary);
+  font-weight: 500;
+  text-decoration: none;
+}
+```
+
+### Cards
+```css
+.card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 24px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  border-color: var(--border-gold);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+.card-featured {
+  border-color: var(--border-gold);
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(26, 39, 68, 0.3) 100%);
+}
+```
+
+### Navigation
+- Top nav: Fixed, `--bg-nav` background, 64px height, subtle bottom border using `--border-subtle`.
+- Sidebar: 260px width, `--bg-tertiary` background. Active item uses `--navy-mid` background with `--gold-primary` left border (3px).
+- Nav text: `--font-body`, `--text-sm`, font-weight 500. Active = `--text-primary`. Inactive = `--text-secondary`.
+
+### Tables & Data
+- Header row: `--bg-tertiary` background, `--text-secondary` color, `--text-xs` uppercase, letter-spacing 0.08em.
+- Body rows: `--bg-secondary` background, `--border-subtle` bottom border.
+- Alternating rows: Optional, use `--bg-tertiary` at 50% opacity.
+- Numbers/financial data: Always use `--font-mono`, right-aligned.
+- Hover row: `--bg-tertiary` background with `--border-gold` left border.
+
+### Inputs & Forms
+- Background: `--bg-tertiary`
+- Border: 1px solid `--border-medium`
+- Focus: border-color `--gold-primary`, box-shadow `0 0 0 3px var(--gold-glow)`
+- Border-radius: 4px (not rounded)
+- Text: `--text-primary`, `--font-body`, `--text-body`
+- Labels: `--text-secondary`, `--text-xs`, uppercase, letter-spacing 0.06em, margin-bottom 6px
+
+---
+
+## SPACING & LAYOUT
+
+```css
+--space-xs: 4px;
+--space-sm: 8px;
+--space-md: 16px;
+--space-lg: 24px;
+--space-xl: 32px;
+--space-2xl: 48px;
+--space-3xl: 64px;
+--space-4xl: 96px;
+
+/* Max content width */
+--max-width: 1280px;
+
+/* Standard page padding */
+--page-padding: var(--space-2xl);
+```
+
+- Use 8px grid alignment for all spacing.
+- Cards: 24px internal padding, 16px gap between cards.
+- Sections: 64px vertical spacing between major sections.
+- Content: Max-width 1280px centered with auto margins.
+
+---
+
+## EFFECTS & MOTION
+
+### Shadows (Dark Mode Optimized)
+```css
+--shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+--shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+--shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+--shadow-gold: 0 0 24px rgba(201, 168, 76, 0.15);
+```
+
+### Transitions
+- Standard: `all 0.2s ease` for hover states
+- Modals/drawers: `transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)`
+- NO bouncy, springy, or playful animations. Everything is smooth, minimal, and purposeful.
+- Subtle fade-in on page load (opacity 0→1 over 0.4s). No sliding, no zooming.
+
+### Background Textures (Optional, Subtle)
+- Very subtle noise texture at 2-3% opacity on `--bg-primary` for depth.
+- Optional: extremely subtle radial gradient glow (gold at 3-5% opacity) behind hero sections.
+
+---
+
+## DESIGN PRINCIPLES — FOLLOW THESE STRICTLY
+
+1. **Institutional, not startup.** No gradients on buttons. No playful illustrations. No emoji in UI. No rounded-pill buttons. This is a platform for people managing $500M+ deals and federal litigation.
+
+2. **Density with clarity.** Attorneys need information-dense layouts but with clear visual hierarchy. Use whitespace to separate sections, not to fill space. Think Bloomberg, not Apple.
+
+3. **Gold is precious — use it like real gold.** The gold accent should appear on: primary CTA buttons, active navigation indicators, key status badges, and important data highlights. If everything is gold, nothing is gold.
+
+4. **Serif headlines create the "establishment" signal.** Every hero, page title, and major section header uses the serif display font. This subconsciously tells the attorney "this company has been here a while and handles serious work."
+
+5. **Sans-serif everywhere else for speed.** Body text, navigation, labels, buttons, form fields — all sans-serif. This signals modernity and reduces cognitive load for time-starved professionals.
+
+6. **No pure black (#000000).** Always use the warm-tinted darks. Pure black looks cheap on screens and creates harsh contrast that causes eye fatigue during extended use.
+
+7. **Border-radius: 4-8px max.** Cards get 8px. Buttons and inputs get 4px. Nothing should look like a pill or a bubble. Sharp but not razor-sharp.
+
+8. **Micro-interactions, not animations.** Subtle hover effects (color shift, border glow). Smooth transitions. No loading spinners with personality. No confetti. No celebration animations.
+
+9. **Content hierarchy in 3 tiers.** Primary = white text or gold accent. Secondary = off-white `--text-primary`. Tertiary = muted `--text-secondary`. Every screen should have one clear focal point.
+
+10. **Mobile responsive but desktop-first.** The primary users are at desks with dual monitors. Design for 1440px+ first. Mobile is for checking alerts and quick access, not primary workflow.
+
+---
+
+## REFERENCE AESTHETIC
+
+Think of the visual intersection of:
+- **Palantir Foundry** (data-dense dark UI, institutional feel)
+- **Bloomberg Terminal** (information density, monospace data, dark background)
+- **Wachtell Lipton website** (serif typography, understated prestige)
+- **Carta** (modern legal/financial SaaS, clean dark panels)
+- **Relativity eDiscovery** (legal workflow tool, professional UI)
+
+The user should look at Sentinel Counsel and think: "These people handle serious work for serious clients." Not: "This looks like another AI startup."
+
+---
+
+## LANDING PAGE STRUCTURE (Marketing Site)
+
+### Hero Section
+- Full-width dark background (`--bg-primary`)
+- Headline in serif (`--font-display`), white, 56px: e.g., "Your Unfair Advantage in the Courtroom"
+- Subhead in sans-serif (`--font-body`), `--text-secondary`, 18px, max-width 600px
+- One gold CTA button: "Request a Demo" or "Schedule a Briefing"
+- One ghost button: "See the Platform"
+- NO hero images. Optional: subtle abstract data visualization or mesh gradient at very low opacity in background.
+
+### Social Proof Bar
+- Muted logos of client types (not specific clients): "Trusted by litigation teams, PE firms, and institutional investors"
+- `--text-muted` color, small, understated. Not a celebration — a statement of fact.
+
+### Feature Sections
+- Alternating layout: text left / visual right, then reverse
+- Section headers in serif (`--font-display`)
+- Feature descriptions in sans-serif, `--text-primary`, max 2-3 sentences
+- Feature visuals: dark-mode screenshots of the actual platform, bordered with `--border-subtle`
+
+### CTA Section (Bottom)
+- Navy gradient background (`--navy-deep` to `--bg-primary`)
+- Serif headline: "Built for the Way You Actually Work"
+- Gold CTA button + brief reassurance text ("No credit card required. SOC 2 compliant.")
+
+### Footer
+- Minimal. Dark (`--bg-nav`). 4 columns max. `--text-secondary` links. Gold for "Contact" link only.
+
+---
+
+## QUICK REFERENCE — CSS CUSTOM PROPERTIES BLOCK
+
+Copy this into your global CSS or Tailwind config:
+
+```css
+:root {
+  /* Backgrounds */
+  --bg-primary: #0B0B12;
+  --bg-secondary: #12121C;
+  --bg-tertiary: #1A1A28;
+  --bg-nav: #08080E;
+
+  /* Navy */
+  --navy-deep: #1A2744;
+  --navy-mid: #243356;
+  --navy-light: #2E4068;
+
+  /* Gold */
+  --gold-primary: #C9A84C;
+  --gold-light: #D4B85A;
+  --gold-muted: #8B7A3C;
+  --gold-glow: rgba(201, 168, 76, 0.15);
+
+  /* Text */
+  --text-primary: #E8E6E1;
+  --text-heading: #FFFFFF;
+  --text-secondary: #9B98A0;
+  --text-muted: #6B6876;
+  --text-on-gold: #0B0B12;
+
+  /* Status */
+  --status-positive: #4ECDC4;
+  --status-warning: #E0A458;
+  --status-danger: #D45555;
+  --status-info: #5B8DEF;
+
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-medium: rgba(255, 255, 255, 0.12);
+  --border-gold: rgba(201, 168, 76, 0.3);
+
+  /* Typography */
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-gold: 0 0 24px rgba(201, 168, 76, 0.15);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  color: var(--text-heading);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+```
+
+---
+
+## IMPORTANT REMINDERS FOR THE AI AGENT
+
+- When generating any component, page, or layout — ALWAYS apply this design system. Do not default to light-mode or generic styles.
+- When in doubt about a design choice, ask: "Would a managing partner at a $2B PE firm trust this?" If the answer is no, redesign.
+- Load Google Fonts: DM Serif Display (400), Inter (400, 500, 600), JetBrains Mono (400, 500).
+- All images/screenshots shown in the app should have dark-mode styling. No light-mode screenshots in a dark UI.
+- Favicons and og:image should use the gold accent on dark background.
