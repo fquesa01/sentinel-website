@@ -3,11 +3,11 @@ import "@/styles/homepage.css";
 
 const base = import.meta.env.BASE_URL;
 const heroImages = [
-  `${base}images/hero/courtroom.jpg`,
-  `${base}images/hero/deposition-1.jpg`,
-  `${base}images/hero/meeting.jpg`,
-  `${base}images/hero/attorney.jpg`,
-  `${base}images/hero/deposition-2.jpg`,
+  `${base}images/hero/law-library.jpg`,
+  `${base}images/hero/scales-justice.jpg`,
+  `${base}images/hero/legal-volumes.jpg`,
+  `${base}images/hero/microphone.jpg`,
+  `${base}images/hero/gavel-books.jpg`,
 ];
 
 export default function HomePage() {
