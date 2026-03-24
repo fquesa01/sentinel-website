@@ -37,7 +37,7 @@ export default function HomePage() {
           </div>
           <h1>Your Unfair <em>Advantage</em><br/>in the Courtroom</h1>
           <p className="hero-sub">
-            Pull case files by voice. Flag lies in real time. Draft discovery in minutes. All without compromising privilege.
+            Pull case files by voice. Flag lies in real time. Draft discovery in minutes. Integrated e-discovery. Client and contact tracking. All without compromising privilege.
           </p>
           <div className="hero-actions">
             <a href="#contact" className="btn-primary">
