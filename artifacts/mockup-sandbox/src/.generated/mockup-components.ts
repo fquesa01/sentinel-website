@@ -8,5 +8,6 @@ export const modules: ModuleMap = {
   "./components/mockups/sentinel-homepage/StarkPolished.tsx": () => import("../components/mockups/sentinel-homepage/StarkPolished.tsx"),
   "./components/mockups/sentinel-homepage/StarkPrecision.tsx": () => import("../components/mockups/sentinel-homepage/StarkPrecision.tsx"),
   "./components/mockups/sentinel-homepage/StarkTight.tsx": () => import("../components/mockups/sentinel-homepage/StarkTight.tsx"),
-  "./components/mockups/sentinel-homepage/WarmAuthority.tsx": () => import("../components/mockups/sentinel-homepage/WarmAuthority.tsx")
+  "./components/mockups/sentinel-homepage/WarmAuthority.tsx": () => import("../components/mockups/sentinel-homepage/WarmAuthority.tsx"),
+  "./components/mockups/sentinel-homepage/WarmIce.tsx": () => import("../components/mockups/sentinel-homepage/WarmIce.tsx")
 };
