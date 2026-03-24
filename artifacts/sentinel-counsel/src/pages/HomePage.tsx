@@ -1,13 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import "@/styles/homepage.css";
+
+const base = import.meta.env.BASE_URL;
+const heroImages = [
+  `${base}images/hero/courtroom.jpg`,
+  `${base}images/hero/deposition-1.jpg`,
+  `${base}images/hero/meeting.jpg`,
+  `${base}images/hero/attorney.jpg`,
+  `${base}images/hero/deposition-2.jpg`,
+];
 
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % heroImages.length);
+    }, 6000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -29,7 +46,16 @@ export default function HomePage() {
       </nav>
 
       <section className="ice-hero">
-        <div className="hero-grid-bg"></div>
+        <div className="hero-slideshow">
+          {heroImages.map((src, i) => (
+            <div
+              key={src}
+              className={`hero-slide ${i === activeSlide ? "active" : ""} ${i === (activeSlide - 1 + heroImages.length) % heroImages.length ? "prev" : ""}`}
+              style={{ backgroundImage: `url(${src})` }}
+            />
+          ))}
+          <div className="hero-overlay"></div>
+        </div>
         <div className="hero-content">
           <div className="hero-badge">
             AI-Powered Litigation Platform
