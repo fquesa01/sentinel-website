@@ -1,30 +1,14 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import "@/styles/homepage.css";
-
-const base = import.meta.env.BASE_URL;
-const heroImages = [
-  `${base}images/hero/brutalist.jpg`,
-  `${base}images/hero/rain-noir.jpg`,
-  `${base}images/hero/light-trails.jpg`,
-  `${base}images/hero/server-corridor.jpg`,
-  `${base}images/hero/night-skyline.jpg`,
-];
+import ParticleField from "@/components/ParticleField";
 
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
-  const [activeSlide, setActiveSlide] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % heroImages.length);
-    }, 6000);
-    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -46,16 +30,8 @@ export default function HomePage() {
       </nav>
 
       <section className="ice-hero">
-        <div className="hero-slideshow">
-          {heroImages.map((src, i) => (
-            <div
-              key={src}
-              className={`hero-slide ${i === activeSlide ? "active" : ""} ${i === (activeSlide - 1 + heroImages.length) % heroImages.length ? "prev" : ""}`}
-              style={{ backgroundImage: `url(${src})` }}
-            />
-          ))}
-          <div className="hero-overlay"></div>
-        </div>
+        <ParticleField />
+        <div className="hero-gradient-fade"></div>
         <div className="hero-content">
           <div className="hero-badge">
             AI-Powered Litigation Platform
