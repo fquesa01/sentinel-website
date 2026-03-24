@@ -647,6 +647,12 @@
   color: var(--accent-primary);
 }
 
+.priv-text > p {
+  font-size: 1.1rem;
+  color: #c8cdd4;
+  line-height: 1.7;
+}
+
 .priv-features {
   display: flex;
   flex-direction: column;
@@ -687,7 +693,9 @@
 }
 
 .priv-feat-text p {
-  font-size: 0.95rem;
+  font-size: 1.1rem;
+  color: #c8cdd4;
+  line-height: 1.7;
 }
 
 .case-callout {
