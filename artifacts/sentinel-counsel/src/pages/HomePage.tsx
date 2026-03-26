@@ -6,7 +6,7 @@ const base = import.meta.env.BASE_URL;
 
 const SCENES = [
   {
-    video: `${base}videos/courtroom_drone_through.mp4`,
+    video: `${base}videos/courtroom_drone_above.mp4`,
     heading: <>Your Unfair <em>Advantage</em><br/>in the Courtroom</>,
   },
   {
