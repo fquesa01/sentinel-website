@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import "@/styles/homepage.css";
-import ParticleField from "@/components/ParticleField";
+import VideoBackground from "@/components/VideoBackground";
+
+const base = import.meta.env.BASE_URL;
+const COURTROOM_VIDEOS = [
+  `${base}videos/courtroom_drone_above.mp4`,
+  `${base}videos/courtroom_drone_through.mp4`,
+  `${base}videos/courtroom_drone_descend.mp4`,
+];
 
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
@@ -13,7 +20,7 @@ export default function HomePage() {
 
   return (
     <div className="ice-container">
-      <ParticleField />
+      <VideoBackground videos={COURTROOM_VIDEOS} clipDuration={10000} crossfadeDuration={2500} />
       <nav className={`ice-nav ${scrolled ? "scrolled" : ""}`}>
         <a href="#" className="ice-logo">
           <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
