@@ -229,7 +229,7 @@
   padding: 0.875rem 2rem;
   background: transparent;
   border: 1px solid var(--accent-primary);
-  color: var(--accent-primary);
+  color: #ffffff;
   font-family: var(--font-mono);
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -251,7 +251,7 @@
   padding: 0.875rem 2rem;
   border: 1px solid var(--border);
   background: transparent;
-  color: var(--text-heading);
+  color: #ffffff;
   font-family: var(--font-mono);
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -287,7 +287,7 @@
   gap: 0.75rem;
   font-family: var(--font-mono);
   font-size: 0.95rem;
-  color: var(--gray-light);
+  color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
