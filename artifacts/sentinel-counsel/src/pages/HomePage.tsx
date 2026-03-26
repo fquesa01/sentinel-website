@@ -21,6 +21,10 @@ const SCENES = [
     video: `${base}videos/deposition_room_drone.mp4`,
     heading: <>Your Unfair <em>Advantage</em><br/>in a Deposition</>,
   },
+  {
+    video: `${base}videos/discovery_office_drone.mp4`,
+    heading: <>Your Unfair <em>Advantage</em><br/>in Discovery</>,
+  },
 ];
 
 const SCENE_VIDEOS = SCENES.map((s) => s.video);
