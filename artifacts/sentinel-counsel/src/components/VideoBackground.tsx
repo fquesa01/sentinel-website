@@ -1,15 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 interface VideoBackgroundProps {
   videos: string[];
   crossfadeDuration?: number;
   clipDuration?: number;
+  onClipChange?: (index: number) => void;
 }
 
 export default function VideoBackground({
   videos,
   crossfadeDuration = 2000,
   clipDuration = 8000,
+  onClipChange,
 }: VideoBackgroundProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState<number | null>(null);
@@ -17,6 +19,20 @@ export default function VideoBackground({
   const activeRef = useRef<HTMLVideoElement>(null);
   const nextRef = useRef<HTMLVideoElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const handleClipChange = useCallback(
+    (idx: number) => {
+      setActiveIndex(idx);
+      setNextIndex(null);
+      setFading(false);
+      onClipChange?.(idx);
+    },
+    [onClipChange],
+  );
+
+  useEffect(() => {
+    onClipChange?.(0);
+  }, []);
 
   useEffect(() => {
     if (videos.length <= 1) return;
@@ -36,9 +52,7 @@ export default function VideoBackground({
       }, 50);
 
       timerRef.current = setTimeout(() => {
-        setFading(false);
-        setActiveIndex(next);
-        setNextIndex(null);
+        handleClipChange(next);
       }, crossfadeDuration);
     };
 
@@ -47,7 +61,7 @@ export default function VideoBackground({
       clearInterval(interval);
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [activeIndex, videos.length, crossfadeDuration, clipDuration]);
+  }, [activeIndex, videos.length, crossfadeDuration, clipDuration, handleClipChange]);
 
   return (
     <div
@@ -91,7 +105,6 @@ export default function VideoBackground({
           opacity: fading ? 0 : 1,
           transition: `opacity ${crossfadeDuration}ms ease-in-out`,
           zIndex: 1,
-          playbackRate: 0.6,
         }}
         onLoadedMetadata={(e) => {
           (e.target as HTMLVideoElement).playbackRate = 0.6;
@@ -117,7 +130,6 @@ export default function VideoBackground({
             opacity: fading ? 1 : 0,
             transition: `opacity ${crossfadeDuration}ms ease-in-out`,
             zIndex: 0,
-            playbackRate: 0.6,
           }}
           onLoadedMetadata={(e) => {
             (e.target as HTMLVideoElement).playbackRate = 0.6;

@@ -1,16 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import "@/styles/homepage.css";
 import VideoBackground from "@/components/VideoBackground";
 
 const base = import.meta.env.BASE_URL;
-const COURTROOM_VIDEOS = [
-  `${base}videos/courtroom_drone_above.mp4`,
-  `${base}videos/courtroom_drone_through.mp4`,
-  `${base}videos/courtroom_drone_descend.mp4`,
+
+const SCENES = [
+  {
+    video: `${base}videos/courtroom_drone_above.mp4`,
+    heading: <>Your Unfair <em>Advantage</em><br/>in the Courtroom</>,
+  },
+  {
+    video: `${base}videos/courtroom_drone_through.mp4`,
+    heading: <>Your Unfair <em>Advantage</em><br/>in the Courtroom</>,
+  },
+  {
+    video: `${base}videos/courtroom_drone_descend.mp4`,
+    heading: <>Your Unfair <em>Advantage</em><br/>in the Courtroom</>,
+  },
+  {
+    video: `${base}videos/deposition_room_drone.mp4`,
+    heading: <>Your Unfair <em>Advantage</em><br/>in a Deposition</>,
+  },
 ];
+
+const SCENE_VIDEOS = SCENES.map((s) => s.video);
 
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
+  const [clipIndex, setClipIndex] = useState(0);
+  const [textFading, setTextFading] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -18,9 +36,28 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const isFirstClip = useRef(true);
+  const handleClipChange = useCallback((index: number) => {
+    if (isFirstClip.current) {
+      isFirstClip.current = false;
+      setClipIndex(index);
+      return;
+    }
+    setTextFading(true);
+    setTimeout(() => {
+      setClipIndex(index);
+      setTextFading(false);
+    }, 600);
+  }, []);
+
   return (
     <div className="ice-container">
-      <VideoBackground videos={COURTROOM_VIDEOS} clipDuration={10000} crossfadeDuration={2500} />
+      <VideoBackground
+        videos={SCENE_VIDEOS}
+        clipDuration={10000}
+        crossfadeDuration={2500}
+        onClipChange={handleClipChange}
+      />
       <nav className={`ice-nav ${scrolled ? "scrolled" : ""}`}>
         <a href="#" className="ice-logo">
           <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -42,7 +79,9 @@ export default function HomePage() {
           <div className="hero-badge">
             AI-Powered Litigation Platform
           </div>
-          <h1>Your Unfair <em>Advantage</em><br/>in the Courtroom</h1>
+          <h1 className={textFading ? "hero-text-fade" : "hero-text-visible"}>
+            {SCENES[clipIndex].heading}
+          </h1>
           <p className="hero-sub">
             Sentinel handles the heavy lifting — voice-powered case files, real-time lie detection, e-discovery, and draft discovery — so you can focus on what matters most: your clients and your cases.
           </p>
