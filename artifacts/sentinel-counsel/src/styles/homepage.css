@@ -789,6 +789,10 @@
   height: 16px;
 }
 
+#team {
+  background: rgba(10, 12, 16, 0.9);
+}
+
 .team-new-inner {
   display: grid;
   grid-template-columns: 1fr 1.3fr;
