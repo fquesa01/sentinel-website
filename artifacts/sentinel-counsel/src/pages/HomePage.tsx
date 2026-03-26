@@ -306,7 +306,7 @@ export default function HomePage() {
       <section className="case-callout" id="heppner">
         <div className="case-inner">
           <span className="mono-label">The Precedent</span>
-          <h2>The Court Has Spoken:<br/>AI Use Can Waive Privilege</h2>
+          <h2>The Court Has Spoken:<br/>Unsecured AI Use Will Waive Privilege</h2>
           <p>A landmark federal ruling has confirmed what many feared — using consumer AI tools with privileged information destroys attorney-client privilege.</p>
 
           <div className="case-ruling">
