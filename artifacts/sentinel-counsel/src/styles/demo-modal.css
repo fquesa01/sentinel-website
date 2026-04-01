@@ -1,0 +1,214 @@
+.demo-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: modalOverlayIn 0.2s ease;
+}
+
+@keyframes modalOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.demo-modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  width: 100%;
+  max-width: 480px;
+  padding: 3rem;
+  position: relative;
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.demo-modal-close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--gray-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.demo-modal-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.demo-modal-close:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.demo-modal-header {
+  margin-bottom: 2rem;
+}
+
+.demo-modal-header h3 {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 300;
+  color: var(--text-heading);
+  margin-bottom: 0.5rem;
+}
+
+.demo-modal-header p {
+  font-size: 0.95rem;
+  color: var(--text-body);
+}
+
+.demo-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.demo-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.demo-field label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--gray-light);
+}
+
+.demo-field input {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  color: var(--text-heading);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.demo-field input::placeholder {
+  color: var(--gray-dark);
+}
+
+.demo-field input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.15);
+}
+
+.demo-field input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.demo-error {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--danger);
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.demo-modal-btn {
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.demo-modal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.demo-disclaimer {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gray-dark);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.demo-disclaimer::before {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='1.5' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='3' y='11' width='18' height='11' rx='2' ry='2'/%3E%3Cpath d='M7 11V7a5 5 0 0 1 10 0v4'/%3E%3C/svg%3E");
+  background-size: contain;
+  flex-shrink: 0;
+}
+
+.demo-modal-success {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.demo-success-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 1.5rem;
+  color: var(--accent-primary);
+}
+
+.demo-success-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.demo-modal-success h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--text-heading);
+  margin-bottom: 1rem;
+}
+
+.demo-modal-success p {
+  font-size: 0.95rem;
+  color: var(--text-body);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .demo-modal {
+    padding: 2rem 1.5rem;
+    max-width: 100%;
+    margin: 0 0.5rem;
+  }
+
+  .demo-modal-header h3 {
+    font-size: 1.5rem;
+  }
+}

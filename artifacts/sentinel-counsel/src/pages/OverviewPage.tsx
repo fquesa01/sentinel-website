@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import "@/styles/homepage.css";
 import "@/styles/overview.css";
+import DemoRequestModal from "@/components/DemoRequestModal";
 
 export default function OverviewPage() {
   const [scrolled, setScrolled] = useState(false);
+  const [demoOpen, setDemoOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -28,7 +30,7 @@ export default function OverviewPage() {
         <div className="ice-nav-links">
           <Link href="/">Home</Link>
           <Link href="/overview" className="ice-nav-active">Overview</Link>
-          <a href="/#contact" className="ice-nav-cta">Request Demo</a>
+          <button className="ice-nav-cta" onClick={() => setDemoOpen(true)}>Request Demo</button>
         </div>
       </nav>
 
@@ -200,9 +202,9 @@ export default function OverviewPage() {
       <section className="cta-section">
         <h2>Ready to Protect<br />Your Practice?</h2>
         <p className="section-desc">Join the law firms already using Sentinel Counsel to harness AI without compromising privilege.</p>
-        <a href="/#contact" className="btn-primary">
+        <button className="btn-primary" onClick={() => setDemoOpen(true)}>
           Request a Confidential Demo
-        </a>
+        </button>
       </section>
 
       <footer className="ice-footer">
@@ -219,6 +221,8 @@ export default function OverviewPage() {
           <a href="#">Security</a>
         </div>
       </footer>
+
+      <DemoRequestModal open={demoOpen} onClose={() => setDemoOpen(false)} />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { Link } from "wouter";
 import "@/styles/homepage.css";
 import VideoBackground from "@/components/VideoBackground";
+import DemoRequestModal from "@/components/DemoRequestModal";
 
 const base = import.meta.env.BASE_URL;
 
@@ -26,6 +27,7 @@ export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
   const [clipIndex, setClipIndex] = useState(0);
   const [textFading, setTextFading] = useState(false);
+  const [demoOpen, setDemoOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -68,7 +70,7 @@ export default function HomePage() {
           <Link href="/overview">Overview</Link>
           <a href="#team">Team</a>
           <a href="#security">Security</a>
-          <a href="#contact" className="ice-nav-cta">Request Demo</a>
+          <button className="ice-nav-cta" onClick={() => setDemoOpen(true)}>Request Demo</button>
         </div>
       </nav>
 
@@ -84,9 +86,9 @@ export default function HomePage() {
             Sentinel handles the heavy lifting — voice-powered case files, real-time lie detection, e-discovery, and draft discovery — so you can focus on what matters most: your clients and your cases.
           </p>
           <div className="hero-actions">
-            <a href="#contact" className="btn-primary">
+            <button className="btn-primary" onClick={() => setDemoOpen(true)}>
               Request a Demo
-            </a>
+            </button>
             <a href="#courtroom" className="btn-ghost">
               See It in Action
             </a>
@@ -409,9 +411,9 @@ export default function HomePage() {
       <section className="cta-section" id="contact">
         <h2>Ready to Protect<br/>Your Practice?</h2>
         <p className="section-desc">Join the law firms already using Sentinel Counsel to harness AI without compromising privilege.</p>
-        <a href="#" className="btn-primary">
+        <button className="btn-primary" onClick={() => setDemoOpen(true)}>
           Request a Confidential Demo
-        </a>
+        </button>
       </section>
 
       <footer className="ice-footer">
@@ -428,6 +430,8 @@ export default function HomePage() {
           <a href="#">Security</a>
         </div>
       </footer>
+
+      <DemoRequestModal open={demoOpen} onClose={() => setDemoOpen(false)} />
     </div>
   );
 }

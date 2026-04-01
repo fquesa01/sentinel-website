@@ -40,6 +40,15 @@
   text-decoration: none;
 }
 
+.ice-container button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+
 .ice-container section {
   padding: 8rem 4rem;
   max-width: 1400px;
