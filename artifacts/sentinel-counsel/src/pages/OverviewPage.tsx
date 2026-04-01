@@ -3,8 +3,6 @@ import { Link } from "wouter";
 import "@/styles/homepage.css";
 import "@/styles/overview.css";
 
-const base = import.meta.env.BASE_URL;
-
 export default function OverviewPage() {
   const [scrolled, setScrolled] = useState(false);
 
