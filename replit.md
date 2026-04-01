@@ -25,7 +25,11 @@ Sentinel Counsel homepage — AI security platform for law firms. React + Vite w
 - **Design**: Ice Protocol — dark (#0b0d10) background, cyan (#00d4ff) accents, green status indicators, Roboto Mono monospace nav
 - **Fonts**: Outfit (headings), Inter (body), Roboto Mono (mono/labels) — loaded via Google Fonts in index.html
 - **CSS**: Custom CSS in `src/styles/homepage.css` (no Tailwind for page content)
-- **Sections**: Nav, Hero, Trust Bar, Courtroom Demo Terminal, Capabilities (5 cards), Privilege Vault (animated), Heppner Case Callout, Team/Leadership, Security Stats, CTA, Footer
+- **Pages**: HomePage (`/`) — full marketing page with video backgrounds; OverviewPage (`/overview`) — concise one-pager summarizing all offerings
+- **Routing**: wouter with `<Link>` for SPA navigation between pages; anchor links (`#section`) for in-page navigation
+- **Sections (HomePage)**: Nav, Hero, Trust Bar, Courtroom Demo Terminal, Capabilities (5 cards), Privilege Vault (animated), Heppner Case Callout, Team/Leadership, Security Stats, CTA, Footer
+- **Sections (OverviewPage)**: Nav, Hero, Value Prop, Five Pillars grid, Privilege Protection, Security Stats, Team, Heppner Precedent, CTA, Footer
+- **CSS**: `homepage.css` (shared base styles + homepage-specific), `overview.css` (overview page styles)
 - **Animations**: Pulsing status dots, blinking cursor, rotating vault ticks, vault center glow pulse
 
 ### `artifacts/mockup-sandbox` (`@workspace/mockup-sandbox`)

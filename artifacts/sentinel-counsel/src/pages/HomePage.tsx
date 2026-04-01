@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from "react";
+import { Link } from "wouter";
 import "@/styles/homepage.css";
 import VideoBackground from "@/components/VideoBackground";
 
@@ -64,6 +65,7 @@ export default function HomePage() {
         <div className="ice-nav-links">
           <a href="#courtroom">Litigation</a>
           <a href="#capabilities">Capabilities</a>
+          <Link href="/overview">Overview</Link>
           <a href="#team">Team</a>
           <a href="#security">Security</a>
           <a href="#contact" className="ice-nav-cta">Request Demo</a>
