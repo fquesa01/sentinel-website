@@ -64,10 +64,11 @@ router.post("/demo-request", async (req: Request, res: Response) => {
       },
     });
 
-    logger.info({ name, email, businessName }, "Demo request email sent");
+    logger.info("Demo request email sent successfully");
     res.json({ success: true });
-  } catch (err: any) {
-    logger.error({ err: err.message, name, email, businessName }, "Failed to send demo request email");
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    logger.error({ err: message }, "Failed to send demo request email");
     res.status(500).json({ error: "Failed to send demo request. Please try again later." });
   }
 });
