@@ -247,6 +247,28 @@ export default function ContentPage() {
                   {section.body.map((paragraph, i) => (
                     <p key={i}>{paragraph}</p>
                   ))}
+                  {section.table && (
+                    <div className="comparison-table-wrap">
+                      <table className="comparison-table">
+                        <thead>
+                          <tr>
+                            <th>Feature</th>
+                            <th>{section.table.headerA}</th>
+                            <th>{section.table.headerB}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {section.table.rows.map((row) => (
+                            <tr key={row.feature}>
+                              <td className="comparison-feature">{row.feature}</td>
+                              <td>{row.colA}</td>
+                              <td>{row.colB}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </section>
               ))}
             </div>

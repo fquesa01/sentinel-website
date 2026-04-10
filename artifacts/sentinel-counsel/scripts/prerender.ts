@@ -106,6 +106,13 @@ function renderArticleBody(page: ContentPage): string {
     for (const paragraph of section.body) {
       html += `<p>${escapeHtml(paragraph)}</p>`;
     }
+    if (section.table) {
+      html += `<div class="comparison-table-wrap"><table class="comparison-table"><thead><tr><th>Feature</th><th>${escapeHtml(section.table.headerA)}</th><th>${escapeHtml(section.table.headerB)}</th></tr></thead><tbody>`;
+      for (const row of section.table.rows) {
+        html += `<tr><td class="comparison-feature">${escapeHtml(row.feature)}</td><td>${escapeHtml(row.colA)}</td><td>${escapeHtml(row.colB)}</td></tr>`;
+      }
+      html += `</tbody></table></div>`;
+    }
     html += `</section>`;
   }
 

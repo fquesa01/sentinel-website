@@ -21,10 +21,23 @@ export const CATEGORY_ORDER: ContentCategory[] = [
   "landing",
 ];
 
+export interface ComparisonRow {
+  feature: string;
+  colA: string;
+  colB: string;
+}
+
+export interface ComparisonTable {
+  headerA: string;
+  headerB: string;
+  rows: ComparisonRow[];
+}
+
 export interface ContentSection {
   id: string;
   heading: string;
   body: string[];
+  table?: ComparisonTable;
 }
 
 export interface ContentPage {
@@ -696,11 +709,22 @@ export const contentPages: ContentPage[] = [
       id: "feature-comparison",
       heading: "Feature-by-Feature Comparison",
       body: [
-        "Document Review: Relativity provides customizable coding layouts, batch sets, propagation rules, and extensive quality control tools. Its analytics suite includes clustering, email threading, and find similar documents functionality. Sentinel Counsel prioritizes speed and accessibility — AI-powered review identifies privileged documents, clusters related materials, and drafts privilege log entries automatically, with voice-first interaction for instant results.",
-        "Processing & Ingestion: Both platforms handle the full range of modern data sources. Relativity's processing pipeline is mature and well-documented. Sentinel Counsel adds AI-powered culling at ingestion, reducing review populations before human reviewers engage, and integrates legal hold management directly into the processing workflow.",
-        "Deposition Support: Relativity does not include native deposition preparation tools. Sentinel Counsel provides AI-powered deposition preparation with real-time testimony analysis, cross-referencing witness statements against discovery documents, and voice-first querying during live depositions.",
-        "Compliance Monitoring: Relativity focuses primarily on eDiscovery and does not include compliance surveillance features. Sentinel Counsel integrates communication surveillance, anomaly detection, and regulatory monitoring within the same privilege-protected environment."
-      ]
+        "The table below summarizes how Sentinel Counsel and Relativity compare across the capabilities that matter most to litigation teams evaluating eDiscovery platforms in 2026."
+      ],
+      table: {
+        headerA: "Sentinel Counsel",
+        headerB: "Relativity",
+        rows: [
+          { feature: "Document Review", colA: "AI-powered privilege detection, voice-first querying, automated privilege log drafting", colB: "Customizable coding layouts, batch sets, analytics suite with clustering and email threading" },
+          { feature: "Privilege Protection", colA: "Zero-exposure architecture — no data sent to third parties", colB: "Multi-tenant cloud; contractual protections" },
+          { feature: "Processing & Ingestion", colA: "AI-powered culling at ingestion, integrated legal hold", colB: "Mature processing pipeline, extensive format support" },
+          { feature: "Deposition Support", colA: "Real-time AI testimony analysis, voice-first querying during depositions", colB: "Not included natively" },
+          { feature: "Compliance Monitoring", colA: "Multi-channel surveillance, AI anomaly detection within privilege boundary", colB: "Not included; eDiscovery-focused" },
+          { feature: "Interface", colA: "Voice-first AI, minimal training required", colB: "Complex UI, requires dedicated litigation support staff" },
+          { feature: "Pricing Model", colA: "Subscription-based, no per-GB fees", colB: "Per-user licensing + per-GB storage fees" },
+          { feature: "Best For", colA: "Small/mid-size firms, privilege-sensitive matters", colB: "Large firms with dedicated lit support teams" }
+        ]
+      }
     },
     {
       id: "pricing-deployment",
@@ -764,11 +788,22 @@ export const contentPages: ContentPage[] = [
       id: "feature-comparison",
       heading: "Feature-by-Feature Comparison",
       body: [
-        "Collaboration: Everlaw excels at collaborative document review with real-time updates, shared annotations, and storybuilder for visual case narratives. Sentinel Counsel approaches collaboration through voice-first AI summaries shareable across the team, prioritizing speed over visual coordination tools.",
-        "Search & Analytics: Everlaw's search interface is consistently praised for speed and intuitiveness, with powerful Boolean and conceptual search. Sentinel Counsel uses voice-first natural language queries, enabling attorneys to ask questions conversationally and receive AI-synthesized answers rather than document lists.",
-        "Data Handling: Both platforms handle diverse data sources including email, documents, chat, and cloud storage. Sentinel Counsel adds AI-powered culling at ingestion and integrates legal hold management and compliance monitoring, reducing the need for separate platforms.",
-        "Security & Compliance: Everlaw holds SOC 2 Type II and FedRAMP. Sentinel Counsel's zero-exposure architecture goes beyond security certifications to address privilege specifically — ensuring document content never leaves the privilege boundary, not just that it is protected from unauthorized access."
-      ]
+        "The table below compares Sentinel Counsel and Everlaw across the dimensions most important to mid-size firms evaluating cloud-native eDiscovery."
+      ],
+      table: {
+        headerA: "Sentinel Counsel",
+        headerB: "Everlaw",
+        rows: [
+          { feature: "Collaboration", colA: "Voice-first AI summaries shareable across team", colB: "Real-time updates, shared annotations, storybuilder narratives" },
+          { feature: "Search & Analytics", colA: "Natural language voice queries, AI-synthesized answers", colB: "Powerful Boolean and conceptual search, praised for speed" },
+          { feature: "Privilege Protection", colA: "Zero-exposure architecture — no third-party data access", colB: "SOC 2 Type II, FedRAMP; cloud security certifications" },
+          { feature: "Data Handling", colA: "AI-powered culling at ingestion, integrated legal hold and compliance", colB: "Diverse data source support, case-specific ML models" },
+          { feature: "Deposition Support", colA: "AI-powered real-time testimony analysis", colB: "Not included natively" },
+          { feature: "Compliance Monitoring", colA: "Multi-channel surveillance within privilege boundary", colB: "Not included" },
+          { feature: "Pricing", colA: "Subscription-based, no per-GB fees", colB: "Per-user licensing with storage-based fees" },
+          { feature: "Best For", colA: "Privilege-sensitive matters, AI-first litigation", colB: "Team-based collaborative review workflows" }
+        ]
+      }
     },
     {
       id: "pricing-comparison",
@@ -824,11 +859,22 @@ export const contentPages: ContentPage[] = [
       id: "feature-comparison",
       heading: "Feature-by-Feature Comparison",
       body: [
-        "Legal Hold Management: Exterro offers mature, enterprise-scale legal hold capabilities with organizational hierarchy management, multi-matter orchestration, and integration with HR and IT systems. Sentinel Counsel integrates legal holds directly into the AI-powered review environment — when a hold is issued, preserved data flows immediately into review without separate export or transfer, maintaining chain of custody and privilege protection throughout.",
-        "eDiscovery: Exterro provides processing, review, and production capabilities as part of its GRC suite. Sentinel Counsel's eDiscovery capabilities are AI-first — voice-driven querying, automated privilege identification, AI-powered document clustering, and real-time testimony cross-referencing during depositions provide capabilities that traditional review workflows cannot match.",
-        "Privacy & DSAR Management: Exterro includes robust data privacy management tools for GDPR, CCPA, and other privacy regulations. Sentinel Counsel does not currently include dedicated privacy management features, focusing instead on litigation-specific capabilities.",
-        "Compliance Monitoring: Sentinel Counsel includes communication surveillance with AI-powered anomaly detection, multi-channel monitoring, and automated alert workflows — all within the privilege boundary. Exterro's compliance capabilities focus more on governance workflows and policy management rather than real-time communication surveillance."
-      ]
+        "The table below compares Sentinel Counsel and Exterro across the core capabilities relevant to legal departments and law firms evaluating integrated legal platforms."
+      ],
+      table: {
+        headerA: "Sentinel Counsel",
+        headerB: "Exterro",
+        rows: [
+          { feature: "Legal Hold Management", colA: "Integrated directly into AI-powered review; preserved data flows immediately to review", colB: "Enterprise-scale with org hierarchy, multi-matter orchestration, HR/IT integration" },
+          { feature: "eDiscovery", colA: "AI-first: voice-driven querying, automated privilege ID, real-time testimony cross-referencing", colB: "Processing, review, and production as part of broader GRC suite" },
+          { feature: "Privacy & DSAR", colA: "Not currently included; litigation-focused", colB: "Robust GDPR, CCPA, and privacy regulation management" },
+          { feature: "Compliance Monitoring", colA: "Real-time communication surveillance with AI anomaly detection, within privilege boundary", colB: "Governance workflows and policy management" },
+          { feature: "AI Architecture", colA: "AI-first platform; voice-first interface as primary interaction", colB: "AI as enhancement to traditional GRC workflows" },
+          { feature: "Privilege Protection", colA: "Zero-exposure guarantee — no third-party AI data access", colB: "Evaluate data handling against Heppner standard" },
+          { feature: "Platform Breadth", colA: "Focused depth on litigation, deposition, compliance", colB: "Broad GRC: holds, eDiscovery, privacy, governance" },
+          { feature: "Best For", colA: "Law firms needing AI-powered litigation with privilege protection", colB: "Large orgs needing enterprise-wide legal governance" }
+        ]
+      }
     },
     {
       id: "ai-comparison",
