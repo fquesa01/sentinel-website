@@ -28,7 +28,7 @@ Sentinel Counsel homepage — AI security platform for law firms. React + Vite w
 - **Pages**: HomePage (`/`), ResourcesHub (`/resources`), ContentPage (`/resources/:slug`) — lazy-loaded content pages
 - **Routing**: wouter for SPA routing; anchor links (`#section`) for in-page navigation; React.lazy code splitting for content pages
 - **Content System**: Data-driven content pages defined in `src/data/content.ts`; ContentPage layout with breadcrumbs, sticky ToC, related articles, and CTA; ResourcesHub groups pages by category
-- **Pre-rendering**: Build-time script (`scripts/prerender.mjs`) generates static `index.html` for each content route for SEO crawlability
+- **Pre-rendering**: Build-time TypeScript script (`scripts/prerender.ts`) renders full content HTML and SEO metadata into static `index.html` for each content route; imports `content.ts` directly as single source of truth; also generates `sitemap.xml` at build time
 - **Sections (HomePage)**: Nav, Hero, Trust Bar, Courtroom Demo Terminal, Capabilities (5 cards), Privilege Vault (animated), Heppner Case Callout, Team/Leadership, Security Stats, CTA, Footer
 - **CSS**: `homepage.css` (all page styles), `content.css` (content page/hub styles)
 - **Animations**: Pulsing status dots, blinking cursor, rotating vault ticks, vault center glow pulse
