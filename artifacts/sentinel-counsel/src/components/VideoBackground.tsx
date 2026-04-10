@@ -7,6 +7,18 @@ interface VideoBackgroundProps {
   onClipChange?: (index: number) => void;
 }
 
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return reduced;
+}
+
 export default function VideoBackground({
   videos,
   crossfadeDuration = 2000,
@@ -19,6 +31,7 @@ export default function VideoBackground({
   const activeRef = useRef<HTMLVideoElement>(null);
   const nextRef = useRef<HTMLVideoElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const reducedMotion = usePrefersReducedMotion();
 
   const handleClipChange = useCallback(
     (idx: number) => {
@@ -35,7 +48,7 @@ export default function VideoBackground({
   }, []);
 
   useEffect(() => {
-    if (videos.length <= 1) return;
+    if (videos.length <= 1 || reducedMotion) return;
 
     const cycle = () => {
       const next = (activeIndex + 1) % videos.length;
@@ -61,7 +74,7 @@ export default function VideoBackground({
       clearInterval(interval);
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [activeIndex, videos.length, crossfadeDuration, clipDuration, handleClipChange]);
+  }, [activeIndex, videos.length, crossfadeDuration, clipDuration, handleClipChange, reducedMotion]);
 
   return (
     <div
@@ -92,7 +105,7 @@ export default function VideoBackground({
         src={videos[activeIndex]}
         autoPlay
         muted
-        loop={videos.length === 1}
+        loop={videos.length === 1 || reducedMotion}
         playsInline
         style={{
           position: "absolute",
@@ -103,15 +116,16 @@ export default function VideoBackground({
           minHeight: "100%",
           objectFit: "cover",
           opacity: fading ? 0 : 1,
-          transition: `opacity ${crossfadeDuration}ms ease-in-out`,
+          transition: reducedMotion ? "none" : `opacity ${crossfadeDuration}ms ease-in-out`,
+          willChange: "opacity",
           zIndex: 1,
         }}
         onLoadedMetadata={(e) => {
-          (e.target as HTMLVideoElement).playbackRate = 0.6;
+          (e.target as HTMLVideoElement).playbackRate = reducedMotion ? 0.3 : 0.6;
         }}
       />
 
-      {nextIndex !== null && (
+      {nextIndex !== null && !reducedMotion && (
         <video
           ref={nextRef}
           key={`next-${nextIndex}`}
@@ -129,6 +143,7 @@ export default function VideoBackground({
             objectFit: "cover",
             opacity: fading ? 1 : 0,
             transition: `opacity ${crossfadeDuration}ms ease-in-out`,
+            willChange: "opacity",
             zIndex: 0,
           }}
           onLoadedMetadata={(e) => {
