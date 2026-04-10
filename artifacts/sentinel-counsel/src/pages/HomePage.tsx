@@ -42,6 +42,10 @@ const organizationSchema = {
     "compliance monitoring",
     "document review"
   ],
+  sameAs: [
+    "https://www.linkedin.com/company/sntlabs",
+    "https://twitter.com/sntlabs"
+  ],
 };
 
 const softwareSchema = {
@@ -155,8 +159,13 @@ export default function HomePage() {
   return (
     <div className="ice-container">
       <Helmet>
-        <title>Sentinel Counsel — AI-Powered Litigation Platform for Law Firms</title>
+        <title>Sentinel Counsel — AI-Powered Litigation Platform</title>
         <meta name="description" content="Sentinel Counsel is the AI-powered litigation platform built for law firms. Voice-first e-discovery, real-time deposition support, and privilege-by-design architecture. Harness AI without waiving attorney-client privilege." />
+        <meta property="og:title" content="Sentinel Counsel — AI-Powered Litigation Platform" />
+        <meta property="og:description" content="Voice-first e-discovery, real-time deposition support, and privilege-by-design architecture for law firms." />
+        <meta property="og:url" content="https://sntlabs.io/" />
+        <meta name="twitter:title" content="Sentinel Counsel — AI-Powered Litigation Platform" />
+        <meta name="twitter:description" content="Voice-first e-discovery, real-time deposition support, and privilege-by-design architecture for law firms." />
         <link rel="canonical" href="https://sntlabs.io/" />
         <script type="application/ld+json">{JSON.stringify(organizationSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(softwareSchema)}</script>

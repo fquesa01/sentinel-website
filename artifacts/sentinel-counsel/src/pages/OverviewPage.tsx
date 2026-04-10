@@ -119,12 +119,14 @@ export default function OverviewPage() {
   return (
     <div className="ice-container">
       <Helmet>
-        <title>Platform Overview — Sentinel Counsel | AI Litigation Software</title>
+        <title>Platform Overview — Sentinel Counsel</title>
         <meta name="description" content="Sentinel Counsel platform overview: five pillars of privileged intelligence — AI access, ambient intelligence, investigation orchestration, e-discovery, and secure client portal. All privilege-protected." />
-        <link rel="canonical" href="https://sntlabs.io/overview" />
         <meta property="og:title" content="Platform Overview — Sentinel Counsel" />
-        <meta property="og:description" content="Five pillars of privileged intelligence: AI access, ambient intelligence, investigation orchestration, e-discovery, and secure client portal." />
+        <meta property="og:description" content="Five pillars of privileged intelligence — AI access, ambient intelligence, investigation orchestration, e-discovery, and secure client portal." />
         <meta property="og:url" content="https://sntlabs.io/overview" />
+        <meta name="twitter:title" content="Platform Overview — Sentinel Counsel" />
+        <meta name="twitter:description" content="Five pillars of privileged intelligence — AI access, ambient intelligence, investigation orchestration, e-discovery, and secure client portal." />
+        <link rel="canonical" href="https://sntlabs.io/overview" />
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
         {productSchemas.map((schema, i) => (
           <script key={i} type="application/ld+json">{JSON.stringify(schema)}</script>
