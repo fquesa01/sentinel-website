@@ -15,17 +15,19 @@ function renderParagraphWithLinks(text: string, links: ContextualLink[]): React.
       const part = parts[i];
       if (typeof part !== "string") continue;
       if (used.has(link.keyword)) continue;
-      const idx = part.toLowerCase().indexOf(link.keyword.toLowerCase());
-      if (idx === -1) continue;
+      const pattern = new RegExp(`\\b(${link.keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})\\b`, "i");
+      const m = pattern.exec(part);
+      if (!m) continue;
+      const idx = m.index;
+      const matchText = m[1];
       const before = part.slice(0, idx);
-      const match = part.slice(idx, idx + link.keyword.length);
-      const after = part.slice(idx + link.keyword.length);
+      const after = part.slice(idx + matchText.length);
       used.add(link.keyword);
       const replacement: React.ReactNode[] = [];
       if (before) replacement.push(before);
       replacement.push(
         <Link key={link.slug} href={`/resources/${link.slug}`} className="contextual-link">
-          {match}
+          {matchText}
         </Link>
       );
       if (after) replacement.push(after);
