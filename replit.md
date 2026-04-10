@@ -27,8 +27,10 @@ Sentinel Counsel homepage — AI security platform for law firms. React + Vite w
 - **CSS**: Custom CSS in `src/styles/homepage.css` (no Tailwind for page content)
 - **Pages**: HomePage (`/`), ResourcesHub (`/resources`), ContentPage (`/resources/:slug`) — lazy-loaded content pages
 - **Routing**: wouter for SPA routing; anchor links (`#section`) for in-page navigation; React.lazy code splitting for content pages
-- **Content System**: Data-driven content pages defined in `src/data/content.ts`; ContentPage layout with breadcrumbs, sticky ToC, related articles, and CTA; ResourcesHub groups pages by category
+- **Content System**: 19 SEO-targeted pages in `src/data/content.ts` across 5 categories: pillar (4), educational (5), comparison (3), listicle (3), landing (4). ContentPage layout with breadcrumbs, sticky ToC, related articles, and CTA. ResourcesHub groups pages by category. All pages 800+ words.
+- **Content Slugs**: ediscovery-software-law-firms, legal-hold-software, compliance-monitoring-software, ai-deposition-document-review, what-is-a-legal-hold, what-is-ediscovery, early-case-assessment-ai, ediscovery-processing, communication-surveillance-compliance, sentinel-counsel-vs-relativity, sentinel-counsel-vs-everlaw, ai-document-review-tools-comparison, best-ediscovery-software-2026, top-legal-hold-tools-2026, best-ai-tools-for-lawyers-2026, ediscovery-for-litigation, ai-privilege-protection, law-firm-compliance-solutions, deposition-preparation-software
 - **Pre-rendering**: Build-time TypeScript script (`scripts/prerender.ts`) renders full content HTML and SEO metadata into static `index.html` for each content route; imports `content.ts` directly as single source of truth; also generates `sitemap.xml` at build time
+- **Internal Linking**: Every content page has 3 related article links; no orphan pages; full cross-referencing graph
 - **Sections (HomePage)**: Nav, Hero, Trust Bar, Courtroom Demo Terminal, Capabilities (5 cards), Privilege Vault (animated), Heppner Case Callout, Team/Leadership, Security Stats, CTA, Footer
 - **CSS**: `homepage.css` (all page styles), `content.css` (content page/hub styles)
 - **Animations**: Pulsing status dots, blinking cursor, rotating vault ticks, vault center glow pulse
