@@ -25,10 +25,12 @@ Sentinel Counsel homepage — AI security platform for law firms. React + Vite w
 - **Design**: Ice Protocol — dark (#0b0d10) background, cyan (#00d4ff) accents, green status indicators, Roboto Mono monospace nav
 - **Fonts**: Outfit (headings), Inter (body), Roboto Mono (mono/labels) — loaded via Google Fonts in index.html
 - **CSS**: Custom CSS in `src/styles/homepage.css` (no Tailwind for page content)
-- **Pages**: HomePage (`/`) — single-page marketing site with video backgrounds
-- **Routing**: wouter for SPA routing; anchor links (`#section`) for in-page navigation
+- **Pages**: HomePage (`/`), ResourcesHub (`/resources`), ContentPage (`/resources/:slug`) — lazy-loaded content pages
+- **Routing**: wouter for SPA routing; anchor links (`#section`) for in-page navigation; React.lazy code splitting for content pages
+- **Content System**: Data-driven content pages defined in `src/data/content.ts`; ContentPage layout with breadcrumbs, sticky ToC, related articles, and CTA; ResourcesHub groups pages by category
+- **Pre-rendering**: Build-time script (`scripts/prerender.mjs`) generates static `index.html` for each content route for SEO crawlability
 - **Sections (HomePage)**: Nav, Hero, Trust Bar, Courtroom Demo Terminal, Capabilities (5 cards), Privilege Vault (animated), Heppner Case Callout, Team/Leadership, Security Stats, CTA, Footer
-- **CSS**: `homepage.css` (all page styles)
+- **CSS**: `homepage.css` (all page styles), `content.css` (content page/hub styles)
 - **Animations**: Pulsing status dots, blinking cursor, rotating vault ticks, vault center glow pulse
 
 ### `artifacts/mockup-sandbox` (`@workspace/mockup-sandbox`)

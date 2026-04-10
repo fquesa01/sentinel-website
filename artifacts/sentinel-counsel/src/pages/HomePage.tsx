@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from "react";
+import { Link } from "wouter";
 import { Helmet } from "react-helmet-async";
 import "@/styles/homepage.css";
 import VideoBackground from "@/components/VideoBackground";
@@ -189,6 +190,7 @@ export default function HomePage() {
           <a href="#capabilities">Capabilities</a>
           <a href="#team">Team</a>
           <a href="#security">Security</a>
+          <Link href="/resources">Resources</Link>
           <button className="ice-nav-cta" onClick={() => setDemoOpen(true)}>Request Demo</button>
         </div>
       </nav>
