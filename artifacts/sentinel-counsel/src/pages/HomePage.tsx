@@ -4,6 +4,17 @@ import { Helmet } from "react-helmet-async";
 import "@/styles/homepage.css";
 import VideoBackground from "@/components/VideoBackground";
 import DemoRequestModal from "@/components/DemoRequestModal";
+import { contentPages, CATEGORY_LABELS } from "@/data/content";
+
+const FEATURED_SLUGS = [
+  "ediscovery-software-law-firms",
+  "best-ediscovery-software-2026",
+  "sentinel-vs-relativity",
+  "what-is-ediscovery",
+];
+const featuredPages = FEATURED_SLUGS.map((s) =>
+  contentPages.find((p) => p.slug === s)!,
+).filter(Boolean);
 
 const base = import.meta.env.BASE_URL;
 
@@ -527,6 +538,35 @@ export default function HomePage() {
                 <p>Continuous security monitoring, intrusion detection, and incident response by a dedicated security team.</p>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section id="insights" aria-labelledby="insights-heading">
+          <div className="insights-header">
+            <span className="mono-label">Resources</span>
+            <h2 id="insights-heading">Latest Insights</h2>
+            <p>Expert guides on eDiscovery, privilege protection, and AI-powered litigation tools.</p>
+          </div>
+          <div className="insights-grid">
+            {featuredPages.map((page) => (
+              <Link key={page.slug} href={`/resources/${page.slug}`} className="insight-card">
+                <div className="insight-category">{CATEGORY_LABELS[page.category]}</div>
+                <h3>{page.title}</h3>
+                <p>{page.metaDescription}</p>
+                <div className="insight-meta">
+                  <time dateTime={page.lastUpdated}>
+                    {new Date(page.lastUpdated).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </time>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="insights-cta">
+            <Link href="/resources" className="btn-ghost">Browse All Resources</Link>
           </div>
         </section>
 

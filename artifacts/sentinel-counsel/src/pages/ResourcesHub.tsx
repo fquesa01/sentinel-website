@@ -14,6 +14,7 @@ import "@/styles/content.css";
 export default function ResourcesHub() {
   const [scrolled, setScrolled] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<string>("all");
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -132,50 +133,74 @@ export default function ResourcesHub() {
           </div>
         </section>
 
-        {categoriesWithPages.map((category) => {
-          const pages = getContentPagesByCategory(category);
-          return (
-            <section
-              key={category}
-              className="hub-category"
-              aria-labelledby={`cat-${category}`}
+        <div className="hub-filters" role="tablist" aria-label="Filter by category">
+          <button
+            role="tab"
+            aria-selected={activeFilter === "all"}
+            className={`hub-filter-btn ${activeFilter === "all" ? "active" : ""}`}
+            onClick={() => setActiveFilter("all")}
+          >
+            All
+          </button>
+          {CATEGORY_ORDER.map((cat) => (
+            <button
+              key={cat}
+              role="tab"
+              aria-selected={activeFilter === cat}
+              className={`hub-filter-btn ${activeFilter === cat ? "active" : ""}`}
+              onClick={() => setActiveFilter(cat)}
             >
-              <div className="hub-category-header">
-                <span className="mono-label">{CATEGORY_LABELS[category]}</span>
-                <h2 id={`cat-${category}`}>
-                  {CATEGORY_LABELS[category]}
-                </h2>
-              </div>
-              <div className="hub-grid">
-                {pages.map((page) => (
-                  <Link
-                    key={page.slug}
-                    href={`/resources/${page.slug}`}
-                    className="hub-card"
-                  >
-                    <div className="hub-card-category">
-                      {CATEGORY_LABELS[page.category]}
-                    </div>
-                    <h3>{page.title}</h3>
-                    <p>{page.metaDescription}</p>
-                    <div className="hub-card-meta">
-                      <time dateTime={page.lastUpdated}>
-                        {new Date(page.lastUpdated).toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          },
-                        )}
-                      </time>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          );
-        })}
+              {CATEGORY_LABELS[cat]}
+            </button>
+          ))}
+        </div>
+
+        {categoriesWithPages
+          .filter((cat) => activeFilter === "all" || cat === activeFilter)
+          .map((category) => {
+            const pages = getContentPagesByCategory(category);
+            return (
+              <section
+                key={category}
+                className="hub-category"
+                aria-labelledby={`cat-${category}`}
+              >
+                <div className="hub-category-header">
+                  <span className="mono-label">{CATEGORY_LABELS[category]}</span>
+                  <h2 id={`cat-${category}`}>
+                    {CATEGORY_LABELS[category]}
+                  </h2>
+                </div>
+                <div className="hub-grid">
+                  {pages.map((page) => (
+                    <Link
+                      key={page.slug}
+                      href={`/resources/${page.slug}`}
+                      className="hub-card"
+                    >
+                      <div className="hub-card-category">
+                        {CATEGORY_LABELS[page.category]}
+                      </div>
+                      <h3>{page.title}</h3>
+                      <p>{page.metaDescription}</p>
+                      <div className="hub-card-meta">
+                        <time dateTime={page.lastUpdated}>
+                          {new Date(page.lastUpdated).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            },
+                          )}
+                        </time>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            );
+          })}
 
         <section className="cta-section" aria-labelledby="hub-cta-heading">
           <h2 id="hub-cta-heading">

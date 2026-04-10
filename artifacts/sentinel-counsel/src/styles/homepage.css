@@ -1218,4 +1218,123 @@
     justify-content: center;
     gap: 1rem;
   }
+
+  .insights-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+#insights {
+  padding: 8rem 4rem;
+  border-top: 1px solid var(--border);
+}
+
+.insights-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.insights-header p {
+  color: var(--gray-light);
+  max-width: 550px;
+  margin: 1rem auto 0;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.insight-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2rem;
+  text-decoration: none;
+  transition: border-color 0.3s, transform 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.insight-card:hover {
+  border-color: var(--accent-primary);
+  transform: translateY(-4px);
+}
+
+.insight-category {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent-primary);
+  margin-bottom: 0.75rem;
+}
+
+.insight-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: var(--text-heading);
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.insight-card p {
+  font-size: 0.85rem;
+  color: var(--gray-light);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.insight-meta {
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--gray-muted);
+  letter-spacing: 0.05em;
+}
+
+.insights-cta {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.btn-ghost {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent-primary);
+  border: 1px solid var(--accent-primary);
+  padding: 0.75rem 2rem;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s;
+}
+
+.btn-ghost:hover {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+@media (max-width: 1024px) {
+  #insights {
+    padding: 6rem 2rem;
+  }
+
+  .insights-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  #insights {
+    padding: 4rem 1.25rem;
+  }
+
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
 }

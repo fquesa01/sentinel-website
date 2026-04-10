@@ -40,6 +40,11 @@ export interface ContentSection {
   table?: ComparisonTable;
 }
 
+export interface ContextualLink {
+  keyword: string;
+  slug: string;
+}
+
 export interface ContentPage {
   slug: string;
   title: string;
@@ -47,6 +52,7 @@ export interface ContentPage {
   category: ContentCategory;
   sections: ContentSection[];
   relatedSlugs: string[];
+  contextualLinks?: ContextualLink[];
   publishDate: string;
   lastUpdated: string;
 }
@@ -126,6 +132,11 @@ export const contentPages: ContentPage[] = [
       "ediscovery-processing",
       "ai-deposition-document-review",
     ],
+    contextualLinks: [
+      { keyword: "legal hold", slug: "legal-hold-software" },
+      { keyword: "compliance monitoring", slug: "compliance-monitoring-software" },
+      { keyword: "eDiscovery", slug: "what-is-ediscovery" },
+    ],
     publishDate: "2026-03-10",
     lastUpdated: "2026-04-10",
   },
@@ -195,6 +206,11 @@ export const contentPages: ContentPage[] = [
       "compliance-monitoring-software",
       "top-legal-hold-software",
     ],
+    contextualLinks: [
+      { keyword: "eDiscovery", slug: "ediscovery-software-law-firms" },
+      { keyword: "compliance monitoring", slug: "compliance-monitoring-software" },
+      { keyword: "legal hold", slug: "what-is-a-legal-hold" },
+    ],
     publishDate: "2026-03-12",
     lastUpdated: "2026-04-10",
   },
@@ -262,6 +278,11 @@ export const contentPages: ContentPage[] = [
       "communication-surveillance-compliance",
       "legal-hold-software",
       "ediscovery-software-law-firms",
+    ],
+    contextualLinks: [
+      { keyword: "eDiscovery", slug: "ediscovery-software-law-firms" },
+      { keyword: "legal hold", slug: "legal-hold-software" },
+      { keyword: "financial services", slug: "compliance-financial-services" },
     ],
     publishDate: "2026-03-14",
     lastUpdated: "2026-04-10",
@@ -333,6 +354,11 @@ export const contentPages: ContentPage[] = [
       "ai-deposition-solutions",
       "ediscovery-solo-small-firms",
     ],
+    contextualLinks: [
+      { keyword: "legal hold", slug: "what-is-a-legal-hold" },
+      { keyword: "document review", slug: "ai-deposition-document-review" },
+      { keyword: "eDiscovery processing", slug: "ediscovery-processing" },
+    ],
     publishDate: "2026-03-18",
     lastUpdated: "2026-04-10",
   },
@@ -402,6 +428,11 @@ export const contentPages: ContentPage[] = [
       "what-is-ediscovery",
       "ediscovery-software-law-firms",
     ],
+    contextualLinks: [
+      { keyword: "legal hold software", slug: "legal-hold-software" },
+      { keyword: "eDiscovery", slug: "what-is-ediscovery" },
+      { keyword: "compliance monitoring", slug: "compliance-monitoring-software" },
+    ],
     publishDate: "2026-03-15",
     lastUpdated: "2026-04-10",
   },
@@ -469,6 +500,11 @@ export const contentPages: ContentPage[] = [
       "ediscovery-software-law-firms",
       "ediscovery-processing",
       "early-case-assessment-ai",
+    ],
+    contextualLinks: [
+      { keyword: "eDiscovery software", slug: "ediscovery-software-law-firms" },
+      { keyword: "early case assessment", slug: "early-case-assessment-ai" },
+      { keyword: "document review", slug: "ai-deposition-document-review" },
     ],
     publishDate: "2026-03-20",
     lastUpdated: "2026-04-10",

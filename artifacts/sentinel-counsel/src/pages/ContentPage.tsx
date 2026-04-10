@@ -1,10 +1,41 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "wouter";
 import { Helmet } from "react-helmet-async";
-import { getContentPage, contentPages } from "@/data/content";
+import { getContentPage, contentPages, CATEGORY_LABELS, type ContextualLink } from "@/data/content";
 import DemoRequestModal from "@/components/DemoRequestModal";
 import "@/styles/homepage.css";
 import "@/styles/content.css";
+
+function renderParagraphWithLinks(text: string, links: ContextualLink[]): React.ReactNode {
+  if (!links || links.length === 0) return text;
+  const parts: React.ReactNode[] = [text];
+  const used = new Set<string>();
+  for (const link of links) {
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+      if (typeof part !== "string") continue;
+      if (used.has(link.keyword)) continue;
+      const idx = part.toLowerCase().indexOf(link.keyword.toLowerCase());
+      if (idx === -1) continue;
+      const before = part.slice(0, idx);
+      const match = part.slice(idx, idx + link.keyword.length);
+      const after = part.slice(idx + link.keyword.length);
+      used.add(link.keyword);
+      const replacement: React.ReactNode[] = [];
+      if (before) replacement.push(before);
+      replacement.push(
+        <Link key={link.slug} href={`/resources/${link.slug}`} className="contextual-link">
+          {match}
+        </Link>
+      );
+      if (after) replacement.push(after);
+      parts.splice(i, 1, ...replacement);
+      break;
+    }
+  }
+  return <>{parts}</>;
+}
+
 
 export default function ContentPage() {
   const params = useParams<{ slug: string }>();
@@ -113,6 +144,12 @@ export default function ContentPage() {
       {
         "@type": "ListItem",
         position: 3,
+        name: CATEGORY_LABELS[page.category],
+        item: "https://sntlabs.io/resources",
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
         name: page.title,
         item: `https://sntlabs.io/resources/${page.slug}`,
       },
@@ -141,6 +178,10 @@ export default function ContentPage() {
         <meta
           property="article:modified_time"
           content={page.lastUpdated}
+        />
+        <meta
+          property="article:section"
+          content={CATEGORY_LABELS[page.category]}
         />
         <meta
           name="twitter:title"
@@ -196,6 +237,8 @@ export default function ContentPage() {
             <span aria-hidden="true">/</span>
             <Link href="/resources">Resources</Link>
             <span aria-hidden="true">/</span>
+            <span>{CATEGORY_LABELS[page.category]}</span>
+            <span aria-hidden="true">/</span>
             <span aria-current="page">{page.title}</span>
           </nav>
 
@@ -245,7 +288,7 @@ export default function ContentPage() {
                 <section key={section.id} id={section.id}>
                   <h2>{section.heading}</h2>
                   {section.body.map((paragraph, i) => (
-                    <p key={i}>{paragraph}</p>
+                    <p key={i}>{renderParagraphWithLinks(paragraph, page.contextualLinks || [])}</p>
                   ))}
                   {section.table && (
                     <div className="comparison-table-wrap">
@@ -272,6 +315,34 @@ export default function ContentPage() {
                 </section>
               ))}
             </div>
+          </div>
+
+          <div className="content-share">
+            <span>Share</span>
+            <a
+              className="share-btn"
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(page.title)}&url=${encodeURIComponent(`https://sntlabs.io/resources/${page.slug}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              X / Twitter
+            </a>
+            <a
+              className="share-btn"
+              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://sntlabs.io/resources/${page.slug}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn
+            </a>
+            <button
+              className="share-btn"
+              onClick={() => {
+                navigator.clipboard.writeText(`https://sntlabs.io/resources/${page.slug}`);
+              }}
+            >
+              Copy Link
+            </button>
           </div>
 
           {relatedPages.length > 0 && (
