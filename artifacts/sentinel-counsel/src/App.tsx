@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { lazy, Suspense } from "react";
 import HomePage from "@/pages/HomePage";
 import NotFound from "@/pages/not-found";
+import Analytics from "@/components/Analytics";
 
 const ResourcesHub = lazy(() => import("@/pages/ResourcesHub"));
 const ContentPage = lazy(() => import("@/pages/ContentPage"));
@@ -51,6 +52,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+            <Analytics />
             <Router />
           </WouterRouter>
           <Toaster />

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef, type RefObject } from "react";
 import { Link } from "wouter";
 import { Helmet } from "react-helmet-async";
 import "@/styles/homepage.css";
@@ -15,6 +15,22 @@ const FEATURED_SLUGS = [
 const featuredPages = FEATURED_SLUGS.map((s) =>
   contentPages.find((p) => p.slug === s)!,
 ).filter(Boolean);
+
+function useLazyVisible(rootMargin = "200px"): [RefObject<HTMLDivElement | null>, boolean] {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); io.disconnect(); } },
+      { rootMargin }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [rootMargin]);
+  return [ref, visible];
+}
 
 const base = import.meta.env.BASE_URL;
 
@@ -146,6 +162,21 @@ export default function HomePage() {
   const [clipIndex, setClipIndex] = useState(0);
   const [textFading, setTextFading] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && mobileMenuOpen) setMobileMenuOpen(false);
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [mobileMenuOpen]);
+  const [courtroomRef, courtroomVisible] = useLazyVisible();
+  const [capRef, capVisible] = useLazyVisible();
+  const [privRef, privVisible] = useLazyVisible();
+  const [teamRef, teamVisible] = useLazyVisible();
+  const [secRef, secVisible] = useLazyVisible();
+  const [insightsRef, insightsVisible] = useLazyVisible();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -196,13 +227,22 @@ export default function HomePage() {
           </svg>
           <span>Sentinel Counsel</span>
         </a>
-        <div className="ice-nav-links">
-          <a href="#courtroom">Litigation</a>
-          <a href="#capabilities">Capabilities</a>
-          <a href="#team">Team</a>
-          <a href="#security">Security</a>
-          <Link href="/resources">Resources</Link>
-          <button className="ice-nav-cta" onClick={() => setDemoOpen(true)}>Request Demo</button>
+        <button
+          className={`hamburger ${mobileMenuOpen ? "open" : ""}`}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="main-nav-links"
+        >
+          <span /><span /><span />
+        </button>
+        <div id="main-nav-links" className={`ice-nav-links ${mobileMenuOpen ? "mobile-open" : ""}`}>
+          <a href="#courtroom" onClick={() => setMobileMenuOpen(false)}>Litigation</a>
+          <a href="#capabilities" onClick={() => setMobileMenuOpen(false)}>Capabilities</a>
+          <a href="#team" onClick={() => setMobileMenuOpen(false)}>Team</a>
+          <a href="#security" onClick={() => setMobileMenuOpen(false)}>Security</a>
+          <Link href="/resources" onClick={() => setMobileMenuOpen(false)}>Resources</Link>
+          <button className="ice-nav-cta" onClick={() => { setMobileMenuOpen(false); setDemoOpen(true); }}>Request Demo</button>
         </div>
       </nav>
 
@@ -238,7 +278,8 @@ export default function HomePage() {
           </div>
         </div>
 
-        <section id="courtroom" aria-labelledby="courtroom-heading">
+        <div ref={courtroomRef} />
+        <section id="courtroom" aria-labelledby="courtroom-heading" className={courtroomVisible ? "lazy-visible" : "lazy-hidden"}>
           <div className="courtroom-grid">
             <div className="courtroom-text">
               <span className="mono-label">Built for Trial Attorneys</span>
@@ -335,7 +376,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="capabilities" aria-labelledby="capabilities-heading">
+        <div ref={capRef} />
+        <section id="capabilities" aria-labelledby="capabilities-heading" className={capVisible ? "lazy-visible" : "lazy-hidden"}>
           <div className="cap-header">
             <span className="mono-label">Platform</span>
             <h2 id="capabilities-heading">Five Pillars of<br/>Privileged Intelligence</h2>
@@ -385,7 +427,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="privilege" aria-labelledby="privilege-heading">
+        <div ref={privRef} />
+        <section id="privilege" aria-labelledby="privilege-heading" className={privVisible ? "lazy-visible" : "lazy-hidden"}>
           <div className="privilege-inner">
             <div className="priv-visual" aria-hidden="true">
               <div className="vault-ticks"></div>
@@ -462,7 +505,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="team" aria-labelledby="team-heading">
+        <div ref={teamRef} />
+        <section id="team" aria-labelledby="team-heading" className={teamVisible ? "lazy-visible" : "lazy-hidden"}>
           <div className="team-new-inner">
             <div className="team-left">
               <span className="mono-label">Leadership</span>
@@ -515,7 +559,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="security" aria-labelledby="security-heading">
+        <div ref={secRef} />
+        <section id="security" aria-labelledby="security-heading" className={secVisible ? "lazy-visible" : "lazy-hidden"}>
           <div className="security-inner">
             <span className="mono-label">Security Posture</span>
             <h2 id="security-heading">Enterprise-Grade by Default</h2>
@@ -541,7 +586,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="insights" aria-labelledby="insights-heading">
+        <div ref={insightsRef} />
+        <section id="insights" aria-labelledby="insights-heading" className={insightsVisible ? "lazy-visible" : "lazy-hidden"}>
           <div className="insights-header">
             <span className="mono-label">Resources</span>
             <h2 id="insights-heading">Latest Insights</h2>

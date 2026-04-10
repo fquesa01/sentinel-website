@@ -15,6 +15,15 @@ export default function ResourcesHub() {
   const [scrolled, setScrolled] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string>("all");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && mobileMenuOpen) setMobileMenuOpen(false);
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -103,14 +112,23 @@ export default function ResourcesHub() {
           </svg>
           <span>Sentinel Counsel</span>
         </Link>
-        <div className="ice-nav-links">
-          <Link href="/">Home</Link>
-          <Link href="/resources" className="ice-nav-active">
+        <button
+          className={`hamburger ${mobileMenuOpen ? "open" : ""}`}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="hub-nav-links"
+        >
+          <span /><span /><span />
+        </button>
+        <div id="hub-nav-links" className={`ice-nav-links ${mobileMenuOpen ? "mobile-open" : ""}`}>
+          <Link href="/" onClick={() => setMobileMenuOpen(false)}>Home</Link>
+          <Link href="/resources" className="ice-nav-active" onClick={() => setMobileMenuOpen(false)}>
             Resources
           </Link>
           <button
             className="ice-nav-cta"
-            onClick={() => setDemoOpen(true)}
+            onClick={() => { setMobileMenuOpen(false); setDemoOpen(true); }}
           >
             Request Demo
           </button>

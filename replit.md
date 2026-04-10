@@ -33,7 +33,10 @@ Sentinel Counsel homepage — AI security platform for law firms. React + Vite w
 - **Internal Linking**: Every content page has 3 related article links; no orphan pages; full cross-referencing graph
 - **Sections (HomePage)**: Nav, Hero, Trust Bar, Courtroom Demo Terminal, Capabilities (5 cards), Privilege Vault (animated), Heppner Case Callout, Team/Leadership, Security Stats, CTA, Footer
 - **CSS**: `homepage.css` (all page styles), `content.css` (content page/hub styles)
-- **Animations**: Pulsing status dots, blinking cursor, rotating vault ticks, vault center glow pulse
+- **Animations**: Pulsing status dots, blinking cursor, rotating vault ticks, vault center glow pulse; lazy-visible IntersectionObserver reveals on scroll for 6 homepage sections
+- **Mobile**: Hamburger menu (slide-in drawer) on all pages at ≤768px, 44px+ touch targets, Escape-to-close, aria-controls/aria-expanded
+- **Performance**: Lazy section reveals via IntersectionObserver (`useLazyVisible` hook), prefers-reduced-motion disables all animations
+- **Analytics**: Google Analytics 4 (via `VITE_GA_MEASUREMENT_ID` env var), Google Search Console verification (via `VITE_GSC_VERIFICATION` env var), integrated in `Analytics.tsx` component
 
 ### `artifacts/mockup-sandbox` (`@workspace/mockup-sandbox`)
 

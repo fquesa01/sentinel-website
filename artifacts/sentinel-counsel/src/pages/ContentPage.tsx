@@ -45,6 +45,15 @@ export default function ContentPage() {
   const [scrolled, setScrolled] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && mobileMenuOpen) setMobileMenuOpen(false);
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -220,12 +229,21 @@ export default function ContentPage() {
           </svg>
           <span>Sentinel Counsel</span>
         </Link>
-        <div className="ice-nav-links">
-          <Link href="/">Home</Link>
-          <Link href="/resources">Resources</Link>
+        <button
+          className={`hamburger ${mobileMenuOpen ? "open" : ""}`}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="content-nav-links"
+        >
+          <span /><span /><span />
+        </button>
+        <div id="content-nav-links" className={`ice-nav-links ${mobileMenuOpen ? "mobile-open" : ""}`}>
+          <Link href="/" onClick={() => setMobileMenuOpen(false)}>Home</Link>
+          <Link href="/resources" onClick={() => setMobileMenuOpen(false)}>Resources</Link>
           <button
             className="ice-nav-cta"
-            onClick={() => setDemoOpen(true)}
+            onClick={() => { setMobileMenuOpen(false); setDemoOpen(true); }}
           >
             Request Demo
           </button>

@@ -161,11 +161,88 @@
   padding: 0.5rem 1.25rem;
   color: var(--accent-primary) !important;
   transition: all 0.2s ease;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .ice-nav-cta:hover {
   background: rgba(0, 212, 255, 0.1);
   border-color: var(--accent-primary);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 110;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text-heading);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.lazy-hidden {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.lazy-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lazy-hidden {
+    opacity: 1;
+    transform: none;
+  }
+  .lazy-visible {
+    transition: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.ice-nav-links:not(.mobile-open) {
+  visibility: visible;
+}
+
+@media (max-width: 768px) {
+  .ice-nav-links:not(.mobile-open) {
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 
 .ice-hero {
@@ -1046,21 +1123,22 @@
 }
 
 @media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
   .ice-nav {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
   }
 
   .ice-nav.scrolled {
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 1.25rem;
   }
 
   .ice-logo {
-    font-size: 1.4rem;
-    width: 100%;
-    justify-content: center;
+    font-size: 1.25rem;
   }
 
   .ice-logo svg {
@@ -1069,16 +1147,39 @@
   }
 
   .ice-nav-links {
-    gap: 0.75rem;
-    font-size: 0.6rem;
-    flex-wrap: wrap;
-    justify-content: center;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: var(--bg-primary);
+    border-left: 1px solid var(--border);
+    flex-direction: column;
+    padding: 5rem 2rem 2rem;
+    gap: 0;
+    transition: right 0.3s ease;
+    z-index: 105;
+    font-size: 0.85rem;
+  }
+
+  .ice-nav-links.mobile-open {
+    right: 0;
+  }
+
+  .ice-nav-links a,
+  .ice-nav-links button {
+    padding: 1rem 0;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
     width: 100%;
   }
 
   .ice-nav-cta {
-    padding: 0.35rem 0.6rem !important;
-    font-size: 0.6rem !important;
+    margin-top: 1rem;
+    justify-content: center !important;
+    border: 1px solid var(--accent-primary) !important;
   }
 
   .ice-container section {
@@ -1086,7 +1187,7 @@
   }
 
   .ice-container .ice-hero {
-    padding-top: 8rem;
+    padding-top: 7rem;
     padding-bottom: 3rem;
   }
 
@@ -1117,6 +1218,7 @@
     width: 100%;
     justify-content: center;
     font-size: 0.75rem;
+    min-height: 48px;
   }
 
   .trust-inner {
@@ -1146,6 +1248,42 @@
     font-size: 1rem;
   }
 
+  .demo-terminal {
+    margin: 0 -0.5rem;
+  }
+
+  .demo-header {
+    font-size: 0.6rem;
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .demo-body {
+    padding: 1rem;
+  }
+
+  .demo-step {
+    gap: 1rem;
+    padding: 1rem 0;
+  }
+
+  .step-label {
+    font-size: 0.75rem;
+  }
+
+  .step-desc {
+    font-size: 0.85rem;
+  }
+
+  .result-tag {
+    font-size: 0.65rem;
+  }
+
+  .cap-grid {
+    grid-template-columns: 1fr;
+  }
+
   .cap-card {
     padding: 1.5rem;
   }
@@ -1165,6 +1303,15 @@
 
   .priv-visual {
     min-height: 200px;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  .vault-ring-1,
+  .vault-ring-2,
+  .vault-ring-3 {
+    max-width: 90%;
+    max-height: 90%;
   }
 
   .case-inner {
@@ -1194,10 +1341,6 @@
     gap: 2rem;
   }
 
-  .sec-grid {
-    gap: 2rem;
-  }
-
   .sec-number {
     font-size: 2.5rem;
   }
@@ -1217,6 +1360,12 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 1rem;
+  }
+
+  .footer-links a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
   }
 
   .insights-grid {
