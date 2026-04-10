@@ -707,7 +707,7 @@
   background: var(--accent-primary);
 }
 
-.priv-feat-text h4 {
+.priv-feat-text h3 {
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
   font-family: var(--font-heading);
@@ -842,7 +842,7 @@
   content: '>';
 }
 
-.expertise-content h4 {
+.expertise-content h3 {
   font-size: 1.2rem;
   margin-bottom: 0.75rem;
 }
@@ -905,7 +905,7 @@
   padding-bottom: 0.25rem;
 }
 
-.sec-item h4 {
+.sec-item h3 {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -913,7 +913,7 @@
   margin-bottom: 0.75rem;
 }
 
-.sec-item h4::before {
+.sec-item h3::before {
   content: '';
   display: block;
   width: 6px;

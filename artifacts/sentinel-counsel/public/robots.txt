@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sntlabs.io/sitemap.xml
