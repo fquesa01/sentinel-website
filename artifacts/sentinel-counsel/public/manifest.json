@@ -1,0 +1,16 @@
+{
+  "name": "Sentinel Counsel",
+  "short_name": "Sentinel",
+  "description": "AI-powered litigation platform for law firms. Voice-first e-discovery, real-time deposition support, and privilege-by-design architecture.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0d10",
+  "theme_color": "#0b0d10",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -221,12 +221,12 @@ export default function HomePage() {
         onClipChange={handleClipChange}
       />
       <nav className={`ice-nav ${scrolled ? "scrolled" : ""}`} aria-label="Main navigation">
-        <a href="#" className="ice-logo">
+        <Link href="/" className="ice-logo">
           <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M17 2L4 8v9c0 8.3 5.5 16 13 18 7.5-2 13-9.7 13-18V8L17 2z" strokeWidth="1.5" />
           </svg>
           <span>Sentinel Counsel</span>
-        </a>
+        </Link>
         <button
           className={`hamburger ${mobileMenuOpen ? "open" : ""}`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -634,9 +634,11 @@ export default function HomePage() {
         </div>
         <div className="footer-status">SYSTEM STATUS: OPERATIONAL</div>
         <div className="footer-links">
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-          <a href="#">Security</a>
+          <Link href="/privacy">Privacy</Link>
+          <Link href="/terms">Terms</Link>
+          <Link href="/security">Security</Link>
+          <a href="https://www.linkedin.com/company/sntlabs" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://twitter.com/sntlabs" target="_blank" rel="noopener noreferrer">X / Twitter</a>
         </div>
       </footer>
 
