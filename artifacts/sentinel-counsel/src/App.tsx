@@ -10,6 +10,9 @@ import Analytics from "@/components/Analytics";
 
 const ResourcesHub = lazy(() => import("@/pages/ResourcesHub"));
 const ContentPage = lazy(() => import("@/pages/ContentPage"));
+const PrivacyPage = lazy(() => import("@/pages/PrivacyPage"));
+const TermsPage = lazy(() => import("@/pages/TermsPage"));
+const SecurityPage = lazy(() => import("@/pages/SecurityPage"));
 
 const queryClient = new QueryClient();
 
@@ -40,6 +43,9 @@ function Router() {
         <Route path="/" component={HomePage} />
         <Route path="/resources" component={ResourcesHub} />
         <Route path="/resources/:slug" component={ContentPage} />
+        <Route path="/privacy" component={PrivacyPage} />
+        <Route path="/terms" component={TermsPage} />
+        <Route path="/security" component={SecurityPage} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>

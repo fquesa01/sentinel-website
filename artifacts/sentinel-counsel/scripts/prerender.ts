@@ -242,6 +242,40 @@ function prerender() {
     created++;
   }
 
+  // Pre-render static policy pages
+  const policyPages = [
+    {
+      route: "/privacy",
+      title: "Privacy Policy — Sentinel Counsel",
+      description: "Sentinel Counsel's privacy policy. Learn how we collect, use, and protect your personal information on sntlabs.io.",
+      heading: "Privacy Policy",
+    },
+    {
+      route: "/terms",
+      title: "Terms of Service — Sentinel Counsel",
+      description: "Sentinel Counsel's terms of service. Review the terms governing your use of sntlabs.io and the Sentinel Counsel litigation platform.",
+      heading: "Terms of Service",
+    },
+    {
+      route: "/security",
+      title: "Security — Sentinel Counsel",
+      description: "Sentinel Counsel's security practices. 256-bit AES encryption, zero data retention, 24/7 threat monitoring, and privilege-by-design architecture for law firms.",
+      heading: "Security at Sentinel Counsel",
+    },
+  ];
+
+  for (const policy of policyPages) {
+    const headMeta = buildHeadMeta({
+      title: policy.title,
+      description: policy.description,
+      url: `${PROD_DOMAIN}${policy.route}`,
+    });
+    const bodyHtml = `<article><header><h1>${escapeHtml(policy.heading)}</h1></header></article>`;
+    const html = injectIntoTemplate(template, policy.title, headMeta, bodyHtml);
+    writeRoute(policy.route, html);
+    created++;
+  }
+
   generateSitemap();
 
   console.log(`\nPre-rendered ${created} routes with full content HTML.`);
@@ -280,6 +314,17 @@ function generateSitemap() {
     <lastmod>${page.lastUpdated}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>`;
+  }
+
+  // Policy pages
+  for (const path of ["/privacy", "/terms", "/security"]) {
+    xml += `
+  <url>
+    <loc>${PROD_DOMAIN}${path}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>`;
   }
 

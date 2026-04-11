@@ -54,6 +54,20 @@ export default function ResourcesHub() {
     ],
   };
 
+  const collectionSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Legal Technology Resources",
+    description:
+      "Guides on eDiscovery, legal holds, compliance, and privilege-preserving AI for law firms.",
+    url: "https://sntlabs.io/resources",
+    publisher: {
+      "@type": "Organization",
+      name: "Sentinel Counsel",
+      url: "https://sntlabs.io",
+    },
+  };
+
   const categoriesWithPages = CATEGORY_ORDER.filter(
     (cat) => getContentPagesByCategory(cat).length > 0,
   );
@@ -88,9 +102,16 @@ export default function ResourcesHub() {
           name="twitter:description"
           content="Legal technology resources: guides on eDiscovery, legal holds, compliance, and privilege-preserving AI for law firms."
         />
+        <meta property="og:image" content="https://sntlabs.io/opengraph.jpg" />
+        <meta property="og:site_name" content="Sentinel Counsel" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://sntlabs.io/opengraph.jpg" />
         <link rel="canonical" href="https://sntlabs.io/resources" />
         <script type="application/ld+json">
           {JSON.stringify(breadcrumbSchema)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(collectionSchema)}
         </script>
       </Helmet>
 
@@ -256,9 +277,11 @@ export default function ResourcesHub() {
         </div>
         <div className="footer-status">SYSTEM STATUS: OPERATIONAL</div>
         <div className="footer-links">
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-          <a href="#">Security</a>
+          <Link href="/privacy">Privacy</Link>
+          <Link href="/terms">Terms</Link>
+          <Link href="/security">Security</Link>
+          <a href="https://www.linkedin.com/company/sntlabs" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://twitter.com/sntlabs" target="_blank" rel="noopener noreferrer">X / Twitter</a>
         </div>
       </footer>
 

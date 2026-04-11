@@ -199,6 +199,10 @@ export default function ContentPage() {
           content={`${page.title} — Sentinel Counsel`}
         />
         <meta name="twitter:description" content={page.metaDescription} />
+        <meta property="og:image" content="https://sntlabs.io/opengraph.jpg" />
+        <meta property="og:site_name" content="Sentinel Counsel" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://sntlabs.io/opengraph.jpg" />
         <link
           rel="canonical"
           href={`https://sntlabs.io/resources/${page.slug}`}
@@ -424,9 +428,11 @@ export default function ContentPage() {
         </div>
         <div className="footer-status">SYSTEM STATUS: OPERATIONAL</div>
         <div className="footer-links">
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-          <a href="#">Security</a>
+          <Link href="/privacy">Privacy</Link>
+          <Link href="/terms">Terms</Link>
+          <Link href="/security">Security</Link>
+          <a href="https://www.linkedin.com/company/sntlabs" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://twitter.com/sntlabs" target="_blank" rel="noopener noreferrer">X / Twitter</a>
         </div>
       </footer>
 
