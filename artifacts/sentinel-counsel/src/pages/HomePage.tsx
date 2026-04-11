@@ -519,7 +519,7 @@ export default function HomePage() {
                   <div className="expertise-marker" aria-hidden="true"></div>
                   <div className="expertise-content">
                     <h3>Enterprise Security &amp; Compliance</h3>
-                    <p>Former Microsoft Security &amp; Compliance leadership. Author of multiple enterprise security treatises. A decade building zero-trust architectures and data protection frameworks for Fortune 500 organizations.</p>
+                    <p>Microsoft Regional Director and multi-year Microsoft Most Valuable Professional across Azure, Data Platform, and Artificial Intelligence. Google Developer Expert for Analytics. Author of published books on cloud architecture, AI, and enterprise security — including titles published by O'Reilly Media and Microsoft Press. Two decades building zero-trust architectures, defense-in-depth AI platforms, and data protection frameworks for Fortune 500 organizations, Ivy League universities, and financial institutions.</p>
                   </div>
                 </div>
                 <div className="expertise-item">
