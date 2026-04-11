@@ -84,8 +84,7 @@ export default function PrivacyPage() {
             </div>
           </header>
 
-          <div className="content-layout">
-            <div className="content-body">
+            <div className="content-body legal-body">
               <section>
                 <h2>Introduction</h2>
                 <p>Sentinel Counsel ("we," "us," or "our"), operated by SNT Labs, is committed to protecting the privacy and confidentiality of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website at sntlabs.io or use our AI-powered litigation platform.</p>
@@ -136,7 +135,6 @@ export default function PrivacyPage() {
                 <p>If you have questions about this Privacy Policy or our data practices, please contact us at privacy@sntlabs.io.</p>
               </section>
             </div>
-          </div>
         </article>
       </main>
 

@@ -84,8 +84,7 @@ export default function TermsPage() {
             </div>
           </header>
 
-          <div className="content-layout">
-            <div className="content-body">
+            <div className="content-body legal-body">
               <section>
                 <h2>Acceptance of Terms</h2>
                 <p>By accessing or using the Sentinel Counsel website (sntlabs.io) and platform (collectively, the "Service"), operated by SNT Labs, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Service.</p>
@@ -143,7 +142,6 @@ export default function TermsPage() {
                 <p>For questions about these Terms of Service, please contact us at legal@sntlabs.io.</p>
               </section>
             </div>
-          </div>
         </article>
       </main>
 

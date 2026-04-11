@@ -84,8 +84,7 @@ export default function SecurityPage() {
             </div>
           </header>
 
-          <div className="content-layout">
-            <div className="content-body">
+            <div className="content-body legal-body">
               <section>
                 <h2>Our Security Commitment</h2>
                 <p>Sentinel Counsel was built from the ground up by former Microsoft Security &amp; Compliance leadership and enterprise security experts. Security is not an afterthought — it is the foundation of every architectural decision we make.</p>
@@ -132,7 +131,6 @@ export default function SecurityPage() {
                 <p>If you discover a security vulnerability or have concerns about the security of our platform, please contact us immediately at security@sntlabs.io. We take all security reports seriously and will respond within 24 hours.</p>
               </section>
             </div>
-          </div>
         </article>
       </main>
 
