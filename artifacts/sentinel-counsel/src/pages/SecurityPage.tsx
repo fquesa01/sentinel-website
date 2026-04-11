@@ -87,7 +87,7 @@ export default function SecurityPage() {
             <div className="content-body legal-body">
               <section>
                 <h2>Built by Enterprise Security Leadership</h2>
-                <p>Sentinel Counsel's security architecture was designed by a leadership team with deep roots in enterprise cloud security and AI governance. Our CTO is a Stanford-trained computer scientist, a 14-year Microsoft Most Valuable Professional, and a Microsoft Regional Director who has spent two decades building secure, governed AI platforms for Fortune 500 companies, financial institutions, and universities. He is the founder of FoundationaLLM — the open-source enterprise AI platform that is red-teamed from inception and deployed within the client's own cloud environment — and Solliance, a global network of 300+ cloud and AI experts (including 30 Microsoft MVPs and 8 Regional Directors) that has delivered enterprise-grade solutions for over 25 years.</p>
+                <p>Sentinel Counsel's security architecture was designed by a leadership team with decades of experience building secure, governed AI platforms for Fortune 500 companies, financial institutions, and universities. Our CTO has spent 20+ years architecting enterprise-grade cloud infrastructure and AI systems — work that has been red-teamed from inception and deployed within client-owned cloud environments across industries including healthcare, finance, technology, and education.</p>
                 <p>At Sentinel Counsel, our team brings the same defense-in-depth methodology we developed for enterprise AI at scale. Security here isn't a feature we bolted on. It's the infrastructure itself.</p>
               </section>
 
@@ -109,7 +109,7 @@ export default function SecurityPage() {
 
               <section>
                 <h2>Access Controls &amp; Governance</h2>
-                <p>We implement strict role-based access controls (RBAC) and the principle of least privilege across all systems — the same governance framework our team built for enterprise AI platforms where RBAC, audit logging, and policy enforcement are applied across every agent workflow. Multi-factor authentication is required for all administrative access, and all access events are logged and audited regularly.</p>
+                <p>We implement strict role-based access controls (RBAC) and the principle of least privilege across all systems — the same governance framework our team has built for enterprise AI platforms where RBAC, audit logging, and policy enforcement are applied across every agent workflow. Multi-factor authentication is required for all administrative access, and all access events are logged and audited regularly.</p>
               </section>
 
               <section>
@@ -129,7 +129,7 @@ export default function SecurityPage() {
 
               <section>
                 <h2>Our Team's Credentials</h2>
-                <p>The Sentinel Counsel security team is led by technologists who have authored a dozen published books on cloud architecture and AI — including titles published by O'Reilly and Microsoft Press, official Azure certification guides, and practice development playbooks that inform Microsoft's global partner network. Our leadership holds Google Developer Expert status for Analytics, Azure Elite and Azure Insider designations, and has maintained Microsoft MVP recognition for over a decade across Azure, Data Platform, and Artificial Intelligence categories. Our team regularly speaks at international conferences on enterprise AI security, multi-agent systems, and governance — including sessions on integrating agents into the enterprise and building next-generation reasoning systems on Azure.</p>
+                <p>The Sentinel Counsel security team is led by technologists recognized at the highest levels of the industry. Our leadership includes a Microsoft Regional Director, a multi-year Microsoft Most Valuable Professional across Azure, Data Platform, and Artificial Intelligence categories, a Google Developer Expert for Analytics, and holders of Azure Elite and Azure Insider designations. Our team has authored a dozen published books on cloud architecture and AI — including titles published by O'Reilly and Microsoft Press, official Azure certification guides, and practice development playbooks that inform Microsoft's global partner network. We speak regularly at international conferences on enterprise AI security, multi-agent systems, and governance — including sessions on integrating agents into the enterprise and building next-generation reasoning systems on Azure.</p>
               </section>
 
               <section>
