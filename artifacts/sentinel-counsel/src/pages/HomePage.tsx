@@ -69,10 +69,7 @@ const organizationSchema = {
     "compliance monitoring",
     "document review"
   ],
-  sameAs: [
-    "https://www.linkedin.com/company/sntlabs",
-    "https://twitter.com/sntlabs"
-  ],
+  sameAs: [],
 };
 
 const softwareSchema = {
@@ -637,8 +634,6 @@ export default function HomePage() {
           <Link href="/privacy">Privacy</Link>
           <Link href="/terms">Terms</Link>
           <Link href="/security">Security</Link>
-          <a href="https://www.linkedin.com/company/sntlabs" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          <a href="https://twitter.com/sntlabs" target="_blank" rel="noopener noreferrer">X / Twitter</a>
         </div>
       </footer>
 

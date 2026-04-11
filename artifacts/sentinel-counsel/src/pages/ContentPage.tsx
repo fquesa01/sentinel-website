@@ -343,22 +343,6 @@ export default function ContentPage() {
 
           <div className="content-share">
             <span>Share</span>
-            <a
-              className="share-btn"
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(page.title)}&url=${encodeURIComponent(`https://sntlabs.io/resources/${page.slug}`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              X / Twitter
-            </a>
-            <a
-              className="share-btn"
-              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://sntlabs.io/resources/${page.slug}`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LinkedIn
-            </a>
             <button
               className="share-btn"
               onClick={() => {
@@ -431,8 +415,6 @@ export default function ContentPage() {
           <Link href="/privacy">Privacy</Link>
           <Link href="/terms">Terms</Link>
           <Link href="/security">Security</Link>
-          <a href="https://www.linkedin.com/company/sntlabs" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          <a href="https://twitter.com/sntlabs" target="_blank" rel="noopener noreferrer">X / Twitter</a>
         </div>
       </footer>
 
