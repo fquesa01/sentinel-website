@@ -86,14 +86,20 @@ export default function SecurityPage() {
 
             <div className="content-body legal-body">
               <section>
-                <h2>Our Security Commitment</h2>
-                <p>Sentinel Counsel was built from the ground up by former Microsoft Security &amp; Compliance leadership and enterprise security experts. Security is not an afterthought — it is the foundation of every architectural decision we make.</p>
-                <p>As a platform handling privileged legal data, we hold ourselves to the highest standard of data protection. Our privilege-by-design architecture ensures that attorney-client privilege and work product protections are maintained at every layer of the system.</p>
+                <h2>Built by Enterprise Security Leadership</h2>
+                <p>Sentinel Counsel's security architecture was designed by a leadership team with deep roots in enterprise cloud security and AI governance. Our CTO is a Stanford-trained computer scientist, a 14-year Microsoft Most Valuable Professional, and a Microsoft Regional Director who has spent two decades building secure, governed AI platforms for Fortune 500 companies, financial institutions, and universities. He is the founder of FoundationaLLM — the open-source enterprise AI platform that is red-teamed from inception and deployed within the client's own cloud environment — and Solliance, a global network of 300+ cloud and AI experts (including 30 Microsoft MVPs and 8 Regional Directors) that has delivered enterprise-grade solutions for over 25 years.</p>
+                <p>At Sentinel Counsel, our team brings the same defense-in-depth methodology we developed for enterprise AI at scale. Security here isn't a feature we bolted on. It's the infrastructure itself.</p>
+              </section>
+
+              <section>
+                <h2>Privilege-by-Design Architecture</h2>
+                <p>As a platform handling privileged legal data, we hold ourselves to a higher standard than general-purpose AI tools. Our architecture was purpose-built to keep data within the privilege boundary at all times. No privileged information is exposed to third parties. Every AI interaction is logged in a defensible audit trail — timestamped and mapped to privilege assertions — so you can demonstrate compliance in any proceeding.</p>
+                <p>This approach draws directly from our team's enterprise AI security work: fine-grain controls over data access, pre- and post-completion filters that guard against data exfiltration, and sensitive data filtering that prevents PII and trade secrets from reaching the LLM.</p>
               </section>
 
               <section>
                 <h2>Encryption</h2>
-                <p>All data is protected with 256-bit AES encryption, both at rest and in transit. Every communication between your device and our platform is encrypted via TLS 1.3. Stored data is encrypted with keys that are managed through a dedicated key management service with strict access controls.</p>
+                <p>All data is protected with 256-bit AES encryption, both at rest and in transit. Every communication between your device and our platform is encrypted via TLS 1.3. Stored data is encrypted with keys managed through a dedicated key management service with strict access controls.</p>
               </section>
 
               <section>
@@ -102,28 +108,28 @@ export default function SecurityPage() {
               </section>
 
               <section>
-                <h2>Privilege-by-Design Architecture</h2>
-                <p>Unlike consumer AI tools, Sentinel Counsel is architected to keep data within the privilege boundary at all times. No privileged information is exposed to third parties. Every AI interaction is logged in a defensible audit trail — timestamped and mapped to privilege assertions — so you can demonstrate compliance in any proceeding.</p>
+                <h2>Access Controls &amp; Governance</h2>
+                <p>We implement strict role-based access controls (RBAC) and the principle of least privilege across all systems — the same governance framework our team built for enterprise AI platforms where RBAC, audit logging, and policy enforcement are applied across every agent workflow. Multi-factor authentication is required for all administrative access, and all access events are logged and audited regularly.</p>
               </section>
 
               <section>
                 <h2>Continuous Monitoring</h2>
-                <p>Our dedicated security team provides 24/7 threat monitoring with continuous intrusion detection and incident response capabilities. We employ multi-layered defense including network monitoring, anomaly detection, and automated threat response.</p>
-              </section>
-
-              <section>
-                <h2>Access Controls</h2>
-                <p>We implement strict role-based access controls (RBAC) and the principle of least privilege across all systems. Multi-factor authentication is required for all administrative access. All access events are logged and audited regularly.</p>
+                <p>Our security team provides 24/7 threat monitoring with continuous intrusion detection and incident response capabilities. We employ multi-layered defense including network monitoring, anomaly detection, and automated threat response — hardened through the same red-team-from-inception methodology our team applies to every platform we build.</p>
               </section>
 
               <section>
                 <h2>Infrastructure Security</h2>
-                <p>Our infrastructure is hosted in SOC 2 compliant data centers with physical security controls including biometric access, 24/7 surveillance, and environmental protections. We maintain isolated environments for each client to prevent cross-tenant data exposure.</p>
+                <p>Our infrastructure is hosted in SOC 2 compliant data centers with physical security controls including biometric access, 24/7 surveillance, and environmental protections. We maintain isolated environments for each client to prevent cross-tenant data exposure. Unlike SaaS AI tools, our architecture supports deployment within the client's own cloud environment, ensuring proprietary data remains under complete control.</p>
               </section>
 
               <section>
                 <h2>Vulnerability Management</h2>
                 <p>We conduct regular security assessments, penetration testing, and code reviews. Our development process includes automated security scanning in the CI/CD pipeline. We maintain a responsible disclosure program for security researchers.</p>
+              </section>
+
+              <section>
+                <h2>Our Team's Credentials</h2>
+                <p>The Sentinel Counsel security team is led by technologists who have authored a dozen published books on cloud architecture and AI — including titles published by O'Reilly and Microsoft Press, official Azure certification guides, and practice development playbooks that inform Microsoft's global partner network. Our leadership holds Google Developer Expert status for Analytics, Azure Elite and Azure Insider designations, and has maintained Microsoft MVP recognition for over a decade across Azure, Data Platform, and Artificial Intelligence categories. Our team regularly speaks at international conferences on enterprise AI security, multi-agent systems, and governance — including sessions on integrating agents into the enterprise and building next-generation reasoning systems on Azure.</p>
               </section>
 
               <section>
