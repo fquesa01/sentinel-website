@@ -3,6 +3,11 @@ import { google } from "googleapis";
 let cachedAccessToken: string | null = null;
 let cachedExpiresAt: number = 0;
 
+export function clearGmailTokenCache() {
+  cachedAccessToken = null;
+  cachedExpiresAt = 0;
+}
+
 async function getAccessToken() {
   if (cachedAccessToken && cachedExpiresAt > Date.now()) {
     return cachedAccessToken;

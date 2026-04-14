@@ -1,5 +1,5 @@
 import { Router, type Request, type Response } from "express";
-import { getUncachableGmailClient } from "../lib/gmail";
+import { getUncachableGmailClient, clearGmailTokenCache } from "../lib/gmail";
 import { logger } from "../lib/logger";
 
 const router = Router();
@@ -42,7 +42,7 @@ router.post("/demo-request", async (req: Request, res: Response) => {
   ].join("\n");
 
   const rawEmail = [
-    `To: 1@sntlabs.io`,
+    `To: team@sntlabs.io`,
     `Subject: ${subject}`,
     `Content-Type: text/plain; charset="UTF-8"`,
     ``,
@@ -56,13 +56,26 @@ router.post("/demo-request", async (req: Request, res: Response) => {
     .replace(/=+$/, "");
 
   try {
-    const gmail = await getUncachableGmailClient();
-    await gmail.users.messages.send({
-      userId: "me",
-      requestBody: {
-        raw: encodedMessage,
-      },
-    });
+    let gmail = await getUncachableGmailClient();
+    try {
+      await gmail.users.messages.send({
+        userId: "me",
+        requestBody: { raw: encodedMessage },
+      });
+    } catch (firstErr: unknown) {
+      const code = (firstErr as { code?: number })?.code;
+      if (code === 401 || code === 403) {
+        logger.warn("Gmail token expired, retrying with fresh token");
+        clearGmailTokenCache();
+        gmail = await getUncachableGmailClient();
+        await gmail.users.messages.send({
+          userId: "me",
+          requestBody: { raw: encodedMessage },
+        });
+      } else {
+        throw firstErr;
+      }
+    }
 
     logger.info("Demo request email sent successfully");
     res.json({ success: true });
