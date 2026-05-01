@@ -4,11 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "hello": "tsx ./src/hello.ts",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "seed-products": "tsx src/seed-products.ts"
+  },
+  "dependencies": {
+    "stripe": "*"
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "tsx": "catalog:"
+    "tsx": "catalog:",
+    "typescript": "5.7.3"
   }
 }
