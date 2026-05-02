@@ -377,14 +377,43 @@ router.post("/create-subscription", async (req: Request, res: Response) => {
       let subscriptionId = submission.stripeSubscriptionId;
       let clientSecret: string | null = null;
 
-      if (subscriptionId) {
-        const existing = await stripe.subscriptions.retrieve(subscriptionId, {
+      // Helper: try every documented Stripe path to obtain the
+      // client_secret for the first invoice of an existing subscription.
+      // Used both for "we already created a subscription" recovery and
+      // for "we just created a subscription but the response was thin".
+      async function resolveClientSecret(
+        subId: string,
+        latestInvoice: unknown,
+      ): Promise<string | null> {
+        // 1) inline on the subscription object
+        const inline = extractClientSecret(latestInvoice);
+        if (inline) return inline;
+        // 2) re-retrieve the invoice id directly
+        const invoiceId =
+          typeof latestInvoice === "string"
+            ? latestInvoice
+            : (latestInvoice as { id?: string } | null)?.id;
+        if (invoiceId) {
+          const invoice = await stripe.invoices.retrieve(invoiceId, {
+            expand: ["confirmation_secret", "payment_intent"],
+          });
+          const fromInvoice = extractClientSecret(invoice);
+          if (fromInvoice) return fromInvoice;
+        }
+        // 3) re-retrieve the subscription with full expansions
+        const refreshed = await stripe.subscriptions.retrieve(subId, {
           expand: ["latest_invoice.confirmation_secret", "latest_invoice.payment_intent"],
         });
-        clientSecret = extractClientSecret(existing.latest_invoice);
+        return extractClientSecret(refreshed.latest_invoice);
       }
 
-      if (!subscriptionId || !clientSecret) {
+      if (subscriptionId) {
+        // Subscription already exists for this submission. We MUST NOT
+        // create a second one — that would result in duplicate billing.
+        // Try hard to recover the existing client_secret; if we cannot,
+        // surface a 409 so the client can retry safely.
+        clientSecret = await resolveClientSecret(subscriptionId, null);
+      } else {
         const subscription = await stripe.subscriptions.create(
           {
             customer: customerId,
@@ -406,24 +435,18 @@ router.post("/create-subscription", async (req: Request, res: Response) => {
         );
 
         subscriptionId = subscription.id;
-        clientSecret = extractClientSecret(subscription.latest_invoice);
-
-        if (!clientSecret && subscription.latest_invoice) {
-          const invoiceId =
-            typeof subscription.latest_invoice === "string"
-              ? subscription.latest_invoice
-              : subscription.latest_invoice.id;
-          if (invoiceId) {
-            const invoice = await stripe.invoices.retrieve(invoiceId, {
-              expand: ["confirmation_secret", "payment_intent"],
-            });
-            clientSecret = extractClientSecret(invoice);
-          }
-        }
+        clientSecret = await resolveClientSecret(subscriptionId, subscription.latest_invoice);
       }
 
       if (!clientSecret) {
-        throw new Error("Stripe did not return a client_secret for the first invoice");
+        // Throw a sentinel that maps to 409 Conflict so the client knows
+        // the subscription exists but the secret can't be recovered right
+        // now (e.g. invoice transitioning state). The client can retry
+        // and will hit the existing-subscription branch above without
+        // ever creating a duplicate.
+        const e = new Error("Could not recover payment client_secret for existing subscription");
+        (e as Error & { code?: string }).code = "CLIENT_SECRET_UNAVAILABLE";
+        throw e;
       }
 
       await tx
@@ -448,6 +471,14 @@ router.post("/create-subscription", async (req: Request, res: Response) => {
   } catch (err) {
     if (err instanceof NotFoundError) {
       res.status(404).json({ error: "Submission not found" });
+      return;
+    }
+    const code = (err as { code?: string } | null)?.code;
+    if (code === "CLIENT_SECRET_UNAVAILABLE") {
+      logger.warn({ submissionId }, "Existing subscription has no recoverable client_secret; client should retry");
+      res
+        .status(409)
+        .json({ error: "Payment session is being prepared. Please try again in a moment." });
       return;
     }
     const message = err instanceof Error ? err.message : "Unknown error";

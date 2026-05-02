@@ -778,17 +778,24 @@ export default function StartPage() {
   useLayoutEffect(() => {
     const prev = document.querySelector('meta[name="robots"]');
     const prevContent = prev?.getAttribute("content") ?? null;
+    let created: HTMLMetaElement | null = null;
     if (prev) {
       prev.setAttribute("content", "noindex,nofollow");
     } else {
-      const m = document.createElement("meta");
-      m.setAttribute("name", "robots");
-      m.setAttribute("content", "noindex,nofollow");
-      document.head.appendChild(m);
+      created = document.createElement("meta");
+      created.setAttribute("name", "robots");
+      created.setAttribute("content", "noindex,nofollow");
+      document.head.appendChild(created);
     }
     return () => {
       if (prev && prevContent !== null) {
         prev.setAttribute("content", prevContent);
+      }
+      // If we created the tag (no prior robots meta existed), remove it
+      // on unmount so subsequent SPA navigations don't inherit
+      // noindex,nofollow from this private page.
+      if (created && created.parentNode) {
+        created.parentNode.removeChild(created);
       }
     };
   }, []);
