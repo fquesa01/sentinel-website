@@ -1,4 +1,4 @@
-import { eq, sql } from "drizzle-orm";
+import { and, eq, isNull, sql } from "drizzle-orm";
 import type Stripe from "stripe";
 import { db, intakeSubmissionsTable } from "@workspace/db";
 import { getStripeSync } from "./stripeClient";
@@ -12,7 +12,9 @@ import { logger } from "./logger";
  *    subscriptions / invoices upserted into the local stripe schema).
  *  - On success, JSON-parse the payload (already validated) and run our
  *    own side-effects for `invoice.paid` (send the two confirmation emails
- *    once per submission).
+ *    once per submission). Email sends are claimed atomically via a
+ *    conditional UPDATE so concurrent webhook deliveries can never send
+ *    the same email twice.
  *
  * Throws on signature failure; the route handler should respond 400.
  */
@@ -35,6 +37,8 @@ export async function handleStripeWebhook(payload: Buffer, signature: string): P
     return;
   }
 
+  // Both event types fire on first paid invoice. We treat them
+  // identically — the atomic claim below makes double-firing safe.
   if (event.type !== "invoice.paid" && event.type !== "invoice.payment_succeeded") {
     return;
   }
@@ -58,34 +62,89 @@ export async function handleStripeWebhook(payload: Buffer, signature: string): P
     return;
   }
 
-  if (submission.emailsSentAt) {
-    logger.info({ submissionId: submission.id }, "Confirmation emails already sent — skipping");
-    return;
-  }
-
   const invoiceContext = {
     amountPaidCents: invoice.amount_paid ?? 0,
     invoiceNumber: invoice.number ?? null,
     invoiceUrl: invoice.hosted_invoice_url ?? null,
   };
 
-  try {
-    await sendTeamIntakeEmail(submission, invoiceContext);
-  } catch (err) {
-    logger.error({ err, submissionId: submission.id }, "Failed to send team intake email");
-  }
-  try {
-    await sendClientConfirmationEmail(submission, invoiceContext);
-  } catch (err) {
-    logger.error({ err, submissionId: submission.id }, "Failed to send client confirmation email");
-  }
-
+  // Mark the submission active on first paid invoice. This is an
+  // unconditional update because it's safe to set repeatedly.
   await db
     .update(intakeSubmissionsTable)
-    .set({
-      status: "active",
-      emailsSentAt: new Date(),
-      updatedAt: sql`NOW()`,
-    })
+    .set({ status: "active", updatedAt: sql`NOW()` })
     .where(eq(intakeSubmissionsTable.id, submission.id));
+
+  // ATOMIC CLAIM: try to take responsibility for the team email by
+  // flipping team_email_sent_at from NULL → NOW() in a single UPDATE.
+  // If the update returns 0 rows, another webhook delivery already sent
+  // it. If sending then fails, we reset the column back to NULL so the
+  // next delivery can retry.
+  const teamClaim = await db
+    .update(intakeSubmissionsTable)
+    .set({ teamEmailSentAt: sql`NOW()` })
+    .where(
+      and(
+        eq(intakeSubmissionsTable.id, submission.id),
+        isNull(intakeSubmissionsTable.teamEmailSentAt),
+      ),
+    )
+    .returning({ id: intakeSubmissionsTable.id });
+
+  if (teamClaim.length > 0) {
+    try {
+      await sendTeamIntakeEmail(submission, invoiceContext);
+      logger.info({ submissionId: submission.id }, "Sent team intake email");
+    } catch (err) {
+      logger.error({ err, submissionId: submission.id }, "Team intake email failed — releasing claim for retry");
+      await db
+        .update(intakeSubmissionsTable)
+        .set({ teamEmailSentAt: null })
+        .where(eq(intakeSubmissionsTable.id, submission.id));
+    }
+  } else {
+    logger.info({ submissionId: submission.id }, "Team email already claimed by another delivery");
+  }
+
+  const clientClaim = await db
+    .update(intakeSubmissionsTable)
+    .set({ clientEmailSentAt: sql`NOW()` })
+    .where(
+      and(
+        eq(intakeSubmissionsTable.id, submission.id),
+        isNull(intakeSubmissionsTable.clientEmailSentAt),
+      ),
+    )
+    .returning({ id: intakeSubmissionsTable.id });
+
+  if (clientClaim.length > 0) {
+    try {
+      await sendClientConfirmationEmail(submission, invoiceContext);
+      logger.info({ submissionId: submission.id }, "Sent client confirmation email");
+    } catch (err) {
+      logger.error(
+        { err, submissionId: submission.id },
+        "Client confirmation email failed — releasing claim for retry",
+      );
+      await db
+        .update(intakeSubmissionsTable)
+        .set({ clientEmailSentAt: null })
+        .where(eq(intakeSubmissionsTable.id, submission.id));
+    }
+  } else {
+    logger.info({ submissionId: submission.id }, "Client email already claimed by another delivery");
+  }
+
+  // Roll-up marker: only set emails_sent_at once both have shipped.
+  await db
+    .update(intakeSubmissionsTable)
+    .set({ emailsSentAt: sql`NOW()` })
+    .where(
+      and(
+        eq(intakeSubmissionsTable.id, submission.id),
+        isNull(intakeSubmissionsTable.emailsSentAt),
+        sql`${intakeSubmissionsTable.teamEmailSentAt} IS NOT NULL`,
+        sql`${intakeSubmissionsTable.clientEmailSentAt} IS NOT NULL`,
+      ),
+    );
 }

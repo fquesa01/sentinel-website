@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import {
@@ -758,12 +758,34 @@ export default function StartPage() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [submissionId, setSubmissionId] = useState<number | null>(null);
+  const [submissionToken, setSubmissionToken] = useState<string | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [subscriptionId, setSubscriptionId] = useState<string | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
+
+  // Belt-and-suspenders: overwrite the document robots meta directly on
+  // mount so this private page is never indexed even if Helmet is delayed
+  // or fails to merge in some browser/environment.
+  useLayoutEffect(() => {
+    const prev = document.querySelector('meta[name="robots"]');
+    const prevContent = prev?.getAttribute("content") ?? null;
+    if (prev) {
+      prev.setAttribute("content", "noindex,nofollow");
+    } else {
+      const m = document.createElement("meta");
+      m.setAttribute("name", "robots");
+      m.setAttribute("content", "noindex,nofollow");
+      document.head.appendChild(m);
+    }
+    return () => {
+      if (prev && prevContent !== null) {
+        prev.setAttribute("content", prevContent);
+      }
+    };
+  }, []);
 
   const pricing = useMemo(
     () => computePricing(state.licenseCount, state.contractLength),
@@ -828,7 +850,8 @@ export default function StartPage() {
       );
 
       let sid = submissionId;
-      if (sid == null) {
+      let token = submissionToken;
+      if (sid == null || token == null) {
         const intakeRes = await fetch(apiUrl("/intake"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -857,15 +880,20 @@ export default function StartPage() {
           const data = await intakeRes.json().catch(() => null);
           throw new Error(data?.error || "Could not save your intake.");
         }
-        const intakeData = (await intakeRes.json()) as { submissionId: number };
+        const intakeData = (await intakeRes.json()) as {
+          submissionId: number;
+          submissionToken: string;
+        };
         sid = intakeData.submissionId;
+        token = intakeData.submissionToken;
         setSubmissionId(sid);
+        setSubmissionToken(token);
       }
 
       const subRes = await fetch(apiUrl("/create-subscription"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ submissionId: sid }),
+        body: JSON.stringify({ submissionId: sid, submissionToken: token }),
       });
       if (!subRes.ok) {
         const data = await subRes.json().catch(() => null);

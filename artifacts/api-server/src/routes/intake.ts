@@ -1,8 +1,23 @@
 import { Router, type Request, type Response } from "express";
+import { randomBytes, timingSafeEqual } from "node:crypto";
 import { eq, sql } from "drizzle-orm";
 import { db, intakeSubmissionsTable } from "@workspace/db";
 import { getUncachableStripeClient, isStripeConfigured } from "../lib/stripeClient";
 import { logger } from "../lib/logger";
+
+function generateSubmissionToken(): string {
+  return randomBytes(24).toString("hex");
+}
+
+function tokensMatch(a: string, b: string): boolean {
+  if (typeof a !== "string" || typeof b !== "string") return false;
+  if (a.length !== b.length) return false;
+  try {
+    return timingSafeEqual(Buffer.from(a), Buffer.from(b));
+  } catch {
+    return false;
+  }
+}
 
 const router = Router();
 
@@ -145,6 +160,7 @@ router.post("/intake", async (req: Request, res: Response) => {
   }
 
   try {
+    const submissionToken = generateSubmissionToken();
     const [row] = await db
       .insert(intakeSubmissionsTable)
       .values({
@@ -167,6 +183,7 @@ router.post("/intake", async (req: Request, res: Response) => {
         referralSource: parsed.data.referralSource,
         notes: parsed.data.notes,
         status: "pending",
+        submissionToken,
       })
       .returning();
 
@@ -174,7 +191,10 @@ router.post("/intake", async (req: Request, res: Response) => {
       throw new Error("Insert returned no row");
     }
 
-    res.json({ submissionId: row.id });
+    // The opaque token must be returned exactly once and is the only proof
+    // of ownership the client can use to call /create-subscription. We do
+    // NOT echo any other DB ids the client doesn't already know.
+    res.json({ submissionId: row.id, submissionToken: row.submissionToken });
   } catch (err) {
     logger.error({ err }, "Failed to persist intake submission");
     res.status(500).json({ error: "Failed to save submission. Please try again." });
@@ -228,129 +248,187 @@ router.post("/create-subscription", async (req: Request, res: Response) => {
     return;
   }
 
-  const submissionId = Number((req.body ?? {}).submissionId);
+  const body = (req.body ?? {}) as Record<string, unknown>;
+  const submissionId = Number(body["submissionId"]);
+  const providedToken = typeof body["submissionToken"] === "string" ? (body["submissionToken"] as string) : "";
+
   if (!Number.isInteger(submissionId) || submissionId <= 0) {
     res.status(400).json({ error: "submissionId is required" });
     return;
   }
-
-  const [submission] = await db
-    .select()
-    .from(intakeSubmissionsTable)
-    .where(eq(intakeSubmissionsTable.id, submissionId))
-    .limit(1);
-
-  if (!submission) {
-    res.status(404).json({ error: "Submission not found" });
+  if (!providedToken) {
+    res.status(400).json({ error: "submissionToken is required" });
     return;
   }
 
-  // If a subscription was already created for this submission and it still
-  // has an open invoice, reuse the existing payment intent.
+  // Stripe v22 (API 2025-09-30+) replaced `latest_invoice.payment_intent`
+  // with `latest_invoice.confirmation_secret`. We try the new field first
+  // and fall back to the older `payment_intent.client_secret` so we work
+  // across API version pins.
+  function extractClientSecret(invoice: unknown): string | null {
+    if (!invoice || typeof invoice !== "object") return null;
+    const inv = invoice as {
+      confirmation_secret?: { client_secret?: string | null } | null;
+      payment_intent?: string | { client_secret?: string | null } | null;
+    };
+    if (inv.confirmation_secret?.client_secret) {
+      return inv.confirmation_secret.client_secret;
+    }
+    if (inv.payment_intent && typeof inv.payment_intent !== "string") {
+      return inv.payment_intent.client_secret ?? null;
+    }
+    return null;
+  }
+
+  // Distinguish "no such row / bad token" from "real failure" so we can
+  // return the correct status without leaking enumeration. Throwing this
+  // sentinel inside the transaction triggers a rollback as a side benefit.
+  class NotFoundError extends Error {}
+
+  type CreateResult = {
+    clientSecret: string;
+    subscriptionId: string;
+    customerId: string;
+    unitAmountCents: number;
+    licenseCount: number;
+    contractLength: "1yr" | "2yr";
+  };
+
+  let result: CreateResult;
   try {
-    const stripe = await getUncachableStripeClient();
-    const contractLength = submission.contractLength as "1yr" | "2yr";
+    result = await db.transaction(async (tx) => {
+      // Hold a row-level lock for the entire create-subscription
+      // operation. This serializes concurrent callers for the same
+      // submission so only one of them issues the Stripe writes; the
+      // others see the persisted stripeSubscriptionId after acquiring
+      // the lock and reuse it. Combined with Stripe-side idempotency
+      // keys, duplicate Stripe customers/subscriptions cannot occur.
+      const rows = await tx
+        .select()
+        .from(intakeSubmissionsTable)
+        .where(eq(intakeSubmissionsTable.id, submissionId))
+        .for("update")
+        .limit(1);
+      const submission = rows[0];
 
-    let customerId = submission.stripeCustomerId;
-    if (!customerId) {
-      const customer = await stripe.customers.create({
-        name: submission.firmName,
-        email: submission.primaryContactEmail,
-        phone: submission.primaryContactPhone,
-        address: {
-          line1: submission.billingStreet,
-          city: submission.billingCity,
-          state: submission.billingState,
-          postal_code: submission.billingZip,
-          country: submission.billingCountry,
-        },
-        metadata: {
-          submission_id: String(submission.id),
-          firm_name: submission.firmName,
-          contract_length: contractLength,
-          license_count: String(submission.licenseCount),
-        },
-      });
-      customerId = customer.id;
-    }
-
-    const { priceId, unitAmountCents } = await findPriceForContract(contractLength);
-
-    let subscriptionId = submission.stripeSubscriptionId;
-    let clientSecret: string | null = null;
-
-    if (subscriptionId) {
-      const existing = await stripe.subscriptions.retrieve(subscriptionId, {
-        expand: ["latest_invoice.payment_intent"],
-      });
-      const latest = existing.latest_invoice;
-      if (
-        latest &&
-        typeof latest !== "string" &&
-        latest.payment_intent &&
-        typeof latest.payment_intent !== "string"
-      ) {
-        clientSecret = latest.payment_intent.client_secret ?? null;
+      if (!submission || !tokensMatch(submission.submissionToken, providedToken)) {
+        throw new NotFoundError();
       }
-    }
 
-    if (!subscriptionId || !clientSecret) {
-      const subscription = await stripe.subscriptions.create({
-        customer: customerId,
-        items: [{ price: priceId, quantity: submission.licenseCount }],
-        payment_behavior: "default_incomplete",
-        payment_settings: {
-          save_default_payment_method: "on_subscription",
-          payment_method_types: ["card"],
-        },
-        expand: ["latest_invoice.payment_intent"],
-        metadata: {
-          submission_id: String(submission.id),
-          firm_name: submission.firmName,
-          contract_length: contractLength,
-          license_count: String(submission.licenseCount),
-        },
-      });
+      const stripe = await getUncachableStripeClient();
+      const contractLength = submission.contractLength as "1yr" | "2yr";
 
-      subscriptionId = subscription.id;
-      const latest = subscription.latest_invoice;
-      if (
-        latest &&
-        typeof latest !== "string" &&
-        latest.payment_intent &&
-        typeof latest.payment_intent !== "string"
-      ) {
-        clientSecret = latest.payment_intent.client_secret ?? null;
+      let customerId = submission.stripeCustomerId;
+      if (!customerId) {
+        const customer = await stripe.customers.create(
+          {
+            name: submission.firmName,
+            email: submission.primaryContactEmail,
+            phone: submission.primaryContactPhone,
+            address: {
+              line1: submission.billingStreet,
+              city: submission.billingCity,
+              state: submission.billingState,
+              postal_code: submission.billingZip,
+              country: submission.billingCountry,
+            },
+            metadata: {
+              submission_id: String(submission.id),
+              firm_name: submission.firmName,
+              contract_length: contractLength,
+              license_count: String(submission.licenseCount),
+            },
+          },
+          { idempotencyKey: `intake-${submission.id}-customer` },
+        );
+        customerId = customer.id;
       }
-    }
 
-    if (!clientSecret) {
-      throw new Error("Stripe did not return a client_secret for the first invoice");
-    }
+      const { priceId, unitAmountCents } = await findPriceForContract(contractLength);
 
-    await db
-      .update(intakeSubmissionsTable)
-      .set({
-        stripeCustomerId: customerId,
-        stripeSubscriptionId: subscriptionId,
-        stripePriceId: priceId,
-        updatedAt: sql`NOW()`,
-      })
-      .where(eq(intakeSubmissionsTable.id, submission.id));
+      let subscriptionId = submission.stripeSubscriptionId;
+      let clientSecret: string | null = null;
 
-    res.json({
-      clientSecret,
-      subscriptionId,
-      customerId,
-      unitAmountCents,
-      licenseCount: submission.licenseCount,
-      contractLength,
+      if (subscriptionId) {
+        const existing = await stripe.subscriptions.retrieve(subscriptionId, {
+          expand: ["latest_invoice.confirmation_secret", "latest_invoice.payment_intent"],
+        });
+        clientSecret = extractClientSecret(existing.latest_invoice);
+      }
+
+      if (!subscriptionId || !clientSecret) {
+        const subscription = await stripe.subscriptions.create(
+          {
+            customer: customerId,
+            items: [{ price: priceId, quantity: submission.licenseCount }],
+            payment_behavior: "default_incomplete",
+            payment_settings: {
+              save_default_payment_method: "on_subscription",
+              payment_method_types: ["card"],
+            },
+            expand: ["latest_invoice.confirmation_secret", "latest_invoice.payment_intent"],
+            metadata: {
+              submission_id: String(submission.id),
+              firm_name: submission.firmName,
+              contract_length: contractLength,
+              license_count: String(submission.licenseCount),
+            },
+          },
+          { idempotencyKey: `intake-${submission.id}-subscription` },
+        );
+
+        subscriptionId = subscription.id;
+        clientSecret = extractClientSecret(subscription.latest_invoice);
+
+        if (!clientSecret && subscription.latest_invoice) {
+          const invoiceId =
+            typeof subscription.latest_invoice === "string"
+              ? subscription.latest_invoice
+              : subscription.latest_invoice.id;
+          if (invoiceId) {
+            const invoice = await stripe.invoices.retrieve(invoiceId, {
+              expand: ["confirmation_secret", "payment_intent"],
+            });
+            clientSecret = extractClientSecret(invoice);
+          }
+        }
+      }
+
+      if (!clientSecret) {
+        throw new Error("Stripe did not return a client_secret for the first invoice");
+      }
+
+      await tx
+        .update(intakeSubmissionsTable)
+        .set({
+          stripeCustomerId: customerId,
+          stripeSubscriptionId: subscriptionId,
+          stripePriceId: priceId,
+          updatedAt: sql`NOW()`,
+        })
+        .where(eq(intakeSubmissionsTable.id, submission.id));
+
+      return {
+        clientSecret,
+        subscriptionId,
+        customerId,
+        unitAmountCents,
+        licenseCount: submission.licenseCount,
+        contractLength,
+      };
     });
   } catch (err) {
+    if (err instanceof NotFoundError) {
+      res.status(404).json({ error: "Submission not found" });
+      return;
+    }
     const message = err instanceof Error ? err.message : "Unknown error";
     logger.error({ err: message, submissionId }, "Failed to create subscription");
     res.status(500).json({ error: "Could not start payment. Please try again." });
+    return;
   }
+
+  res.json(result);
 });
 
 export default router;
