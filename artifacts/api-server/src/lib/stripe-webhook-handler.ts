@@ -5,6 +5,29 @@ import { getStripeSync } from "./stripeClient";
 import { sendTeamIntakeEmail, sendClientConfirmationEmail } from "./intake-emails";
 import { logger } from "./logger";
 
+// Stripe API 2025-09-30 moved invoice.subscription to
+// invoice.parent.subscription_details.subscription. Support both shapes
+// so this keeps working across webhook API version changes.
+function extractInvoiceSubscriptionId(invoice: Stripe.Invoice): string | null {
+  const inv = invoice as unknown as {
+    subscription?: string | { id: string } | null;
+    parent?: {
+      subscription_details?: {
+        subscription?: string | { id: string } | null;
+      } | null;
+    } | null;
+  };
+  const fromParent = inv.parent?.subscription_details?.subscription;
+  if (fromParent) {
+    return typeof fromParent === "string" ? fromParent : fromParent.id;
+  }
+  const legacy = inv.subscription;
+  if (legacy) {
+    return typeof legacy === "string" ? legacy : legacy.id;
+  }
+  return null;
+}
+
 /**
  * Process a Stripe webhook delivery:
  *  - Hand the raw payload + signature to `stripe-replit-sync` for signature
@@ -44,10 +67,7 @@ export async function handleStripeWebhook(payload: Buffer, signature: string): P
   }
 
   const invoice = event.data.object as Stripe.Invoice;
-  const subscriptionId =
-    typeof invoice.subscription === "string"
-      ? invoice.subscription
-      : invoice.subscription?.id ?? null;
+  const subscriptionId = extractInvoiceSubscriptionId(invoice);
 
   if (!subscriptionId) return;
 
