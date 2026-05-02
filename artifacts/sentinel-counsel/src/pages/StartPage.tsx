@@ -437,9 +437,10 @@ interface ReviewStepProps {
   onContinue: () => void;
   busy: boolean;
   error: string | null;
+  locked: boolean;
 }
 
-function ReviewStep({ state, setState, pricing, onBack, onContinue, busy, error }: ReviewStepProps) {
+function ReviewStep({ state, setState, pricing, onBack, onContinue, busy, error, locked }: ReviewStepProps) {
   function update<K extends keyof IntakeFormState>(key: K, val: IntakeFormState[K]) {
     setState((s) => ({ ...s, [key]: val }));
   }
@@ -448,9 +449,9 @@ function ReviewStep({ state, setState, pricing, onBack, onContinue, busy, error 
     <>
       <h1>Choose licenses &amp; review pricing</h1>
       <p className="subhead">
-        Pick your seat count and contract length — pricing updates live.
-        You'll be charged the first quarterly amount when you complete
-        payment on the next step. Subsequent invoices bill every three months.
+        {locked
+          ? "Your subscription has been prepared with the seat count and contract length below. To change them, contact your Sentinel Counsel rep before completing payment."
+          : "Pick your seat count and contract length — pricing updates live. You'll be charged the first quarterly amount when you complete payment on the next step. Subsequent invoices bill every three months."}
       </p>
 
       {error && <div className="start-error">{error}</div>}
@@ -465,6 +466,7 @@ function ReviewStep({ state, setState, pricing, onBack, onContinue, busy, error 
               max={10000}
               value={state.licenseCount}
               onChange={(e) => update("licenseCount", Number(e.target.value) || 0)}
+              disabled={locked}
             />
           </div>
           <div className="start-field">
@@ -472,12 +474,18 @@ function ReviewStep({ state, setState, pricing, onBack, onContinue, busy, error 
             <select
               value={state.contractLength}
               onChange={(e) => update("contractLength", e.target.value as ContractLength)}
+              disabled={locked}
             >
               <option value="1yr">1 year — list price</option>
               <option value="2yr">2 years — 10% discount</option>
             </select>
           </div>
         </div>
+        {locked && (
+          <p className="mono-label" style={{ marginTop: 12 }}>
+            Pricing is locked — your payment session is already prepared for these values.
+          </p>
+        )}
       </section>
 
       <div className="start-pricing-card">
@@ -933,6 +941,7 @@ export default function StartPage() {
               onContinue={handleReviewContinue}
               busy={busy}
               error={error}
+              locked={subscriptionId !== null}
             />
           )}
 
