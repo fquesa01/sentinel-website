@@ -775,57 +775,261 @@ interface SuccessStepProps {
   pricing: PricingMath;
   subscriptionId: string;
   processing: boolean;
+  submissionId: number;
+  submissionToken: string;
 }
 
-function SuccessStep({ state, pricing, subscriptionId, processing }: SuccessStepProps) {
+interface SubmissionStatusPayload {
+  status: string;
+  invoiceNumber: string | null;
+  hostedInvoiceUrl: string | null;
+  amountPaidCents: number | null;
+  nextBillingAt: string | null;
+  emailedAt: string | null;
+  teamEmailedAt: string | null;
+  clientEmailedAt: string | null;
+}
+
+const STATUS_POLL_INTERVAL_MS = 2000;
+const STATUS_POLL_TIMEOUT_MS = 60_000;
+
+function fmtDate(iso: string | null): string | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function SuccessStep({
+  state,
+  pricing,
+  subscriptionId,
+  processing,
+  submissionId,
+  submissionToken,
+}: SuccessStepProps) {
+  const [statusData, setStatusData] = useState<SubmissionStatusPayload | null>(null);
+  const [pollTimedOut, setPollTimedOut] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    const start = Date.now();
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    async function poll() {
+      try {
+        const res = await fetch(
+          apiUrl(
+            `/submission-status?submissionId=${encodeURIComponent(String(submissionId))}` +
+              `&submissionToken=${encodeURIComponent(submissionToken)}`,
+          ),
+        );
+        if (!cancelled && res.ok) {
+          const data = (await res.json()) as SubmissionStatusPayload;
+          setStatusData(data);
+          if (data.status === "active") {
+            return; // stop polling — confirmation is ready
+          }
+        }
+      } catch {
+        // network blip — keep polling until timeout
+      }
+      if (cancelled) return;
+      if (Date.now() - start >= STATUS_POLL_TIMEOUT_MS) {
+        setPollTimedOut(true);
+        return;
+      }
+      timer = setTimeout(poll, STATUS_POLL_INTERVAL_MS);
+    }
+
+    poll();
+    return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+    };
+  }, [submissionId, submissionToken]);
+
+  const isActive = statusData?.status === "active";
+  const isAwaitingWebhook = !processing && !isActive && !pollTimedOut;
+  const isProcessingPayment = processing && !isActive;
+
+  const firstName = state.primaryContactName.split(" ")[0] || "Counselor";
+  const billingEmail = state.billingContactEmail.trim() || state.primaryContactEmail;
+  const contractLabel = pricing.contractYears === 2 ? "2 years (10% discount)" : "1 year";
+  const nextBillingLabel = fmtDate(statusData?.nextBillingAt ?? null);
+  const amountPaid =
+    statusData?.amountPaidCents != null
+      ? statusData.amountPaidCents / 100
+      : pricing.quarterlyTotal;
+
+  const headline = isActive
+    ? "You're all set."
+    : isProcessingPayment
+      ? "Payment processing."
+      : "Payment received."; // awaiting webhook OR timed out
+
+  const statusPill = isActive
+    ? { label: "Active", cls: "ok" }
+    : isProcessingPayment
+      ? { label: "Bank confirming", cls: "wait" }
+      : pollTimedOut
+        ? { label: "Confirming", cls: "wait" }
+        : { label: "Finalizing", cls: "wait" };
+
   return (
     <div className="start-success">
-      <div className="start-success-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          {processing ? (
-            <>
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 7v5l3 2" />
-            </>
-          ) : (
-            <>
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-              <polyline points="22 4 12 14.01 9 11.01" />
-            </>
-          )}
-        </svg>
+      <div className="start-success-header">
+        <div className={`start-success-icon ${isActive ? "ok" : "wait"}`}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            {isActive ? (
+              <>
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </>
+            ) : (
+              <>
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 2" />
+              </>
+            )}
+          </svg>
+        </div>
+        <div className={`start-success-pill ${statusPill.cls}`}>{statusPill.label}</div>
       </div>
-      <h1>{processing ? "Payment processing." : "You're in."}</h1>
+
+      <h1>{headline}</h1>
+
       <p className="subhead">
-        {processing ? (
+        {isActive ? (
           <>
-            Thanks, {state.primaryContactName.split(" ")[0] || "Counselor"}. Your bank is
-            still confirming your <strong style={{ color: "#fff" }}>{fmtMoney(pricing.quarterlyTotal)}</strong>{" "}
-            payment. We'll email{" "}
-            <strong style={{ color: "#fff" }}>{state.primaryContactEmail}</strong> the
-            moment it settles — no further action needed from you.
+            Thanks for choosing Sentinel Counsel, {firstName}. Your subscription
+            is active and your first quarterly payment of{" "}
+            <strong style={{ color: "#fff" }}>{fmtMoney(amountPaid)}</strong> has
+            been received. We've emailed{" "}
+            <strong style={{ color: "#fff" }}>{state.primaryContactEmail}</strong>{" "}
+            (and our team) with the full receipt and onboarding next steps.
+          </>
+        ) : isProcessingPayment ? (
+          <>
+            Thanks, {firstName}. Your bank is still confirming your{" "}
+            <strong style={{ color: "#fff" }}>{fmtMoney(amountPaid)}</strong>{" "}
+            payment. As soon as it settles we'll email{" "}
+            <strong style={{ color: "#fff" }}>{state.primaryContactEmail}</strong>{" "}
+            with the receipt — no further action needed from you.
+          </>
+        ) : pollTimedOut ? (
+          <>
+            Thanks, {firstName}. We received your payment of{" "}
+            <strong style={{ color: "#fff" }}>{fmtMoney(amountPaid)}</strong>.
+            Your invoice is being finalized on Stripe — your confirmation email
+            is on its way to{" "}
+            <strong style={{ color: "#fff" }}>{state.primaryContactEmail}</strong>.
+            You can safely close this page.
           </>
         ) : (
           <>
-            Thanks for choosing Sentinel Counsel, {state.primaryContactName.split(" ")[0] || "Counselor"}.
-            Your first quarterly payment of <strong style={{ color: "#fff" }}>{fmtMoney(pricing.quarterlyTotal)}</strong>{" "}
-            has been received. A confirmation has been emailed to{" "}
-            <strong style={{ color: "#fff" }}>{state.primaryContactEmail}</strong>.
+            Thanks, {firstName}. We received your payment of{" "}
+            <strong style={{ color: "#fff" }}>{fmtMoney(amountPaid)}</strong> and
+            are finalizing your invoice with Stripe. This usually takes a few
+            seconds — we'll email{" "}
+            <strong style={{ color: "#fff" }}>{state.primaryContactEmail}</strong>{" "}
+            as soon as it lands.
           </>
         )}
       </p>
-      <p className="subhead" style={{ marginBottom: 0 }}>
-        Our onboarding team will reach out within one business day to schedule
-        kickoff and provision accounts for your {state.authorizedUsers.length} authorized
-        user{state.authorizedUsers.length === 1 ? "" : "s"}. You'll also receive
-        a Master Services Agreement to countersign for your records.
-      </p>
-      <div className="start-success-meta">
-        <div>Firm: {state.firmName}</div>
-        <div>
-          Licenses: {state.licenseCount} · Contract: {pricing.contractYears === 2 ? "2 years" : "1 year"}
+
+      <div className="start-success-card">
+        <div className="start-success-card-row">
+          <span>Firm</span>
+          <strong>{state.firmName}</strong>
         </div>
+        <div className="start-success-card-row">
+          <span>Licenses</span>
+          <strong>{state.licenseCount}</strong>
+        </div>
+        <div className="start-success-card-row">
+          <span>Contract length</span>
+          <strong>{contractLabel}</strong>
+        </div>
+        <div className="start-success-card-row">
+          <span>Quarterly amount</span>
+          <strong>{fmtMoney(amountPaid)}</strong>
+        </div>
+        <div className="start-success-card-row">
+          <span>Next invoice</span>
+          <strong>
+            {nextBillingLabel ? nextBillingLabel : <em className="pending">in ~3 months</em>}
+          </strong>
+        </div>
+        <div className="start-success-card-row">
+          <span>Invoice #</span>
+          <strong>
+            {statusData?.invoiceNumber ? (
+              statusData.hostedInvoiceUrl ? (
+                <a
+                  className="start-success-link"
+                  href={statusData.hostedInvoiceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {statusData.invoiceNumber} ↗
+                </a>
+              ) : (
+                statusData.invoiceNumber
+              )
+            ) : (
+              <em className="pending">finalizing…</em>
+            )}
+          </strong>
+        </div>
+        <div className="start-success-card-row">
+          <span>Billing email</span>
+          <strong>{billingEmail}</strong>
+        </div>
+      </div>
+
+      <div className={`start-success-email ${isActive ? "ok" : "wait"}`}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <rect x="3" y="5" width="18" height="14" rx="1" />
+          <path d="m3 7 9 6 9-6" />
+        </svg>
+        <div>
+          {isActive ? (
+            <>
+              We've emailed your team. A receipt is in{" "}
+              <strong>{state.primaryContactEmail}</strong>'s inbox and our
+              onboarding team has been notified.
+            </>
+          ) : (
+            <>
+              Your confirmation email is being prepared. We'll send it to{" "}
+              <strong>{state.primaryContactEmail}</strong> the moment Stripe
+              finalizes the invoice.
+            </>
+          )}
+        </div>
+      </div>
+
+      <p className="subhead" style={{ marginBottom: 0, marginTop: "1.5rem" }}>
+        Our onboarding team will reach out within one business day to schedule
+        kickoff and provision accounts for your {state.authorizedUsers.length}{" "}
+        authorized user{state.authorizedUsers.length === 1 ? "" : "s"}. You'll
+        also receive a Master Services Agreement to countersign for your
+        records.
+      </p>
+
+      <div className="start-success-meta">
+        <div>Submission ID: {submissionId}</div>
         <div>Stripe subscription: {subscriptionId}</div>
+        {isAwaitingWebhook && (
+          <div className="start-success-poll">
+            <span className="start-success-spinner" /> Listening for Stripe…
+          </div>
+        )}
       </div>
     </div>
   );
@@ -1030,12 +1234,14 @@ export default function StartPage() {
             />
           )}
 
-          {step === 4 && subscriptionId && (
+          {step === 4 && subscriptionId && submissionId !== null && submissionToken !== null && (
             <SuccessStep
               state={state}
               pricing={pricing}
               subscriptionId={subscriptionId}
               processing={paymentProcessing}
+              submissionId={submissionId}
+              submissionToken={submissionToken}
             />
           )}
         </main>

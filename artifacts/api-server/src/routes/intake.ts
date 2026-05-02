@@ -475,4 +475,115 @@ router.post("/create-subscription", async (req: Request, res: Response) => {
   res.json(result);
 });
 
+interface SubmissionStatusResponse {
+  status: string;
+  invoiceNumber: string | null;
+  hostedInvoiceUrl: string | null;
+  amountPaidCents: number | null;
+  nextBillingAt: string | null;
+  emailedAt: string | null;
+  teamEmailedAt: string | null;
+  clientEmailedAt: string | null;
+}
+
+// Polled by the /start success step to detect when the invoice.paid
+// webhook has flipped the submission to active and surface invoice
+// number / hosted invoice URL / next billing date for the confirmation
+// card. Uses the same opaque-token check as /create-subscription so the
+// id alone can't enumerate other submissions.
+router.get("/submission-status", async (req: Request, res: Response) => {
+  const submissionId = Number(req.query["submissionId"]);
+  const providedToken =
+    typeof req.query["submissionToken"] === "string"
+      ? (req.query["submissionToken"] as string)
+      : "";
+
+  if (!Number.isInteger(submissionId) || submissionId <= 0) {
+    res.status(400).json({ error: "submissionId is required" });
+    return;
+  }
+  if (!providedToken) {
+    res.status(400).json({ error: "submissionToken is required" });
+    return;
+  }
+
+  let submission;
+  try {
+    const rows = await db
+      .select()
+      .from(intakeSubmissionsTable)
+      .where(eq(intakeSubmissionsTable.id, submissionId))
+      .limit(1);
+    submission = rows[0];
+  } catch (err) {
+    logger.error({ err, submissionId }, "Failed to load submission for status poll");
+    res.status(500).json({ error: "Could not load submission status." });
+    return;
+  }
+
+  if (!submission || !tokensMatch(submission.submissionToken, providedToken)) {
+    res.status(404).json({ error: "Submission not found" });
+    return;
+  }
+
+  const response: SubmissionStatusResponse = {
+    status: submission.status,
+    invoiceNumber: null,
+    hostedInvoiceUrl: null,
+    amountPaidCents: null,
+    nextBillingAt: null,
+    emailedAt: submission.emailsSentAt ? submission.emailsSentAt.toISOString() : null,
+    teamEmailedAt: submission.teamEmailSentAt ? submission.teamEmailSentAt.toISOString() : null,
+    clientEmailedAt: submission.clientEmailSentAt ? submission.clientEmailSentAt.toISOString() : null,
+  };
+
+  // Pull invoice number, hosted URL, amount paid, and next billing date
+  // from Stripe live so the confirmation card can show them as soon as
+  // the webhook fires. Failure here is non-fatal — the polling client
+  // will keep showing the graceful fallback.
+  if (submission.stripeSubscriptionId && isStripeConfigured()) {
+    try {
+      const stripe = await getUncachableStripeClient();
+      const subscription = await stripe.subscriptions.retrieve(
+        submission.stripeSubscriptionId,
+        { expand: ["latest_invoice"] },
+      );
+
+      const sub = subscription as unknown as {
+        current_period_end?: number | null;
+        items?: { data?: Array<{ current_period_end?: number | null }> };
+        latest_invoice?:
+          | string
+          | {
+              number?: string | null;
+              hosted_invoice_url?: string | null;
+              amount_paid?: number | null;
+              status?: string | null;
+            }
+          | null;
+      };
+
+      const periodEnd =
+        sub.current_period_end ?? sub.items?.data?.[0]?.current_period_end ?? null;
+      if (typeof periodEnd === "number") {
+        response.nextBillingAt = new Date(periodEnd * 1000).toISOString();
+      }
+
+      const inv = sub.latest_invoice;
+      if (inv && typeof inv !== "string") {
+        if (inv.number) response.invoiceNumber = inv.number;
+        if (inv.hosted_invoice_url) response.hostedInvoiceUrl = inv.hosted_invoice_url;
+        if (typeof inv.amount_paid === "number") response.amountPaidCents = inv.amount_paid;
+      }
+    } catch (err) {
+      logger.warn(
+        { err: err instanceof Error ? err.message : err, submissionId },
+        "Could not fetch Stripe subscription for status response",
+      );
+    }
+  }
+
+  res.json(response);
+});
+
 export default router;
