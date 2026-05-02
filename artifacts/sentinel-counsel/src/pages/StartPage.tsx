@@ -556,7 +556,7 @@ interface PayStepProps {
   pricing: PricingMath;
   clientSecret: string;
   onBack: () => void;
-  onSuccess: (subscriptionId: string) => void;
+  onSuccess: (subscriptionId: string, processing: boolean) => void;
   subscriptionId: string;
 }
 
@@ -608,12 +608,12 @@ function PaymentForm({ state, pricing, onBack, onSuccess, subscriptionId }: Omit
     }
 
     if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
-      onSuccess(subscriptionId);
+      onSuccess(subscriptionId, false);
       return;
     }
 
     if (result.paymentIntent && result.paymentIntent.status === "processing") {
-      onSuccess(subscriptionId);
+      onSuccess(subscriptionId, true);
       return;
     }
 
@@ -735,23 +735,45 @@ interface SuccessStepProps {
   state: IntakeFormState;
   pricing: PricingMath;
   subscriptionId: string;
+  processing: boolean;
 }
 
-function SuccessStep({ state, pricing, subscriptionId }: SuccessStepProps) {
+function SuccessStep({ state, pricing, subscriptionId, processing }: SuccessStepProps) {
   return (
     <div className="start-success">
       <div className="start-success-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-          <polyline points="22 4 12 14.01 9 11.01" />
+          {processing ? (
+            <>
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 7v5l3 2" />
+            </>
+          ) : (
+            <>
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </>
+          )}
         </svg>
       </div>
-      <h1>You're in.</h1>
+      <h1>{processing ? "Payment processing." : "You're in."}</h1>
       <p className="subhead">
-        Thanks for choosing Sentinel Counsel, {state.primaryContactName.split(" ")[0] || "Counselor"}.
-        Your first quarterly payment of <strong style={{ color: "#fff" }}>{fmtMoney(pricing.quarterlyTotal)}</strong>{" "}
-        has been received. A confirmation has been emailed to{" "}
-        <strong style={{ color: "#fff" }}>{state.primaryContactEmail}</strong>.
+        {processing ? (
+          <>
+            Thanks, {state.primaryContactName.split(" ")[0] || "Counselor"}. Your bank is
+            still confirming your <strong style={{ color: "#fff" }}>{fmtMoney(pricing.quarterlyTotal)}</strong>{" "}
+            payment. We'll email{" "}
+            <strong style={{ color: "#fff" }}>{state.primaryContactEmail}</strong> the
+            moment it settles — no further action needed from you.
+          </>
+        ) : (
+          <>
+            Thanks for choosing Sentinel Counsel, {state.primaryContactName.split(" ")[0] || "Counselor"}.
+            Your first quarterly payment of <strong style={{ color: "#fff" }}>{fmtMoney(pricing.quarterlyTotal)}</strong>{" "}
+            has been received. A confirmation has been emailed to{" "}
+            <strong style={{ color: "#fff" }}>{state.primaryContactEmail}</strong>.
+          </>
+        )}
       </p>
       <p className="subhead" style={{ marginBottom: 0 }}>
         Our onboarding team will reach out within one business day to schedule
@@ -779,6 +801,7 @@ export default function StartPage() {
   const [submissionToken, setSubmissionToken] = useState<string | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [subscriptionId, setSubscriptionId] = useState<string | null>(null);
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -955,15 +978,21 @@ export default function StartPage() {
                 setError(null);
                 setStep(2);
               }}
-              onSuccess={(sid) => {
+              onSuccess={(sid, processing) => {
                 setSubscriptionId(sid);
+                setPaymentProcessing(processing);
                 setStep(4);
               }}
             />
           )}
 
           {step === 4 && subscriptionId && (
-            <SuccessStep state={state} pricing={pricing} subscriptionId={subscriptionId} />
+            <SuccessStep
+              state={state}
+              pricing={pricing}
+              subscriptionId={subscriptionId}
+              processing={paymentProcessing}
+            />
           )}
         </main>
 
