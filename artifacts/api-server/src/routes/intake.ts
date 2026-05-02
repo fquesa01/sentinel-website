@@ -3,6 +3,7 @@ import { randomBytes, timingSafeEqual } from "node:crypto";
 import { eq, sql } from "drizzle-orm";
 import { db, intakeSubmissionsTable } from "@workspace/db";
 import { getUncachableStripeClient, isStripeConfigured } from "../lib/stripeClient";
+import { getStripeInitStatus } from "../lib/stripe-init";
 import { logger } from "../lib/logger";
 
 function generateSubmissionToken(): string {
@@ -268,6 +269,18 @@ async function findPriceForContract(
 router.post("/create-subscription", async (req: Request, res: Response) => {
   if (!isStripeConfigured()) {
     res.status(503).json({ error: "Payments are not currently available. Please contact us directly." });
+    return;
+  }
+  const stripeStatus = getStripeInitStatus();
+  if (stripeStatus.error) {
+    logger.error(
+      { stripeInitError: stripeStatus.error },
+      "Refusing /create-subscription — Stripe init failed at boot",
+    );
+    res.status(503).json({
+      error:
+        "Payments are temporarily unavailable while we restore our billing connection. Please try again in a few minutes or contact billing@sntlabs.io.",
+    });
     return;
   }
 

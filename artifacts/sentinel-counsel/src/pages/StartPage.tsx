@@ -909,8 +909,13 @@ export default function StartPage() {
         (u) => u.name.trim() && u.email.trim(),
       );
 
-      let sid = submissionId;
-      let token = submissionToken;
+      // Always re-POST intake when no subscription exists yet so any edits
+      // to license count, contract length, or other fields made after a
+      // failed prior /create-subscription attempt are persisted before we
+      // talk to Stripe. Once a subscription IS created, we keep the
+      // original submission to preserve referential integrity.
+      let sid = subscriptionId ? submissionId : null;
+      let token = subscriptionId ? submissionToken : null;
       if (sid == null || token == null) {
         const intakeRes = await fetch(apiUrl("/intake"), {
           method: "POST",
