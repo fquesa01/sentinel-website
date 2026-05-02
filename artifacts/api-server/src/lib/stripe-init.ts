@@ -3,6 +3,18 @@ import { getStripeSync, isStripeConfigured } from "./stripeClient";
 import { logger } from "./logger";
 
 let initialized = false;
+let initError: string | null = null;
+let initSkipped = false;
+
+export interface StripeInitStatus {
+  initialized: boolean;
+  skipped: boolean;
+  error: string | null;
+}
+
+export function getStripeInitStatus(): StripeInitStatus {
+  return { initialized, skipped: initSkipped, error: initError };
+}
 
 /**
  * Initialise the local Stripe sync schema, register a managed webhook, and
@@ -17,6 +29,7 @@ export async function initStripe(): Promise<void> {
   if (initialized) return;
 
   if (!isStripeConfigured()) {
+    initSkipped = true;
     logger.warn(
       "STRIPE_SECRET_KEY not set — Stripe initialization skipped. " +
         "Add it via the Secrets tab to enable the /start signup page.",
@@ -56,7 +69,12 @@ export async function initStripe(): Promise<void> {
       .catch((err) => logger.error({ err }, "Stripe backfill failed"));
 
     initialized = true;
+    initError = null;
   } catch (err) {
-    logger.error({ err }, "Failed to initialise Stripe — continuing without it");
+    initError = err instanceof Error ? err.message : String(err);
+    logger.error(
+      { err },
+      "Failed to initialise Stripe — continuing without it. /api/healthz will report degraded.",
+    );
   }
 }
