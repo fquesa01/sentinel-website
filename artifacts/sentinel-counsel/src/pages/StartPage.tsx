@@ -394,32 +394,6 @@ function IntakeStep({ state, setState, onNext, error }: IntakeStepProps) {
       </section>
 
       <section className="start-section">
-        <h2>Licenses &amp; contract</h2>
-        <div className="start-license-row">
-          <div className="start-field">
-            <label>Number of licenses (min {MIN_LICENSES})</label>
-            <input
-              type="number"
-              min={MIN_LICENSES}
-              max={10000}
-              value={state.licenseCount}
-              onChange={(e) => update("licenseCount", Number(e.target.value) || 0)}
-            />
-          </div>
-          <div className="start-field">
-            <label>Contract length</label>
-            <select
-              value={state.contractLength}
-              onChange={(e) => update("contractLength", e.target.value as ContractLength)}
-            >
-              <option value="1yr">1 year — list price</option>
-              <option value="2yr">2 years — 10% discount</option>
-            </select>
-          </div>
-        </div>
-      </section>
-
-      <section className="start-section">
         <h2>Anything else?</h2>
         <div className="start-form">
           <div className="start-field">
@@ -457,6 +431,7 @@ function IntakeStep({ state, setState, onNext, error }: IntakeStepProps) {
 
 interface ReviewStepProps {
   state: IntakeFormState;
+  setState: React.Dispatch<React.SetStateAction<IntakeFormState>>;
   pricing: PricingMath;
   onBack: () => void;
   onContinue: () => void;
@@ -464,17 +439,46 @@ interface ReviewStepProps {
   error: string | null;
 }
 
-function ReviewStep({ state, pricing, onBack, onContinue, busy, error }: ReviewStepProps) {
+function ReviewStep({ state, setState, pricing, onBack, onContinue, busy, error }: ReviewStepProps) {
+  function update<K extends keyof IntakeFormState>(key: K, val: IntakeFormState[K]) {
+    setState((s) => ({ ...s, [key]: val }));
+  }
+
   return (
     <>
-      <h1>Review &amp; confirm pricing</h1>
+      <h1>Choose licenses &amp; review pricing</h1>
       <p className="subhead">
-        Confirm the order below. You will be charged the first quarterly
-        amount when you complete payment on the next step. Subsequent invoices
-        bill automatically every three months.
+        Pick your seat count and contract length — pricing updates live.
+        You'll be charged the first quarterly amount when you complete
+        payment on the next step. Subsequent invoices bill every three months.
       </p>
 
       {error && <div className="start-error">{error}</div>}
+
+      <section className="start-section">
+        <div className="start-license-row">
+          <div className="start-field">
+            <label>Number of licenses (min {MIN_LICENSES})</label>
+            <input
+              type="number"
+              min={MIN_LICENSES}
+              max={10000}
+              value={state.licenseCount}
+              onChange={(e) => update("licenseCount", Number(e.target.value) || 0)}
+            />
+          </div>
+          <div className="start-field">
+            <label>Contract length</label>
+            <select
+              value={state.contractLength}
+              onChange={(e) => update("contractLength", e.target.value as ContractLength)}
+            >
+              <option value="1yr">1 year — list price</option>
+              <option value="2yr">2 years — 10% discount</option>
+            </select>
+          </div>
+        </div>
+      </section>
 
       <div className="start-pricing-card">
         <div className="start-pricing-row">
@@ -799,9 +803,6 @@ export default function StartPage() {
     if (state.billingContactEmail.trim() && !isValidEmail(state.billingContactEmail.trim())) {
       return "Billing contact email is not a valid email address.";
     }
-    if (!Number.isInteger(state.licenseCount) || state.licenseCount < MIN_LICENSES) {
-      return `Minimum of ${MIN_LICENSES} licenses required.`;
-    }
     const validUsers = state.authorizedUsers.filter(
       (u) => u.name.trim() && u.email.trim(),
     );
@@ -827,6 +828,10 @@ export default function StartPage() {
   }
 
   async function handleReviewContinue() {
+    if (!Number.isInteger(state.licenseCount) || state.licenseCount < MIN_LICENSES) {
+      setError(`Minimum of ${MIN_LICENSES} licenses required.`);
+      return;
+    }
     setBusy(true);
     setError(null);
     try {
@@ -919,6 +924,7 @@ export default function StartPage() {
           {step === 2 && (
             <ReviewStep
               state={state}
+              setState={setState}
               pricing={pricing}
               onBack={() => {
                 setError(null);
