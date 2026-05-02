@@ -660,6 +660,45 @@ function PayStep(props: PayStepProps) {
     () => loadStripeWithKey(),
     [],
   );
+  const [stripeReady, setStripeReady] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    stripePromise
+      .then((s) => {
+        if (!cancelled) setStripeReady(s !== null);
+      })
+      .catch(() => {
+        if (!cancelled) setStripeReady(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [stripePromise]);
+
+  if (stripeReady === false) {
+    return (
+      <>
+        <h1>Payment unavailable</h1>
+        <p className="subhead">
+          We couldn't initialize the secure payment form because Sentinel
+          Counsel's Stripe publishable key isn't configured on the server.
+          Your intake has been saved — please email{" "}
+          <strong style={{ color: "#fff" }}>billing@sntlabs.io</strong> with
+          the subscription reference below and we'll complete payment manually.
+        </p>
+        <div className="start-error">
+          Stripe publishable key missing. Subscription ID:{" "}
+          <code>{props.subscriptionId}</code>
+        </div>
+        <div className="start-actions">
+          <button type="button" className="btn-start-ghost" onClick={props.onBack}>
+            Back to pricing
+          </button>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
