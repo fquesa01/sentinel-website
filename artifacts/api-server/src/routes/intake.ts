@@ -9,6 +9,31 @@ function generateSubmissionToken(): string {
   return randomBytes(24).toString("hex");
 }
 
+// Stripe customer.address.country must be ISO-3166-1 alpha-2 (e.g. "US").
+// Accept the alpha-2 code directly, plus a few common friendly names so we
+// don't break clients that submit display strings.
+const COUNTRY_NAME_TO_CODE: Record<string, string> = {
+  "united states": "US",
+  "united states of america": "US",
+  "usa": "US",
+  "u.s.": "US",
+  "u.s.a.": "US",
+  "canada": "CA",
+  "united kingdom": "GB",
+  "great britain": "GB",
+  "uk": "GB",
+  "australia": "AU",
+  "ireland": "IE",
+  "new zealand": "NZ",
+};
+
+function normalizeCountryCode(input: string): string {
+  const trimmed = input.trim();
+  if (/^[A-Za-z]{2}$/.test(trimmed)) return trimmed.toUpperCase();
+  const mapped = COUNTRY_NAME_TO_CODE[trimmed.toLowerCase()];
+  return mapped ?? trimmed;
+}
+
 function tokensMatch(a: string, b: string): boolean {
   if (typeof a !== "string" || typeof b !== "string") return false;
   if (a.length !== b.length) return false;
@@ -70,7 +95,7 @@ function parseAndValidate(body: unknown): { ok: true; data: IntakePayload } | { 
   const billingCity = s(b["billingCity"], 100);
   const billingState = s(b["billingState"], 100);
   const billingZip = s(b["billingZip"], 20);
-  const billingCountry = s(b["billingCountry"], 80);
+  const billingCountry = normalizeCountryCode(s(b["billingCountry"], 80));
   const primaryContactName = s(b["primaryContactName"], 150);
   const primaryContactTitle = s(b["primaryContactTitle"], 150);
   const primaryContactEmail = s(b["primaryContactEmail"], 200);
@@ -79,6 +104,9 @@ function parseAndValidate(body: unknown): { ok: true; data: IntakePayload } | { 
   if (!firmName) return { ok: false, error: "Firm name is required" };
   if (!billingStreet || !billingCity || !billingState || !billingZip || !billingCountry) {
     return { ok: false, error: "Complete billing address is required" };
+  }
+  if (!/^[A-Z]{2}$/.test(billingCountry)) {
+    return { ok: false, error: "Billing country must be a 2-letter ISO code (e.g. US, CA, GB)" };
   }
   if (!primaryContactName || !primaryContactTitle || !primaryContactEmail || !primaryContactPhone) {
     return { ok: false, error: "Primary contact details are required" };

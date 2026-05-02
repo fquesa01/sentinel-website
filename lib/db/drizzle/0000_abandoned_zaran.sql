@@ -1,0 +1,33 @@
+CREATE TABLE IF NOT EXISTS "intake_submissions" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"firm_name" text NOT NULL,
+	"billing_street" text NOT NULL,
+	"billing_city" text NOT NULL,
+	"billing_state" text NOT NULL,
+	"billing_zip" text NOT NULL,
+	"billing_country" text NOT NULL,
+	"primary_contact_name" text NOT NULL,
+	"primary_contact_title" text NOT NULL,
+	"primary_contact_email" text NOT NULL,
+	"primary_contact_phone" text NOT NULL,
+	"billing_contact_name" text,
+	"billing_contact_email" text,
+	"authorized_users" jsonb NOT NULL,
+	"license_count" integer NOT NULL,
+	"contract_length" text NOT NULL,
+	"ein" text,
+	"referral_source" text,
+	"notes" text,
+	"stripe_customer_id" text,
+	"stripe_subscription_id" text,
+	"stripe_price_id" text,
+	"status" text DEFAULT 'pending' NOT NULL,
+	"submission_token" text NOT NULL,
+	"emails_sent_at" timestamp,
+	"team_email_sent_at" timestamp,
+	"client_email_sent_at" timestamp,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "intake_submissions_token_idx" ON "intake_submissions" USING btree ("submission_token");

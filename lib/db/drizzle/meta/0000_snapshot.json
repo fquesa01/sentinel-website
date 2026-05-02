@@ -1,0 +1,225 @@
+{
+  "id": "0e0acd0b-e8e1-4ea1-a1e4-2d357772a325",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.intake_submissions": {
+      "name": "intake_submissions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "firm_name": {
+          "name": "firm_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "billing_street": {
+          "name": "billing_street",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "billing_city": {
+          "name": "billing_city",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "billing_state": {
+          "name": "billing_state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "billing_zip": {
+          "name": "billing_zip",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "billing_country": {
+          "name": "billing_country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "primary_contact_name": {
+          "name": "primary_contact_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "primary_contact_title": {
+          "name": "primary_contact_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "primary_contact_email": {
+          "name": "primary_contact_email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "primary_contact_phone": {
+          "name": "primary_contact_phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "billing_contact_name": {
+          "name": "billing_contact_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "billing_contact_email": {
+          "name": "billing_contact_email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "authorized_users": {
+          "name": "authorized_users",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "license_count": {
+          "name": "license_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contract_length": {
+          "name": "contract_length",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ein": {
+          "name": "ein",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "referral_source": {
+          "name": "referral_source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stripe_customer_id": {
+          "name": "stripe_customer_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stripe_subscription_id": {
+          "name": "stripe_subscription_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stripe_price_id": {
+          "name": "stripe_price_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "submission_token": {
+          "name": "submission_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "emails_sent_at": {
+          "name": "emails_sent_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "team_email_sent_at": {
+          "name": "team_email_sent_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "client_email_sent_at": {
+          "name": "client_email_sent_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "intake_submissions_token_idx": {
+          "name": "intake_submissions_token_idx",
+          "columns": [
+            {
+              "expression": "submission_token",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

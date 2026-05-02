@@ -54,7 +54,7 @@ function emptyState(): IntakeFormState {
     billingCity: "",
     billingState: "",
     billingZip: "",
-    billingCountry: "United States",
+    billingCountry: "US",
     primaryContactName: "",
     primaryContactTitle: "",
     primaryContactEmail: "",
@@ -270,11 +270,17 @@ function IntakeStep({ state, setState, onNext, error }: IntakeStepProps) {
           </div>
           <div className="start-field">
             <label>Country</label>
-            <input
-              type="text"
+            <select
               value={state.billingCountry}
               onChange={(e) => update("billingCountry", e.target.value)}
-            />
+            >
+              <option value="US">United States</option>
+              <option value="CA">Canada</option>
+              <option value="GB">United Kingdom</option>
+              <option value="AU">Australia</option>
+              <option value="IE">Ireland</option>
+              <option value="NZ">New Zealand</option>
+            </select>
           </div>
         </div>
       </section>
@@ -575,7 +581,7 @@ function PaymentForm({ state, pricing, onBack, onSuccess, subscriptionId }: Omit
               city: state.billingCity,
               state: state.billingState,
               postal_code: state.billingZip,
-              country: state.billingCountry === "United States" ? "US" : state.billingCountry,
+              country: state.billingCountry,
             },
           },
         },

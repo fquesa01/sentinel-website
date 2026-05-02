@@ -1,6 +1,7 @@
 import app from "./app";
 import { logger } from "./lib/logger";
 import { initStripe } from "./lib/stripe-init";
+import { runDbMigrations } from "@workspace/db";
 
 const rawPort = process.env["PORT"];
 
@@ -15,6 +16,13 @@ const port = Number(rawPort);
 if (Number.isNaN(port) || port <= 0) {
   throw new Error(`Invalid PORT value: "${rawPort}"`);
 }
+
+// Apply any pending Drizzle migrations before opening the listener so the
+// schema is guaranteed to match what the routes expect. Drizzle skips
+// already-applied migrations via its tracking table.
+logger.info("Running app DB migrations...");
+await runDbMigrations();
+logger.info("App DB migrations complete");
 
 await initStripe();
 
