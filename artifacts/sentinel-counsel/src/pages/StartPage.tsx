@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import {
@@ -771,34 +771,6 @@ export default function StartPage() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
-
-  // Belt-and-suspenders: overwrite the document robots meta directly on
-  // mount so this private page is never indexed even if Helmet is delayed
-  // or fails to merge in some browser/environment.
-  useLayoutEffect(() => {
-    const prev = document.querySelector('meta[name="robots"]');
-    const prevContent = prev?.getAttribute("content") ?? null;
-    let created: HTMLMetaElement | null = null;
-    if (prev) {
-      prev.setAttribute("content", "noindex,nofollow");
-    } else {
-      created = document.createElement("meta");
-      created.setAttribute("name", "robots");
-      created.setAttribute("content", "noindex,nofollow");
-      document.head.appendChild(created);
-    }
-    return () => {
-      if (prev && prevContent !== null) {
-        prev.setAttribute("content", prevContent);
-      }
-      // If we created the tag (no prior robots meta existed), remove it
-      // on unmount so subsequent SPA navigations don't inherit
-      // noindex,nofollow from this private page.
-      if (created && created.parentNode) {
-        created.parentNode.removeChild(created);
-      }
-    };
-  }, []);
 
   const pricing = useMemo(
     () => computePricing(state.licenseCount, state.contractLength),

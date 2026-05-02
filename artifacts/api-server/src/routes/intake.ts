@@ -9,9 +9,7 @@ function generateSubmissionToken(): string {
   return randomBytes(24).toString("hex");
 }
 
-// Stripe customer.address.country must be ISO-3166-1 alpha-2 (e.g. "US").
-// Accept the alpha-2 code directly, plus a few common friendly names so we
-// don't break clients that submit display strings.
+// Stripe requires ISO-3166-1 alpha-2; accept a few friendly aliases too.
 const COUNTRY_NAME_TO_CODE: Record<string, string> = {
   "united states": "US",
   "united states of america": "US",
@@ -219,9 +217,6 @@ router.post("/intake", async (req: Request, res: Response) => {
       throw new Error("Insert returned no row");
     }
 
-    // The opaque token must be returned exactly once and is the only proof
-    // of ownership the client can use to call /create-subscription. We do
-    // NOT echo any other DB ids the client doesn't already know.
     res.json({ submissionId: row.id, submissionToken: row.submissionToken });
   } catch (err) {
     logger.error({ err }, "Failed to persist intake submission");
@@ -289,10 +284,8 @@ router.post("/create-subscription", async (req: Request, res: Response) => {
     return;
   }
 
-  // Stripe v22 (API 2025-09-30+) replaced `latest_invoice.payment_intent`
-  // with `latest_invoice.confirmation_secret`. We try the new field first
-  // and fall back to the older `payment_intent.client_secret` so we work
-  // across API version pins.
+  // Supports both the new `confirmation_secret` (Stripe API 2025-09-30+)
+  // and the legacy `payment_intent.client_secret`.
   function extractClientSecret(invoice: unknown): string | null {
     if (!invoice || typeof invoice !== "object") return null;
     const inv = invoice as {
@@ -308,9 +301,6 @@ router.post("/create-subscription", async (req: Request, res: Response) => {
     return null;
   }
 
-  // Distinguish "no such row / bad token" from "real failure" so we can
-  // return the correct status without leaking enumeration. Throwing this
-  // sentinel inside the transaction triggers a rollback as a side benefit.
   class NotFoundError extends Error {}
 
   type CreateResult = {
@@ -325,12 +315,9 @@ router.post("/create-subscription", async (req: Request, res: Response) => {
   let result: CreateResult;
   try {
     result = await db.transaction(async (tx) => {
-      // Hold a row-level lock for the entire create-subscription
-      // operation. This serializes concurrent callers for the same
-      // submission so only one of them issues the Stripe writes; the
-      // others see the persisted stripeSubscriptionId after acquiring
-      // the lock and reuse it. Combined with Stripe-side idempotency
-      // keys, duplicate Stripe customers/subscriptions cannot occur.
+      // FOR UPDATE serializes concurrent callers for the same submission
+      // so only one issues the Stripe writes; combined with idempotency
+      // keys, no duplicate customers/subscriptions can be created.
       const rows = await tx
         .select()
         .from(intakeSubmissionsTable)
@@ -377,18 +364,12 @@ router.post("/create-subscription", async (req: Request, res: Response) => {
       let subscriptionId = submission.stripeSubscriptionId;
       let clientSecret: string | null = null;
 
-      // Helper: try every documented Stripe path to obtain the
-      // client_secret for the first invoice of an existing subscription.
-      // Used both for "we already created a subscription" recovery and
-      // for "we just created a subscription but the response was thin".
       async function resolveClientSecret(
         subId: string,
         latestInvoice: unknown,
       ): Promise<string | null> {
-        // 1) inline on the subscription object
         const inline = extractClientSecret(latestInvoice);
         if (inline) return inline;
-        // 2) re-retrieve the invoice id directly
         const invoiceId =
           typeof latestInvoice === "string"
             ? latestInvoice
@@ -400,7 +381,6 @@ router.post("/create-subscription", async (req: Request, res: Response) => {
           const fromInvoice = extractClientSecret(invoice);
           if (fromInvoice) return fromInvoice;
         }
-        // 3) re-retrieve the subscription with full expansions
         const refreshed = await stripe.subscriptions.retrieve(subId, {
           expand: ["latest_invoice.confirmation_secret", "latest_invoice.payment_intent"],
         });
@@ -408,10 +388,7 @@ router.post("/create-subscription", async (req: Request, res: Response) => {
       }
 
       if (subscriptionId) {
-        // Subscription already exists for this submission. We MUST NOT
-        // create a second one — that would result in duplicate billing.
-        // Try hard to recover the existing client_secret; if we cannot,
-        // surface a 409 so the client can retry safely.
+        // Existing subscription: never create a second one.
         clientSecret = await resolveClientSecret(subscriptionId, null);
       } else {
         const subscription = await stripe.subscriptions.create(
@@ -439,11 +416,6 @@ router.post("/create-subscription", async (req: Request, res: Response) => {
       }
 
       if (!clientSecret) {
-        // Throw a sentinel that maps to 409 Conflict so the client knows
-        // the subscription exists but the secret can't be recovered right
-        // now (e.g. invoice transitioning state). The client can retry
-        // and will hit the existing-subscription branch above without
-        // ever creating a duplicate.
         const e = new Error("Could not recover payment client_secret for existing subscription");
         (e as Error & { code?: string }).code = "CLIENT_SECRET_UNAVAILABLE";
         throw e;

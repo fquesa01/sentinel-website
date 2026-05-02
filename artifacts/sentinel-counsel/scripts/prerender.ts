@@ -276,6 +276,25 @@ function prerender() {
     created++;
   }
 
+  // Private signup. Emit a prerendered shell with a server-delivered
+  // noindex,nofollow robots meta so non-JS crawlers honor it without
+  // depending on the SPA hydrating.
+  {
+    const startTitle = "Sentinel Counsel — Private Signup";
+    let startHtml = stripExistingMeta(template);
+    startHtml = startHtml.replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(startTitle)}</title>`);
+    startHtml = startHtml.replace(
+      /<meta\s+name="robots"[^>]*\/?\s*>/gi,
+      '<meta name="robots" content="noindex,nofollow" />',
+    );
+    startHtml = startHtml.replace(
+      "</head>",
+      `    <meta name="googlebot" content="noindex,nofollow" />\n  </head>`,
+    );
+    writeRoute("/start", startHtml);
+    created++;
+  }
+
   generateSitemap();
 
   console.log(`\nPre-rendered ${created} routes with full content HTML.`);
