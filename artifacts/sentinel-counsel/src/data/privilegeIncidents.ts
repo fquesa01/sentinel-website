@@ -395,21 +395,89 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "Even after publicly discovering its own breach, the firm's only available control was a strongly-worded email. Without an architectural privilege boundary, every prompt is an honor-system event.",
   },
   {
-    id: "walters-openai-2023",
-    date: "2023-06-05",
-    year: 2023,
-    category: "news",
-    tool: "ChatGPT",
+    id: "peshek-illinois-2010",
+    date: "2010-04-19",
+    year: 2010,
+    category: "social-media",
     headline:
-      "Georgia radio host sues OpenAI after ChatGPT fabricates a federal embezzlement complaint naming him",
+      "Illinois assistant public defender disciplined for blogging confidential client information",
     quote:
-      "ChatGPT's allegations were false and malicious... The complaint alleges that Walters embezzled funds from the Second Amendment Foundation. No such lawsuit exists.",
-    attribution: "Walters v. OpenAI, L.L.C., 23-A-04860-2 (Ga. Super. Ct., Gwinnett Cty.)",
-    sourceName: "The Verge",
+      "Respondent's blog... revealed information related to the representation of her clients, including their identifying characteristics and the nature of the charges against them.",
+    attribution:
+      "In re Kristine Ann Peshek, Comm. No. 09 CH 89, Illinois ARDC Hearing Board",
+    sourceName: "ABA Journal",
     sourceUrl:
-      "https://www.theverge.com/2023/6/9/23755057/openai-chatgpt-false-information-defamation-lawsuit",
+      "https://www.abajournal.com/news/article/public_defenders_blog_brings_discipline_call",
     whyItMatters:
-      "LLMs invent specific, named, defamatory 'facts' about real people — including 'court filings' that never existed. The same engine drafting your privilege log can fabricate a privilege log adverse to your client.",
+      "The first widely-cited bar discipline for social-media privilege erosion. Pseudonymizing clients on a blog isn't a privilege control — and identifiable detail traveled instantly across the open web.",
+  },
+  {
+    id: "skinner-georgia-2014",
+    date: "2014-09-22",
+    year: 2014,
+    category: "social-media",
+    headline:
+      "Georgia Supreme Court reprimands attorney who responded to client's online review by posting privileged details",
+    quote:
+      "An attorney responding to a former client's negative online review may not, in defending herself, disclose information related to the representation.",
+    attribution:
+      "In the Matter of Margrett A. Skinner, S14Y0661 (Ga. Sup. Ct.)",
+    sourceName: "ABA Journal",
+    sourceUrl:
+      "https://www.abajournal.com/news/article/lawyer_who_revealed_clients_confidences_to_respond_to_negative_online_review",
+    whyItMatters:
+      "Counsel sees a one-star Yelp review and reflexively 'defends the record.' Each public-reply field is a privilege waiver waiting to happen — and the platform never deletes the post.",
+  },
+  {
+    id: "hunter-virginia-2013",
+    date: "2013-02-28",
+    year: 2013,
+    category: "social-media",
+    tool: "Other",
+    headline:
+      "Virginia Supreme Court: criminal defense lawyer's case-results blog violated client confidentiality",
+    quote:
+      "Hunter's blog posts revealed information... that, when combined with other information, made it possible for a third party to identify the clients.",
+    attribution: "Hunter v. Va. State Bar, 285 Va. 485 (2013)",
+    sourceName: "Reuters",
+    sourceUrl:
+      "https://www.reuters.com/article/idUS381748229220130301/",
+    whyItMatters:
+      "Even truthful, public-record case results become a confidentiality violation once a lawyer assembles them under their byline. The aggregation problem is a privilege problem.",
+  },
+  {
+    id: "grok-shared-2025",
+    date: "2025-08-20",
+    year: 2025,
+    category: "llm-chat",
+    tool: "Grok",
+    headline:
+      "More than 370,000 Grok conversations exposed to Google search via xAI's 'share' button",
+    quote:
+      "Anyone clicking 'share' on a Grok conversation was unwittingly publishing it to the open web, where Google promptly indexed hundreds of thousands of private chats.",
+    attribution: "Forbes investigation",
+    sourceName: "Forbes",
+    sourceUrl:
+      "https://www.forbes.com/sites/iainmartin/2025/08/20/elon-musks-grok-leaked-370000-user-chats/",
+    whyItMatters:
+      "The second major chatbot in two months to silently publish 'shared' conversations to Google. The 'share' UI pattern itself is a privilege landmine — counsel sharing a draft brief with a colleague exposes it to the world.",
+  },
+  {
+    id: "meta-ai-discover-2025",
+    date: "2025-06-13",
+    year: 2025,
+    category: "llm-chat",
+    tool: "Other",
+    headline:
+      "Meta AI's 'Discover' feed publicly surfaces user chats containing names, addresses, medical and legal questions",
+    quote:
+      "Users of Meta AI are unwittingly posting their private chats — including queries about taxes, medical issues, and legal disputes — to a public feed inside the Meta AI app.",
+    attribution: "TechCrunch reporting on Meta AI Discover feed",
+    sourceName: "TechCrunch",
+    sourceUrl:
+      "https://techcrunch.com/2025/06/12/the-meta-ai-app-is-a-privacy-disaster/",
+    whyItMatters:
+      "An entire chatbot product was shipped with a public 'feed' as the default destination for prompts. If a paralegal opens Meta AI to summarize a deposition transcript, that transcript can land on a discovery feed seen by strangers.",
   },
   {
     id: "charlotin-tracker-2025",
