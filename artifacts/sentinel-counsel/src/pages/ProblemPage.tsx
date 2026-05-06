@@ -170,7 +170,7 @@ export default function ProblemPage() {
           <p className="problem-lede">
             Court filings. Transcripts. News reports. Leaked chatbot conversations.
             A growing record of attorneys, clients, and experts handing privileged
-            matter to consumer AI tools — and getting caught. Below is the receipts.
+            matter to consumer AI tools — and getting caught. Below are the receipts.
           </p>
           <div className="problem-hero-cta">
             <button className="btn-primary" onClick={() => setDemoOpen(true)}>

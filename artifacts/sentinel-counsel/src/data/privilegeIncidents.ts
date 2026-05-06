@@ -213,7 +213,7 @@ export const privilegeIncidents: PrivilegeIncident[] = [
     date: "2024-04-30",
     year: 2024,
     category: "court-filing",
-    tool: "ChatGPT",
+    tool: "Copilot",
     headline: "W.D. Va. magistrate orders show-cause after AI-hallucinated case citations",
     quote:
       "The undersigned was unable to find the case... Counsel concedes that he used Microsoft Copilot to draft the brief and did not check the citations.",

@@ -314,7 +314,7 @@ function prerender() {
     });
 
     let body = `<main><section><h1>Every week, attorney-client privilege is broken in public.</h1>`;
-    body += `<p>Court filings. Transcripts. News reports. Leaked chatbot conversations. A growing record of attorneys, clients, and experts handing privileged matter to consumer AI tools — and getting caught.</p></section>`;
+    body += `<p>Court filings. Transcripts. News reports. Leaked chatbot conversations. A growing record of attorneys, clients, and experts handing privileged matter to consumer AI tools — and getting caught. Below are the receipts.</p></section>`;
     body += `<section aria-label="Incidents">`;
     const sorted = [...privilegeIncidents].sort((a, b) => (a.date < b.date ? 1 : -1));
     for (const incident of sorted) {
