@@ -236,6 +236,7 @@ export default function HomePage() {
         <div id="main-nav-links" className={`ice-nav-links ${mobileMenuOpen ? "mobile-open" : ""}`}>
           <a href="#courtroom" onClick={() => setMobileMenuOpen(false)}>Litigation</a>
           <a href="#capabilities" onClick={() => setMobileMenuOpen(false)}>Capabilities</a>
+          <Link href="/problem" onClick={() => setMobileMenuOpen(false)}>The Problem</Link>
           <a href="#team" onClick={() => setMobileMenuOpen(false)}>Team</a>
           <a href="#security" onClick={() => setMobileMenuOpen(false)}>Security</a>
           <Link href="/resources" onClick={() => setMobileMenuOpen(false)}>Resources</Link>
@@ -631,6 +632,8 @@ export default function HomePage() {
         </div>
         <div className="footer-status">SYSTEM STATUS: OPERATIONAL</div>
         <div className="footer-links">
+          <Link href="/problem">The Problem</Link>
+          <Link href="/resources">Resources</Link>
           <Link href="/privacy">Privacy</Link>
           <Link href="/terms">Terms</Link>
           <Link href="/security">Security</Link>

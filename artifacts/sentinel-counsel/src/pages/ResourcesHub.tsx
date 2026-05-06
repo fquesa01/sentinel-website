@@ -144,6 +144,7 @@ export default function ResourcesHub() {
         </button>
         <div id="hub-nav-links" className={`ice-nav-links ${mobileMenuOpen ? "mobile-open" : ""}`}>
           <Link href="/" onClick={() => setMobileMenuOpen(false)}>Home</Link>
+          <Link href="/problem" onClick={() => setMobileMenuOpen(false)}>The Problem</Link>
           <Link href="/resources" className="ice-nav-active" onClick={() => setMobileMenuOpen(false)}>
             Resources
           </Link>
@@ -277,6 +278,8 @@ export default function ResourcesHub() {
         </div>
         <div className="footer-status">SYSTEM STATUS: OPERATIONAL</div>
         <div className="footer-links">
+          <Link href="/problem">The Problem</Link>
+          <Link href="/resources">Resources</Link>
           <Link href="/privacy">Privacy</Link>
           <Link href="/terms">Terms</Link>
           <Link href="/security">Security</Link>

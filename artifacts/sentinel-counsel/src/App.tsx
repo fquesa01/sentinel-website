@@ -14,6 +14,7 @@ const PrivacyPage = lazy(() => import("@/pages/PrivacyPage"));
 const TermsPage = lazy(() => import("@/pages/TermsPage"));
 const SecurityPage = lazy(() => import("@/pages/SecurityPage"));
 const StartPage = lazy(() => import("@/pages/StartPage"));
+const ProblemPage = lazy(() => import("@/pages/ProblemPage"));
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ function Router() {
         <Route path="/terms" component={TermsPage} />
         <Route path="/security" component={SecurityPage} />
         <Route path="/start" component={StartPage} />
+        <Route path="/problem" component={ProblemPage} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>

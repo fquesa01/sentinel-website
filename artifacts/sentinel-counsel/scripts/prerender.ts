@@ -8,6 +8,11 @@ import {
   getContentPagesByCategory,
   type ContentPage,
 } from "../src/data/content.js";
+import {
+  privilegeIncidents,
+  INCIDENT_CATEGORY_LABELS,
+  sanitizeExternalUrl,
+} from "../src/data/privilegeIncidents.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir = join(__dirname, "..", "dist", "public");
@@ -276,6 +281,66 @@ function prerender() {
     created++;
   }
 
+  // The Problem — public marketing page, fully prerendered for crawlers
+  {
+    const datasetSchema = {
+      "@context": "https://schema.org",
+      "@type": "Dataset",
+      name: "The Problem — Attorney-Client Privilege Violations Tracker",
+      description:
+        "A curated, sourced catalog of real-world incidents where attorney-client privilege has been broken or eroded by use of consumer AI tools, sloppy workflows, or public disclosures.",
+      url: `${PROD_DOMAIN}/problem`,
+      creator: {
+        "@type": "Organization",
+        name: "Sentinel Counsel",
+        url: PROD_DOMAIN,
+      },
+    };
+    const breadcrumbSchema = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: `${PROD_DOMAIN}/` },
+        { "@type": "ListItem", position: 2, name: "The Problem", item: `${PROD_DOMAIN}/problem` },
+      ],
+    };
+    const headMeta = buildHeadMeta({
+      title:
+        "The Problem — Where Attorney-Client Privilege Is Breaking, In Public | Sentinel Counsel",
+      description:
+        "A live catalog of real-world incidents — court filings, transcripts, news, and leaked LLM chats — where attorneys, clients, and experts have eroded attorney-client privilege using consumer AI tools.",
+      url: `${PROD_DOMAIN}/problem`,
+      jsonLd: [datasetSchema, breadcrumbSchema],
+    });
+
+    let body = `<main><section><h1>Every week, attorney-client privilege is broken in public.</h1>`;
+    body += `<p>Court filings. Transcripts. News reports. Leaked chatbot conversations. A growing record of attorneys, clients, and experts handing privileged matter to consumer AI tools — and getting caught.</p></section>`;
+    body += `<section aria-label="Incidents">`;
+    const sorted = [...privilegeIncidents].sort((a, b) => (a.date < b.date ? 1 : -1));
+    for (const incident of sorted) {
+      body += `<article>`;
+      body += `<div><span>${escapeHtml(INCIDENT_CATEGORY_LABELS[incident.category])}</span>`;
+      if (incident.tool) body += ` <span>${escapeHtml(incident.tool)}</span>`;
+      body += ` <time datetime="${incident.date}">${escapeHtml(incident.date)}</time></div>`;
+      body += `<h2>${escapeHtml(incident.headline)}</h2>`;
+      body += `<blockquote>${escapeHtml(incident.quote)}</blockquote>`;
+      body += `<p>— ${escapeHtml(incident.attribution)}</p>`;
+      body += `<p><strong>Why it matters:</strong> ${escapeHtml(incident.whyItMatters)}</p>`;
+      body += `<p><a href="${escapeHtml(sanitizeExternalUrl(incident.sourceUrl))}" rel="noopener noreferrer" target="_blank">Source: ${escapeHtml(incident.sourceName)}</a></p>`;
+      body += `</article>`;
+    }
+    body += `</section></main>`;
+
+    const html = injectIntoTemplate(
+      template,
+      "The Problem — Where Attorney-Client Privilege Is Breaking, In Public | Sentinel Counsel",
+      headMeta,
+      body,
+    );
+    writeRoute("/problem", html);
+    created++;
+  }
+
   // Private signup. Emit a prerendered shell with a server-delivered
   // noindex,nofollow robots meta so non-JS crawlers honor it without
   // depending on the SPA hydrating.
@@ -321,6 +386,12 @@ function generateSitemap() {
   </url>
   <url>
     <loc>${PROD_DOMAIN}/resources</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>${PROD_DOMAIN}/problem</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
