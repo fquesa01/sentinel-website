@@ -21,6 +21,14 @@
   line-height: 1.6;
 }
 
+.problem-hero-cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+  align-items: center;
+}
+
 .problem-counter {
   display: flex;
   gap: 2.5rem;

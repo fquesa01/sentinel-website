@@ -172,6 +172,14 @@ export default function ProblemPage() {
             A growing record of attorneys, clients, and experts handing privileged
             matter to consumer AI tools — and getting caught. Below is the receipts.
           </p>
+          <div className="problem-hero-cta">
+            <button className="btn-primary" onClick={() => setDemoOpen(true)}>
+              Request a Demo
+            </button>
+            <a className="btn-ghost" href="#problem-incidents">
+              See the Receipts ↓
+            </a>
+          </div>
           <div className="problem-counter" role="region" aria-label="Tracker statistics">
             <div className="problem-counter-item">
               <span className="problem-counter-num">{totalIncidents}</span>
@@ -236,7 +244,7 @@ export default function ProblemPage() {
           </div>
         </section>
 
-        <section className="problem-grid" aria-label="Incidents">
+        <section id="problem-incidents" className="problem-grid" aria-label="Incidents">
           {filtered.length === 0 && (
             <div className="problem-empty">No incidents match your filters.</div>
           )}

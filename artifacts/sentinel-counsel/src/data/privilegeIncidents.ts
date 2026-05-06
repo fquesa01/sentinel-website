@@ -345,39 +345,6 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "Coding-agent autonomy is the next frontier of leakage. Imagine the same agent with read/write access to a firm's matter management system — and a hallucinated 'cleanup' instruction from a partner.",
   },
   {
-    id: "jpmorgan-ban-2023",
-    date: "2023-02-22",
-    year: 2023,
-    category: "news",
-    tool: "ChatGPT",
-    headline: "JPMorgan restricts employee use of ChatGPT amid compliance and privilege concerns",
-    quote:
-      "The move was not in response to a specific incident but reflected the firm's normal controls around third-party software.",
-    attribution: "JPMorgan spokesperson, reported by Bloomberg",
-    sourceName: "CNN",
-    sourceUrl:
-      "https://www.cnn.com/2023/02/22/tech/jpmorgan-openai-chatgpt-restrictions/index.html",
-    whyItMatters:
-      "The largest U.S. bank — with the most expensive compliance org on earth — concluded that consumer LLMs cannot be used on regulated communications. Law firms have the same regulatory profile and a fraction of the budget.",
-  },
-  {
-    id: "amazon-warning-2023",
-    date: "2023-01-25",
-    year: 2023,
-    category: "news",
-    tool: "ChatGPT",
-    headline:
-      "Amazon attorney warns staff: don't share confidential information — including code — with ChatGPT",
-    quote:
-      "We wouldn't want [ChatGPT's] output to include or resemble our confidential information... I've already seen instances where its output closely matches existing material.",
-    attribution: "Amazon Senior Corporate Counsel, in internal Slack reported by Insider",
-    sourceName: "Business Insider (via Ars Technica)",
-    sourceUrl:
-      "https://arstechnica.com/information-technology/2023/01/openai-chatgpt-resembles-amazon-internal-data-says-amazon-lawyer/",
-    whyItMatters:
-      "Amazon's own counsel observed ChatGPT regenerating substrings of confidential Amazon material. The same model trained on the open web is being asked to summarize firm work product.",
-  },
-  {
     id: "morgan-internal-memo-2025",
     date: "2025-03-13",
     year: 2025,
@@ -478,21 +445,6 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "https://techcrunch.com/2025/06/12/the-meta-ai-app-is-a-privacy-disaster/",
     whyItMatters:
       "An entire chatbot product was shipped with a public 'feed' as the default destination for prompts. If a paralegal opens Meta AI to summarize a deposition transcript, that transcript can land on a discovery feed seen by strangers.",
-  },
-  {
-    id: "charlotin-tracker-2025",
-    date: "2025-09-01",
-    year: 2025,
-    category: "other",
-    headline:
-      "Independent researcher's database documents 200+ court rulings citing AI-hallucinated cases worldwide",
-    quote:
-      "What is striking is the breadth — solo practitioners, BigLaw partners, pro se litigants, expert witnesses, and now even judges. The hallucination problem has become a profession-wide problem.",
-    attribution: "Damien Charlotin, AI Hallucination Cases Database",
-    sourceName: "damiencharlotin.com",
-    sourceUrl: "https://www.damiencharlotin.com/hallucinations/",
-    whyItMatters:
-      "What started as a single Manhattan lawyer in 2023 is now a steady weekly stream across every jurisdiction. The base rate is no longer zero — it is a known, recurring failure mode.",
   },
   {
     id: "byoma-shrestha-2024",
