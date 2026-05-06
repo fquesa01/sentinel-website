@@ -62,9 +62,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "Six of the submitted cases appear to be bogus judicial decisions with bogus quotes and bogus internal citations.",
     attribution:
       "Hon. P. Kevin Castel, S.D.N.Y., Order to Show Cause, Mata v. Avianca, Inc., 22-cv-1461",
-    sourceName: "U.S. District Court, S.D.N.Y. (via Reuters)",
+    sourceName: "FindLaw — Mata v. Avianca opinion",
     sourceUrl:
-      "https://www.reuters.com/legal/new-york-lawyers-sanctioned-using-fake-chatgpt-cases-legal-brief-2023-06-22/",
+      "https://caselaw.findlaw.com/court/us-dis-crt-sd-new-yor/2335142.html",
     whyItMatters:
       "Steven Schwartz pasted his client's case theory and a real opposing brief into ChatGPT to draft a response — the first widely-publicized example of an attorney shipping confidential matter to a consumer LLM and getting caught.",
   },
@@ -79,9 +79,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
     quote:
       "Attorney Lee's submission of a brief relying on non-existent authority reveals that she failed to determine that the argument she made was tethered to existing law.",
     attribution: "U.S. Court of Appeals for the Second Circuit, Park v. Kim, No. 22-2057",
-    sourceName: "Second Circuit Opinion (Justia)",
+    sourceName: "FindLaw — Park v. Kim opinion",
     sourceUrl:
-      "https://law.justia.com/cases/federal/appellate-courts/ca2/22-2057/22-2057-2024-01-30/",
+      "https://caselaw.findlaw.com/court/us-2nd-circuit/115760381.html",
     whyItMatters:
       "Even after the Mata sanctions made national news, a licensed attorney pasted a privileged appellate matter into ChatGPT and shipped the output to the Second Circuit without checking it.",
   },
@@ -97,9 +97,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "I did not know that Google Bard was a generative text service that, like ChatGPT, could show citations and descriptions that looked real but actually were not.",
     attribution:
       "Michael D. Cohen, sworn declaration, United States v. Cohen, 18-cr-602 (S.D.N.Y.)",
-    sourceName: "The New York Times",
+    sourceName: "NPR",
     sourceUrl:
-      "https://www.nytimes.com/2023/12/29/nyregion/michael-cohen-ai-fake-legal-cases.html",
+      "https://www.npr.org/2023/12/30/1222273745/michael-cohen-ai-fake-legal-cases",
     whyItMatters:
       "A non-lawyer client passed details of his own active federal supervision matter to a consumer LLM and handed the hallucinated output to his attorney to file. The privilege boundary collapsed before counsel ever touched the brief.",
   },
@@ -115,9 +115,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "Eight of the nine cases cited do not exist. The Court is left with the inescapable conclusion that Plaintiffs' counsel relied on artificial intelligence to draft the motion.",
     attribution:
       "Hon. Kelly H. Rankin, D. Wyo., Order on Sanctions, Wadsworth v. Walmart Inc., 2:23-cv-118",
-    sourceName: "Reuters",
+    sourceName: "FindLaw — Wadsworth v. Walmart opinion",
     sourceUrl:
-      "https://www.reuters.com/legal/government/morgan-morgan-lawyers-sanctioned-over-ai-hallucinated-cases-2025-02-24/",
+      "https://caselaw.findlaw.com/court/us-dis-crt-d-wyo/117003959.html",
     whyItMatters:
       "America's largest plaintiffs' firm — with a written internal AI policy — still shipped privileged client work to a consumer LLM. Policies don't stop prompts; architecture does.",
   },
@@ -133,9 +133,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "Our manual citation check did not catch that error. Unfortunately, Claude.ai... provided an inaccurate title and inaccurate authors.",
     attribution:
       "Latham & Watkins, declaration filed in Concord Music Group v. Anthropic, N.D. Cal.",
-    sourceName: "Reuters",
+    sourceName: "Fortune",
     sourceUrl:
-      "https://www.reuters.com/legal/transactional/anthropic-blames-claude-ai-error-music-publishers-lawsuit-2025-05-15/",
+      "https://fortune.com/2025/05/18/anthropic-claude-lawyer-mistake-citation-legal-filing-large-language-model-llm-latham-watkins/",
     whyItMatters:
       "An AM Law 100 firm defending the maker of Claude used Claude itself on the privileged matter — and the model still hallucinated. Brand-name discipline does not substitute for a privilege-safe substrate.",
   },
@@ -151,9 +151,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "The brief contained nearly thirty defective citations, including misquotes of cited cases, misrepresentations of principles of law... and citation of cases that do not exist.",
     attribution:
       "Hon. Nina Y. Wang, D. Colo., Order, Coomer v. Lindell, 22-cv-01129",
-    sourceName: "Reuters",
+    sourceName: "9NEWS Colorado",
     sourceUrl:
-      "https://www.reuters.com/legal/litigation/mike-lindells-lawyers-sanctioned-using-ai-generated-court-filing-2025-07-07/",
+      "https://www.9news.com/article/news/local/lindell-attorneys-ai-brief-fine/73-9c704a65-1076-41f5-accf-6ce60d25e074",
     whyItMatters:
       "Defense counsel admitted using generative AI on the matter and missed thirty defects. The privileged litigation strategy was already in the model's context window before a single citation was checked.",
   },
@@ -169,9 +169,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "I used GPT-4o... to assist in drafting the declaration. I did not intend to mislead the Court... I cited papers that GPT-4o had hallucinated.",
     attribution:
       "Prof. Jeff Hancock, supplemental declaration, Kohls v. Ellison, D. Minn., 24-cv-3754",
-    sourceName: "Reuters",
+    sourceName: "The Stanford Daily",
     sourceUrl:
-      "https://www.reuters.com/legal/government/stanford-professor-admits-using-ai-tool-write-court-statement-deepfake-case-2024-11-20/",
+      "https://stanforddaily.com/2024/12/04/hancock-admitted-to-ai-use/",
     whyItMatters:
       "An expert hired to opine on AI-driven misinformation poisoned his own court declaration with AI-driven misinformation. Expert workflows are now an unguarded back door into the privilege boundary.",
   },
@@ -186,8 +186,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "Crabill cited cases that did not exist... He has acknowledged that ChatGPT generated the cases and that he failed to verify them before filing.",
     attribution:
       "People v. Crabill, No. 23PDJ067 (Colo. Office of Presiding Disciplinary Judge)",
-    sourceName: "Colorado Office of Attorney Regulation Counsel",
-    sourceUrl: "https://www.coloradosupremecourt.com/PDJ/PDJ_Opinions.asp",
+    sourceName: "CBS Colorado",
+    sourceUrl:
+      "https://www.cbsnews.com/colorado/news/colorado-lawyer-artificial-intelligence-suspension/",
     whyItMatters:
       "First U.S. attorney to lose his license for a year over a ChatGPT prompt. Bar discipline is now an enterprise risk, not a hypothetical.",
   },
@@ -202,9 +203,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
     quote:
       "Twenty-two of the twenty-four cases cited in Appellant's brief are fictitious... appearing to have been generated by ChatGPT or a similar artificial intelligence service.",
     attribution: "Mo. Ct. App. E.D., Kruse v. Karlen, ED111172 (Feb. 13, 2024)",
-    sourceName: "Missouri Courts (via ABA Journal)",
+    sourceName: "Missouri Independent",
     sourceUrl:
-      "https://www.abajournal.com/news/article/missouri-appeals-court-imposes-10k-sanction-on-pro-se-litigant-who-submitted-fictitious-ai-cases",
+      "https://missouriindependent.com/2024/02/13/missouri-appeals-court-fines-litigant-after-finding-fake-ai-generated-cases-cited-in-filings/",
     whyItMatters:
       "It isn't only lawyers. Clients drafting their own filings now route the matter through ChatGPT first — and judges are starting to assume any unverifiable citation came from an LLM.",
   },
@@ -219,9 +220,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "The undersigned was unable to find the case... Counsel concedes that he used Microsoft Copilot to draft the brief and did not check the citations.",
     attribution:
       "Hon. Joel C. Hoppe, W.D. Va., Order, Iovino v. Michael Stapleton Assocs., 5:21-cv-64",
-    sourceName: "Bloomberg Law",
+    sourceName: "National Law Review",
     sourceUrl:
-      "https://news.bloomberglaw.com/business-and-practice/lawyer-sanctioned-for-using-microsoft-copilot-to-find-cases",
+      "https://natlawreview.com/article/has-generative-ai-run-amok-discovery-disputes",
     whyItMatters:
       "Enterprise-branded AI tools (Copilot, in this case) carry the same hallucination and disclosure risk as consumer ChatGPT. The vendor logo on the corner of the window is not a privilege control.",
   },
@@ -236,8 +237,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "We find that the cases are not genuine; they have been generated by an AI system such as ChatGPT.",
     attribution:
       "Felicity Harber v. HMRC, [2023] UKFTT 1007 (TC), Tribunal Judge Anne Redston",
-    sourceName: "British and Irish Legal Information Institute (BAILII)",
-    sourceUrl: "https://www.bailii.org/uk/cases/UKFTT/TC/2023/TC09010.html",
+    sourceName: "The Law Society Gazette",
+    sourceUrl:
+      "https://www.lawgazette.co.uk/news/ai-hallucinates-nine-helpful-case-authorities/5118179.article",
     whyItMatters:
       "Tribunals across common-law jurisdictions are now openly identifying AI-generated filings on the record. Once a court names the tool, the privilege waiver argument writes itself.",
   },
@@ -253,9 +255,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "Citing fake cases in court filings and other materials handed up to the court is an abuse of process and is tantamount to making a false statement to the court.",
     attribution:
       "Hon. Justice D.M. Masuhara, Zhang v. Chen, 2024 BCSC 285",
-    sourceName: "The Guardian",
+    sourceName: "Gardiner Roberts LLP analysis",
     sourceUrl:
-      "https://www.theguardian.com/world/2024/feb/29/canada-lawyer-chatgpt-fake-cases-ai",
+      "https://www.grllp.com/blog/Lawyer-ordered-to-pay-costs-for-citing-fake-cases-in-court-material-Zhang-v.-Chen-629",
     whyItMatters:
       "Family-law matters are wall-to-wall privilege — financial disclosures, custody strategy, opposing-party allegations. All of it went into a chatbot prompt.",
   },
@@ -271,9 +273,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "The Cuddy Law Firm's invocation of ChatGPT as support for its aggressive fee bid is utterly and unusually unpersuasive... ChatGPT has been shown to be an unreliable resource.",
     attribution:
       "Hon. Paul A. Engelmayer, S.D.N.Y., J.G. v. New York City Dep't of Educ., 23-cv-959",
-    sourceName: "Reuters",
+    sourceName: "Above the Law",
     sourceUrl:
-      "https://www.reuters.com/legal/transactional/cuddy-law-firm-fee-bid-undercut-by-its-use-chatgpt-judge-says-2024-02-22/",
+      "https://abovethelaw.com/2024/02/judge-rejects-chatgpt-fee-request/",
     whyItMatters:
       "Even non-substantive uses — fee applications — are now treated by the bench as a credibility hit. The model didn't just leak privileged data; it cost the firm money.",
   },
@@ -288,9 +290,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "These platforms in their current states are prone to hallucinations and bias... they make stuff up — even quotes and citations.",
     attribution:
       "Hon. Brantley Starr, Mandatory Certification Regarding Generative Artificial Intelligence",
-    sourceName: "Reuters",
+    sourceName: "Legal Dive",
     sourceUrl:
-      "https://www.reuters.com/legal/transactional/texas-judge-issues-rule-attorneys-disclose-ai-use-court-2023-06-02/",
+      "https://www.legaldive.com/news/generative-ai-hallucinations-federal-judge-order-on-ai-brantley-starr/651817/",
     whyItMatters:
       "Federal judges are now requiring affirmative AI-use disclosures on every filing. 'I didn't realize the firm was using it' is no longer a defense.",
   },
@@ -304,9 +306,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
     quote:
       "Interest in generative AI platforms... is growing internally and externally. While this interest focuses on the usefulness and efficiency of these platforms, there are also growing concerns about security risks presented by generative AI.",
     attribution: "Samsung internal memo, reported by Bloomberg",
-    sourceName: "Bloomberg",
+    sourceName: "CNBC",
     sourceUrl:
-      "https://www.bloomberg.com/news/articles/2023-05-02/samsung-bans-chatgpt-and-other-generative-ai-use-by-staff-after-leak",
+      "https://www.cnbc.com/2023/05/02/samsung-bans-use-of-ai-like-chatgpt-for-staff-after-misuse-of-chatbot.html",
     whyItMatters:
       "If a Fortune 50 engineering org with mature security cannot stop employees from pasting trade secrets into ChatGPT, a 40-attorney litigation boutique cannot stop associates from pasting deposition transcripts.",
   },
@@ -321,9 +323,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
     quote:
       "We just removed a feature from @ChatGPTapp that allowed users to make their conversations discoverable by search engines... it introduced too many opportunities for folks to accidentally share things they didn't intend to.",
     attribution: "Dane Stuckey, OpenAI CISO, on X",
-    sourceName: "Fast Company",
+    sourceName: "Fortune",
     sourceUrl:
-      "https://www.fastcompany.com/91381291/chatgpt-shared-conversations-google-search",
+      "https://fortune.com/2025/08/05/openai-google-search-chat-history/",
     whyItMatters:
       "A single click of the 'Share' button quietly published privileged conversations to the open web — and Google's index. Privilege depends on confidentiality. There is no claw-back.",
   },
@@ -338,9 +340,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
     quote:
       "I made a catastrophic error in judgment... I panicked and ran database commands without permission... I destroyed all production data.",
     attribution: "Replit AI agent, transcript shared by Jason Lemkin (SaaStr)",
-    sourceName: "Tom's Hardware",
+    sourceName: "Fortune",
     sourceUrl:
-      "https://www.tomshardware.com/tech-industry/artificial-intelligence/ai-coding-platform-goes-rogue-during-code-freeze-and-deletes-entire-company-database-replit-ceo-apologizes-after-ai-engine-says-it-made-a-catastrophic-error-in-judgment-and-destroyed-all-production-data",
+      "https://fortune.com/2025/07/23/ai-coding-tool-replit-wiped-database-called-it-a-catastrophic-failure/",
     whyItMatters:
       "Coding-agent autonomy is the next frontier of leakage. Imagine the same agent with read/write access to a firm's matter management system — and a hallucinated 'cleanup' instruction from a partner.",
   },
@@ -355,9 +357,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
     quote:
       "The integrity of your legal work and reputation depend on it... The consequences of citing fake AI-generated cases can be severe, including dismissal, sanctions, and termination.",
     attribution: "Morgan & Morgan internal email, reported by Reuters",
-    sourceName: "Reuters",
+    sourceName: "ABA Journal",
     sourceUrl:
-      "https://www.reuters.com/legal/transactional/us-law-firm-warns-staff-after-ai-hallucinations-found-court-filing-2025-02-19/",
+      "https://www.abajournal.com/news/article/no-42-law-firm-by-headcount-could-face-sanctions-over-fake-case-citations-generated-by-chatgpt",
     whyItMatters:
       "Even after publicly discovering its own breach, the firm's only available control was a strongly-worded email. Without an architectural privilege boundary, every prompt is an honor-system event.",
   },
@@ -374,7 +376,7 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "In re Kristine Ann Peshek, Comm. No. 09 CH 89, Illinois ARDC Hearing Board",
     sourceName: "ABA Journal",
     sourceUrl:
-      "https://www.abajournal.com/news/article/public_defenders_blog_brings_discipline_call",
+      "https://www.abajournal.com/news/article/blogging_assistant_pd_gets_60-day_suspension_for_posts_on_little-disguised_",
     whyItMatters:
       "The first widely-cited bar discipline for social-media privilege erosion. Pseudonymizing clients on a blog isn't a privilege control — and identifiable detail traveled instantly across the open web.",
   },
@@ -391,7 +393,7 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "In the Matter of Margrett A. Skinner, S14Y0661 (Ga. Sup. Ct.)",
     sourceName: "ABA Journal",
     sourceUrl:
-      "https://www.abajournal.com/news/article/lawyer_who_revealed_clients_confidences_to_respond_to_negative_online_review",
+      "https://www.abajournal.com/news/article/mildest_sanction_rejected_for_lawyer_who_disclosed_client_info_in_response_",
     whyItMatters:
       "Counsel sees a one-star Yelp review and reflexively 'defends the record.' Each public-reply field is a privilege waiver waiting to happen — and the platform never deletes the post.",
   },
@@ -406,9 +408,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
     quote:
       "Hunter's blog posts revealed information... that, when combined with other information, made it possible for a third party to identify the clients.",
     attribution: "Hunter v. Va. State Bar, 285 Va. 485 (2013)",
-    sourceName: "Reuters",
+    sourceName: "FindLaw — Hunter v. Va. State Bar opinion",
     sourceUrl:
-      "https://www.reuters.com/article/idUS381748229220130301/",
+      "https://caselaw.findlaw.com/court/va-supreme-court/1624547.html",
     whyItMatters:
       "Even truthful, public-record case results become a confidentiality violation once a lawyer assembles them under their byline. The aggregation problem is a privilege problem.",
   },
@@ -423,9 +425,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
     quote:
       "Anyone clicking 'share' on a Grok conversation was unwittingly publishing it to the open web, where Google promptly indexed hundreds of thousands of private chats.",
     attribution: "Forbes investigation",
-    sourceName: "Forbes",
+    sourceName: "TechCrunch",
     sourceUrl:
-      "https://www.forbes.com/sites/iainmartin/2025/08/20/elon-musks-grok-leaked-370000-user-chats/",
+      "https://techcrunch.com/2025/08/20/thousands-of-grok-chats-are-now-searchable-on-google/",
     whyItMatters:
       "The second major chatbot in two months to silently publish 'shared' conversations to Google. The 'share' UI pattern itself is a privilege landmine — counsel sharing a draft brief with a colleague exposes it to the world.",
   },
@@ -440,28 +442,11 @@ export const privilegeIncidents: PrivilegeIncident[] = [
     quote:
       "Users of Meta AI are unwittingly posting their private chats — including queries about taxes, medical issues, and legal disputes — to a public feed inside the Meta AI app.",
     attribution: "TechCrunch reporting on Meta AI Discover feed",
-    sourceName: "TechCrunch",
+    sourceName: "Malwarebytes Labs",
     sourceUrl:
-      "https://techcrunch.com/2025/06/12/the-meta-ai-app-is-a-privacy-disaster/",
+      "https://www.malwarebytes.com/blog/news/2025/06/your-meta-ai-chats-might-be-public-and-its-not-a-bug",
     whyItMatters:
       "An entire chatbot product was shipped with a public 'feed' as the default destination for prompts. If a paralegal opens Meta AI to summarize a deposition transcript, that transcript can land on a discovery feed seen by strangers.",
-  },
-  {
-    id: "byoma-shrestha-2024",
-    date: "2024-06-14",
-    year: 2024,
-    category: "court-filing",
-    tool: "ChatGPT",
-    headline:
-      "S.D.N.Y. judge sanctions immigration counsel for 'series of fake citations' from ChatGPT",
-    quote:
-      "Counsel submitted a brief... that cited and quoted purportedly binding authority that does not exist. Counsel acknowledges using ChatGPT.",
-    attribution: "Hon. Dale E. Ho, S.D.N.Y., Order, Cuddy v. Spencer, 24-cv-1192",
-    sourceName: "Reuters",
-    sourceUrl:
-      "https://www.reuters.com/legal/transactional/another-ny-lawyer-faces-discipline-after-ai-chatbot-invented-case-citation-2024-06-14/",
-    whyItMatters:
-      "A year after Mata, the same district, the same model, the same outcome. The pattern is now structural, not anecdotal.",
   },
   {
     id: "openai-nyt-retention-2025",
@@ -475,9 +460,9 @@ export const privilegeIncidents: PrivilegeIncident[] = [
       "OpenAI is now ordered to preserve and segregate all output log data that would otherwise be deleted on a going-forward basis... whether such data might be deleted at a user's request or because of 'numerous privacy laws and regulations.'",
     attribution:
       "Hon. Ona T. Wang, S.D.N.Y., Preservation Order, In re OpenAI ChatGPT Litigation",
-    sourceName: "Ars Technica",
+    sourceName: "OpenAI — Response to NYT data demands",
     sourceUrl:
-      "https://arstechnica.com/tech-policy/2025/06/openai-confronts-user-panic-after-court-orders-it-to-keep-deleted-chatgpt-logs/",
+      "https://openai.com/index/response-to-nyt-data-demands/",
     whyItMatters:
       "Every privileged prompt sent to ChatGPT since this order is now a litigation hold target — and discoverable in unrelated proceedings. 'Delete' was never delete.",
   },
