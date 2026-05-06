@@ -409,9 +409,32 @@ router.post("/create-subscription", async (req: Request, res: Response) => {
             customer: customerId,
             items: [{ price: priceId, quantity: submission.licenseCount }],
             payment_behavior: "default_incomplete",
+            // Give the customer a 14-day window to wire/ACH on renewal
+            // invoices. Cards still auto-charge on the renewal date; wires
+            // and ACH credit can't be auto-pulled, so Stripe will email a
+            // hosted invoice with payment instructions instead.
+            days_until_due: 14,
+            collection_method: "charge_automatically",
             payment_settings: {
               save_default_payment_method: "on_subscription",
-              payment_method_types: ["card"],
+              payment_method_types: ["card", "us_bank_account", "customer_balance"],
+              payment_method_options: {
+                // ACH Direct Debit (pull). Stripe verifies via instant
+                // (Plaid) when possible, falls back to micro-deposits.
+                us_bank_account: {
+                  financial_connections: { permissions: ["payment_method", "balances"] },
+                  verification_method: "automatic",
+                },
+                // Wire / ACH Credit (push). Stripe issues the firm a
+                // virtual US bank account; reconciliation is automatic
+                // when funds arrive.
+                customer_balance: {
+                  funding_type: "bank_transfer",
+                  bank_transfer: {
+                    type: "us_bank_transfer",
+                  },
+                },
+              },
             },
             expand: ["latest_invoice.confirmation_secret", "latest_invoice.payment_intent"],
             metadata: {
