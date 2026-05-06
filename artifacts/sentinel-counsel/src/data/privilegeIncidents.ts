@@ -94,6 +94,56 @@ export interface PrivilegeIncident {
 // ---------------------------------------------------------------------------
 export const privilegeIncidents: PrivilegeIncident[] = [
   {
+    id: "adams-allen-butler-2026",
+    date: "2026-05-05",
+    year: 2026,
+    category: "court-filing",
+    headline:
+      "Texas Court of Appeals affirms dismissal after pro se appellant's brief cites fictitious cases and fake quotations",
+    quote:
+      "The use of artificial intelligence in preparation of a submission to the Court will not excuse misrepresentations of case law.",
+    attribution:
+      "Tex. App. — Amarillo, Memorandum Opinion (Yarbrough, J.), Adams v. Allen Butler Construction, Inc., 07-25-00191-CV",
+    sourceName: "Texas Court of Appeals — Memorandum Opinion (PDF)",
+    sourceUrl:
+      "https://search.txcourts.gov/SearchMedia.aspx?MediaVersionID=75e96f2b-45dc-4dda-b0cd-fb2253dc1ea2&coa=coa07&DT=Opinion&MediaID=d821a5f7-96a5-459b-85ed-08bff5e2d457",
+    whyItMatters:
+      "State appellate courts are now naming AI use on the record even when the litigant doesn't admit it — and treating fake citations as a standalone basis for waiving the appeal. Unverified LLM output is becoming dispositive, not just embarrassing.",
+  },
+  {
+    id: "adams-kiewit-2026",
+    date: "2026-04-29",
+    year: 2026,
+    category: "court-filing",
+    headline:
+      "D. Ariz. judge strikes pro se motion citing nonexistent Arizona arbitration and Ninth Circuit cases",
+    quote:
+      "Plaintiff is now on notice that the use of hallucinated cases or the filing of documents with related inaccuracies will result in sanctions.",
+    attribution:
+      "Hon. Diane J. Humetewa, D. Ariz., Order, Adams v. Kiewit Infrastructure West Co., CV-25-01823-PHX-DJH",
+    sourceName: "Leagle — Adams v. Kiewit opinion",
+    sourceUrl: "https://www.leagle.com/decision/infdco20260223795",
+    whyItMatters:
+      "Federal courts have stopped asking whether AI was used and started warning that the next fabricated citation triggers sanctions outright. The privilege risk shifts upstream: every prompt with case facts is now one bad citation away from on-the-record discipline.",
+  },
+  {
+    id: "hill-workday-webb-2026",
+    date: "2026-04-28",
+    year: 2026,
+    category: "court-filing",
+    headline:
+      "N.D. Cal. magistrate sanctions supervising attorney $1,000 for AI-fabricated citation in employment-discrimination brief",
+    quote:
+      "There is no dispute that the lawyers at issue submitted a brief which included a fake citation to nonexistent law, caused in part by use of AI and ultimately from a lack of care and lack of supervision.",
+    attribution:
+      "Hon. Peter H. Kang, N.D. Cal., Order Re: Response to OSC by Attorney Webb, Hill v. Workday, Inc., 23-cv-06558-PHK",
+    sourceName: "Bloomberg Law",
+    sourceUrl:
+      "https://news.bloomberglaw.com/litigation/lawyer-in-ai-misuse-case-fined-for-not-supervising-subordinate",
+    whyItMatters:
+      "First sanctions order to extend AI-hallucination liability up the org chart to the supervising partner under California Rule 5.1. 'I didn't run the prompt' is no longer a defense — partners now own every associate's privileged-data exposure to consumer LLMs.",
+  },
+  {
     id: "mata-avianca-2023",
     date: "2023-06-22",
     year: 2023,
