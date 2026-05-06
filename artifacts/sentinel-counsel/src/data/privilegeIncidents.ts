@@ -49,6 +49,34 @@ export interface PrivilegeIncident {
   context?: string;
 }
 
+// ---------------------------------------------------------------------------
+// HOW TO ADD A NEW INCIDENT
+// ---------------------------------------------------------------------------
+// 1. Run:  pnpm --filter @workspace/sentinel-counsel run new:incident -- <url>
+//    That prints a ready-to-paste object skeleton with id, date, and sourceUrl
+//    pre-filled. Paste it at the TOP of the array below (newest first).
+// 2. Fill in the TODO fields. Keep `quote` verbatim from the source.
+// 3. VERIFY the sourceUrl resolves to a real, canonical page before committing.
+//    If the link is paywalled or fragile, prefer a stable mirror (court opinion
+//    on FindLaw/Justia, ABA Journal, NPR, official press release, etc.).
+// 4. Commit. The next deploy auto-publishes the new card on /problem and
+//    includes it in the prerendered HTML and JSON-LD dataset.
+//
+// Field reference (also enforced by the PrivilegeIncident interface above):
+//   id            kebab-case unique slug, e.g. "smith-walmart-2026"
+//   date          ISO YYYY-MM-DD of the underlying event/filing
+//   year          number, must match `date`
+//   category      court-filing | court-transcript | news | llm-chat |
+//                 social-media | other
+//   tool          optional. ChatGPT | Claude | Grok | Gemini | Bard |
+//                 Replit | Copilot | Other
+//   headline      one-line factual summary, no clickbait
+//   quote         verbatim, in quotes, from the source
+//   attribution   who said it / where it appeared
+//   sourceName    outlet or court name shown on the card link
+//   sourceUrl     canonical URL — must resolve, not 404
+//   whyItMatters  1-2 sentences on the privilege implication
+// ---------------------------------------------------------------------------
 export const privilegeIncidents: PrivilegeIncident[] = [
   {
     id: "mata-avianca-2023",
