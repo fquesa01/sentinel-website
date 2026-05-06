@@ -76,6 +76,21 @@ export interface PrivilegeIncident {
 //   sourceName    outlet or court name shown on the card link
 //   sourceUrl     canonical URL — must resolve, not 404
 //   whyItMatters  1-2 sentences on the privilege implication
+//
+// Template (copy, uncomment, fill in):
+// {
+//   id: "shortname-court-2026",
+//   date: "2026-01-15",
+//   year: 2026,
+//   category: "court-filing",
+//   tool: "ChatGPT",
+//   headline: "One-line factual headline",
+//   quote: "Verbatim quote from the source.",
+//   attribution: "Hon. Jane Doe, S.D.N.Y., Order, Case v. Case, 24-cv-1234",
+//   sourceName: "ABA Journal",
+//   sourceUrl: "https://www.abajournal.com/...",
+//   whyItMatters: "Why this matters for attorney-client privilege.",
+// },
 // ---------------------------------------------------------------------------
 export const privilegeIncidents: PrivilegeIncident[] = [
   {
